@@ -1,0 +1,109 @@
+/* Boarding HUD. Prefixes: bh- (screen), vt- (the vitals widget).
+   Sparse on purpose. Colours from the style set: --gb-shield, --gb-health, --gb-bad. */
+
+.bh-frame { padding: 44px 52px; }
+.bh-crosshair { background-color: var(--gb-text); opacity: 0.7; border-radius: 2px; }
+
+.bh-objective { gap: 3px; opacity: 0.8; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); }
+.bh-prompt { gap: 12px; align-items: center; margin-bottom: 200px; text-shadow: 0 1px 3px #000; }
+.bh-ammo { gap: 12px; align-items: flex-end; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); }
+.bh-ammo-mag { font: var(--gb-display-weight) 64px/0.9 var(--gb-font-display); color: var(--gb-text); }
+.bh-ammo-side { gap: 2px; padding-bottom: 4px; }
+
+/* --- vitals: placement per layout ---------------------------------------- */
+.bh-vitals-slot--corner { --w: 380px; }
+.bh-vitals-slot--top    { --w: 560px; }
+.bh-vitals-slot--bottom { --w: 620px; margin-bottom: 6px; }
+
+.vt { gap: 6px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); }
+.vt-head { gap: 10px; align-items: baseline; }
+.vt-name { color: var(--gb-dim); }
+.vt-state { color: var(--gb-text); }
+.vt-num { font: var(--gb-heading-weight) 22px/1 var(--gb-font-display); color: var(--gb-health); }
+.vt--top .vt-head, .vt--bottom .vt-head { justify-content: center; }
+.vt--top .vt-state, .vt--bottom .vt-state { flex: 0 0 auto; }
+
+/* --- a straight bar ------------------------------------------------------- */
+.vt-bar {
+  --pct: 1;
+  --trail: 1;
+  --c: var(--gb-shield);
+  position: relative;
+  height: 12px;
+  border-radius: calc(var(--gb-radius) * 0.5);
+  background-color: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.vt-bar[data-kind='health'] { --c: var(--gb-health); height: 6px; }
+.vt--top .vt-bar[data-kind='shield'], .vt--bottom .vt-bar[data-kind='shield'] { height: 10px; }
+
+.vt-bar > div { position: absolute; inset: 0; transform-origin: 0 50%; }
+.vt-fill  { background-color: var(--c); scale: var(--pct) 1; transition: scale 90ms linear; }
+.vt-trail { background-color: #fff; opacity: 0.45; scale: var(--trail) 1; transition: scale 0.45s cubic-bezier(0.5, 0, 0.9, 0.4) 0.35s; }
+.vt-flash { background-color: #fff; opacity: 0; }
+.vt-ticks { /* SLATE: segment texture over the bar */
+  background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), rgba(0, 0, 0, 0.55) calc(10% - 2px) 10%);
+}
+.vt-bar[data-kind='health'] .vt-ticks { background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), rgba(0, 0, 0, 0.55) calc(25% - 2px) 25%); }
+/* Centred layouts: fill from the middle outward, both ways (Halo-style) */
+.vt--top .vt-bar > div, .vt--bottom .vt-bar > div { transform-origin: 50% 50%; }
+
+/* --- states ---------------------------------------------------------------- */
+/* recharging: a sheen travels along the shield. SLATE: panner in a UI material */
+[data-shield='recharging'] .vt-bar[data-kind='shield'] .vt-fill {
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.55) 50%, transparent 100%);
+  background-size: 30% 100%;
+  background-repeat: no-repeat;
+  animation: vt-sheen 1s linear infinite;
+}
+@keyframes vt-sheen { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+[data-shield='recharging'] [data-state-text='shield'] { color: var(--gb-shield); }
+
+/* broken: the empty shield track outlines and blinks */
+[data-shield='broken'] .vt-bar[data-kind='shield'] { animation: vt-broken 0.8s steps(2, jump-none) infinite; }
+@keyframes vt-broken { 50% { box-shadow: inset 0 0 0 1px var(--gb-shield); } }
+[data-shield='broken'] [data-state-text='shield'] { color: var(--gb-shield); }
+
+/* danger: health turns red and flashes; the screen edge pulses */
+[data-health='danger'] .vt-bar[data-kind='health'] { --c: var(--gb-bad); animation: vt-danger 0.6s steps(2, jump-none) infinite; }
+@keyframes vt-danger { 50% { background-color: rgba(229, 96, 90, 0.35); } }
+[data-health='danger'] [data-state-text='health'],
+[data-health='danger'] .vt-num { color: var(--gb-bad); }
+[data-health='danger'] .vt-arc[data-kind='health'] .vt-arc-fill { stroke: var(--gb-bad); animation: vt-blink 0.6s steps(2, jump-none) infinite; }
+@keyframes vt-blink { 50% { opacity: 0.35; } }
+
+/* --- screen-edge vignettes. SLATE: material (radial gradient) ----------------- */
+.bh-edge { opacity: 0; }
+.bh-edge--hit { background: radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, var(--gb-bad) 55%, transparent) 100%); }
+.bh-edge--danger { background: radial-gradient(ellipse at center, transparent 45%, color-mix(in srgb, var(--gb-bad) 45%, transparent) 100%); }
+[data-health='danger'] .bh-edge--danger { animation: vt-pulse 1s ease-in-out infinite; }
+@keyframes vt-pulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.8; } }
+
+/* --- arcs around the crosshair -------------------------------------------- */
+.vt--arcs { gap: 0; }
+.vt-arcs-svg { overflow: visible; }
+.vt-arc path { fill: none; stroke-linecap: round; }
+.vt-arc-track { stroke: rgba(255, 255, 255, 0.12); stroke-width: 7; }
+.vt-arc-trail { stroke: #fff; opacity: 0.45; stroke-width: 7; stroke-dasharray: 100 200; transition: stroke-dasharray 0.45s cubic-bezier(0.5, 0, 0.9, 0.4) 0.35s; }
+.vt-arc-fill  { stroke-width: 7; stroke-dasharray: 100 200; transition: stroke-dasharray 90ms linear; }
+.vt-arc[data-kind='shield'] .vt-arc-fill { stroke: var(--gb-shield); }
+.vt-arc[data-kind='health'] .vt-arc-fill { stroke: var(--gb-health); }
+.vt-arc[data-kind='health'] path { stroke-width: 5; }
+.vt-arc-labels { margin-top: 250px; gap: 2px; text-shadow: 0 1px 3px #000; }
+
+/* --- death ------------------------------------------------------------------- */
+.bh-dead { gap: 10px; }
+.bh-dead-title {
+  font: var(--gb-display-weight) 64px/1 var(--gb-font-display);
+  letter-spacing: var(--gb-display-spacing);
+  text-transform: uppercase;
+  color: var(--gb-bad);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+}
+[data-health='dead'] .bh-frame, [data-health='dead'] .vt--arcs { opacity: 0.25; }
+
+/* --- contextual visibility (variant hudvis=contextual) ----------------------
+   Vitals fade away when idle (full shield, healthy, no recent hits) and snap back on a hit. */
+.vt { transition: opacity 0.15s ease-out; }
+[data-v-hudvis='contextual'] [data-idle] .vt { opacity: 0; transition: opacity 1.2s ease-in 0.2s; }

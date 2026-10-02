@@ -1,0 +1,45 @@
+/* ============================================================================
+   tokens.css — game-wide values that aren't part of a style set.   → Slate style set
+   Menu screens take their look from --th-* (styles/themes). This file holds
+   the game's own data colours and the in-world text styles.
+   ========================================================================== */
+
+:root {
+  /* 🔧 Slate font size is points at 96 DPI: CSS px = Slate size × 4/3.
+     Write font sizes as calc(<slate size> * var(--pt)). Verify in-engine. */
+  --pt: 1.3333px;
+
+  /* --- colour affinity (documents/design/color_affinity.md) -----------------
+     Game data, not theme: the same in every style set. PROPOSED values.      */
+  --aff-green:  #7fbf5a;
+  --aff-yellow: #e9c64a;
+  --aff-blue:   #5aa7e0;
+  --aff-red:    #e0685a;
+  --aff-black:  #6a5a8a;   /* black reads as dusk violet on a dark panel */
+  --aff-white:  #f2efe6;
+  --aff-void:   #9a9a9a;
+
+  /* Fish rarity (EFishRarity) */
+  --rar-common:    #cfc8b8;
+  --rar-uncommon:  #8fcf7a;
+  --rar-rare:      #7ab8f0;
+  --rar-legendary: #f0c85a;
+
+  /* --- spacing (Slate units) --------------------------------------------- */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+}
+
+/* In-world text: sits straight on the 3D view with no panel, so it carries its
+   own shadow. Must read on sunlit sky AND at night (test both backdrops).     */
+.ts-world {
+  color: #fffaf0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 0 14px rgba(0, 0, 0, 0.35); /* SLATE: blurred shadow = material, or 2 offset shadows */
+}
+
+[data-aff='green']  { --aff: var(--aff-green); }
+[data-aff='yellow'] { --aff: var(--aff-yellow); }
+[data-aff='blue']   { --aff: var(--aff-blue); }
+[data-aff='red']    { --aff: var(--aff-red); }
+[data-aff='black']  { --aff: var(--aff-black); }
+[data-aff='white']  { --aff: var(--aff-white); }
+[data-aff='void']   { --aff: var(--aff-void); }

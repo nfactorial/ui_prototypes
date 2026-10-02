@@ -1,0 +1,18 @@
+/* Main menu. Prefix: mm- */
+.mm { background-color: #000; }
+.mm-bg { overflow: hidden; }
+.mm-vignette {
+  /* SLATE: material. Darkens the left third so the title and buttons read on any shot */
+  background:
+    linear-gradient(90deg, rgba(10, 6, 2, 0.62) 0%, rgba(10, 6, 2, 0.25) 38%, transparent 60%),
+    radial-gradient(ellipse at 60% 50%, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.mm-menu { margin-left: 150px; gap: 56px; }
+.mm-title-block { gap: 0; align-self: flex-start; } /* shrink to the title's width, so the tagline centres under it */
+.mm-small { font: italic 400 34px/1 var(--gb-font-display); margin-left: 6px; }
+.mm-title { font-size: 116px; line-height: 1.02; }
+.mm-tag { margin-top: -4px; opacity: 0.85; font-style: italic; font-size: 16px; }  /* tight under "Witchcraft", a step below body (18): a sub-heading */
+.mm-buttons { gap: 10px; }
+.mm-buttons .gb-button.big { min-width: 320px; }
+.mm-notes { margin: 0 48px 40px 0; max-width: 520px; }

@@ -1,0 +1,152 @@
+/* ============================================================================
+   tokens.css — the style set.                      → FSlateStyleSet / style asset
+   Every colour, font and brush a screen uses comes from here. Screens never
+   hard-code a colour.
+   ⚠️ Placeholder direction (amber phosphor on grimy black, Alien/Firefly), a
+   starting point to iterate on with the user, not a decision.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../assets/fonts/BarlowCondensed-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../assets/fonts/BarlowCondensed-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Share Tech Mono';
+  src: url('../assets/fonts/ShareTechMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+:root {
+  /* 🔧 Slate font size is points at 96 DPI: CSS px = Slate size × 4/3.
+     Write font sizes as calc(<slate size> * var(--pt)). Verify in-engine. */
+  --pt: 1.3333px;
+
+  /* --- colour ------------------------------------------------------------ */
+  --col-void:         #07090a;               /* deepest background */
+  --col-panel:        rgba(10, 13, 12, 0.74); /* translucent panel fill */
+  --col-panel-solid:  #0f1413;
+  --col-scrim:        rgba(3, 4, 4, 0.66);    /* behind modals */
+  --col-line:         rgba(232, 163, 58, 0.32);
+  --col-line-strong:  rgba(232, 163, 58, 0.7);
+
+  --col-primary:      #e8a33a;   /* amber phosphor: the ship talking to you */
+  --col-primary-dim:  #8c6428;
+  --col-text:         #ddd6c4;   /* bone */
+  --col-text-dim:     #8d8776;
+  --col-text-faint:   #55524a;
+
+  --col-ref:          #7cc4bb;   /* the reference rating / navigation */
+  --col-caution:      #e8c547;
+  --col-danger:       #e5533d;
+
+  /* Faction / contact colours — always paired with a shape (space/18 §10) */
+  --col-derelict:     var(--col-primary);  /* what we hunt   · diamond  */
+  --col-hostile:      var(--col-danger);   /* threat          · triangle */
+  --col-neutral:      var(--col-text);     /* traffic         · square   */
+  --col-body:         var(--col-ref);      /* planets, moons  · circle   */
+
+  /* --- spacing (Slate units) --------------------------------------------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  --line: 1px;
+  --line-strong: 2px;
+
+  /* --- typefaces ---------------------------------------------------------- */
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-mono:    'Share Tech Mono', monospace;
+}
+
+/* --- text styles ----------------------------------------------------------
+   One class = one FTextBlockStyle. The number in calc() is the Slate size.  */
+
+.ts-title {
+  font: 600 calc(28 * var(--pt)) / 1.1 var(--font-display);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--col-text);
+}
+.ts-heading {
+  font: 600 calc(16 * var(--pt)) / 1.15 var(--font-display);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--col-primary);
+}
+.ts-label {
+  font: 500 calc(10 * var(--pt)) / 1.2 var(--font-display);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--col-text-dim);
+}
+.ts-body {
+  font: 500 calc(12 * var(--pt)) / 1.35 var(--font-display);
+  letter-spacing: 0.5px;
+  color: var(--col-text);
+}
+.ts-caption {
+  font: 500 calc(9 * var(--pt)) / 1.2 var(--font-display);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--col-text-faint);
+}
+.ts-readout {
+  font: 400 calc(14 * var(--pt)) / 1 var(--font-mono);
+  color: var(--col-text);
+}
+.ts-readout-lg {
+  font: 400 calc(30 * var(--pt)) / 1 var(--font-mono);
+  color: var(--col-primary);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);   /* ShadowOffset (1,1) */
+}
+.ts-prompt {
+  font: 600 calc(13 * var(--pt)) / 1 var(--font-display);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--col-text);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Colour modifiers — ColorAndOpacity overrides on a text block or tinted image */
+.c-primary  { color: var(--col-primary); }
+.c-text     { color: var(--col-text); }
+.c-dim      { color: var(--col-text-dim); }
+.c-ref      { color: var(--col-ref); }
+.c-caution  { color: var(--col-caution); }
+.c-danger   { color: var(--col-danger); }
+
+/* Rich text styles (SRichTextBlock rows) */
+.rt-em      { color: var(--col-primary); }
+.rt-ref     { color: var(--col-ref); font-family: var(--font-mono); }
+.rt-danger  { color: var(--col-danger); }
+
+/* --- brushes ----------------------------------------------------------------
+   One class = one FSlateBrush in the style set.                            */
+
+/* FSlateRoundedBoxBrush: fill + 1px outline, square corners */
+.brush-panel {
+  background-color: var(--col-panel);
+  border: var(--line) solid var(--col-line);
+}
+.brush-panel-solid {
+  background-color: var(--col-panel-solid);
+  border: var(--line) solid var(--col-line);
+}
+/* FSlateBoxBrush (9-slice). Margin 12/48 = 0.25. SVG → PNG for Unreal. */
+.brush-chamfer {
+  border-image-source: url('../assets/brushes/panel_chamfer.svg');
+  border-image-slice: 12 fill;
+  border-image-width: 12px;
+}
+.brush-scrim   { background-color: var(--col-scrim); }
+.brush-none    { background: none; border: none; }

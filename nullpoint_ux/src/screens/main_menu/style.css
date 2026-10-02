@@ -1,0 +1,31 @@
+/* Main menu. Prefix: mm- */
+
+.mm { background-color: #020304; }
+
+/* --- background: the 3D-scene stand-in ----------------------------------- */
+.mm-bg { overflow: hidden; }
+.mm-stars {
+  width: calc(100% + 1024px);   /* room to scroll one tile */
+  background: url(/assets/menu/stars.svg) 0 0 / 1024px 1024px repeat;
+}
+.mm-stars.far  { opacity: 0.45; }
+.mm-stars.near { opacity: 0.9; background-size: 1400px 1400px; width: calc(100% + 1400px); }
+
+.mm-derelict-pos { --w: 1150px; --h: 500px; margin-left: 420px; margin-top: -120px; }
+[data-v-menubg='drift'] .mm-derelict-pos { --w: 1500px; --h: 650px; margin-left: 360px; }
+.mm-derelict { rotate: 0deg; }
+.mm-rim { opacity: 0; }
+
+.mm-vignette {
+  /* SLATE: material. Radial darkening so the menu side reads */
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 45%, transparent 70%),
+    radial-gradient(ellipse at 60% 45%, transparent 40%, rgba(0,0,0,0.7) 100%);
+}
+
+/* --- menu --------------------------------------------------------------- */
+.mm-menu { margin: 0 0 120px 140px; }
+.mm-sub { margin: 12px 0 48px 4px; }
+.mm-buttons { gap: 10px; }
+
+.mm-notes { margin: 0 48px 40px 0; gap: 8px; }

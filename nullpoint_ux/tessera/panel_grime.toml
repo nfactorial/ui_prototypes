@@ -1,0 +1,54 @@
+[meta]
+name = "panel_grime"
+description = "Tiling grime/wear for panel fills. Greyscale: bright = more grime. Used as a tinted, tiled overlay brush."
+
+[nodes.base]
+type = "noise"
+seed = 3
+octaves = 5
+period = 8
+
+[nodes.base.transform]
+scale = [8.0, 8.0]
+
+[nodes.specks]
+type = "cells"
+measure = "centre_distance"
+invert = true
+seed = 5
+period = 24
+
+[nodes.specks.transform]
+scale = [24.0, 24.0]
+
+[nodes.specks_mask]
+type = "levels"
+input = "specks"
+in_low = 0.88
+in_high = 1.0
+
+[nodes.mottle]
+type = "levels"
+input = "base"
+in_low = 0.35
+in_high = 0.85
+out_high = 0.6
+
+[nodes.grime]
+type = "blend"
+a = "mottle"
+b = "specks_mask"
+mode = "lighten"
+
+# Tintable UI texture: white RGB, the mask in alpha. A Slate brush tint
+# multiplies RGB, so coverage must live in alpha; CSS uses the same file as a mask.
+[nodes.out]
+type = "pack"
+rgb = [1.0, 1.0, 1.0]
+a = "grime"
+
+[[outputs]]
+name = "panel_grime"
+node = "out"
+size = [256, 256]
+format = "RGBA"

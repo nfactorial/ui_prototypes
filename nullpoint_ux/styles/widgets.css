@@ -1,0 +1,71 @@
+/* ============================================================================
+   widgets.css — reusable game widgets built from primitives.
+   Each np-* block is a future SCompoundWidget / Widget Blueprint; the class it
+   will become is named in the markup with data-widget="...".
+   ========================================================================== */
+
+/* --- np-stat: label over value (SVerticalBox of two STextBlocks) --------- */
+.np-stat { gap: 2px; }
+
+/* --- np-bar: label · value on one row, SProgressBar under it ------------- */
+.np-bar { gap: var(--sp-1); }
+.np-bar .s-progress { --h: 4px; color: var(--col-primary); }
+.np-bar[data-state='warn']   .s-progress { color: var(--col-caution); }
+.np-bar[data-state='danger'] .s-progress { color: var(--col-danger); }
+
+/* --- np-button: the standard game button (SButton + STextBlock) ---------- */
+.np-button {
+  padding: var(--sp-2) var(--sp-5);
+  border: var(--line) solid var(--col-line-strong);
+  background-color: rgba(232, 163, 58, 0.06);
+  color: var(--col-primary);
+  font: 600 calc(12 * var(--pt)) / 1 var(--font-display);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: background-color 80ms linear, color 80ms linear;
+}
+.np-button:hover  { background-color: var(--col-primary); color: var(--col-void); }
+.np-button:active { background-color: var(--col-primary-dim); color: var(--col-void); }
+.np-button[disabled] {
+  border-color: var(--col-text-faint);
+  background-color: transparent;
+  color: var(--col-text-faint);
+}
+.np-button.danger { border-color: var(--col-danger); color: var(--col-danger); background-color: rgba(229, 83, 61, 0.06); }
+.np-button.danger:hover { background-color: var(--col-danger); color: var(--col-void); }
+
+/* --- np-key: a keycap glyph for input prompts ---------------------------- */
+.np-key {
+  padding: 3px var(--sp-2);
+  border: var(--line) solid var(--col-text);
+  border-radius: 3px;
+  font: 400 calc(11 * var(--pt)) / 1 var(--font-mono);
+  color: var(--col-text);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* --- np-rule: a hairline. <div class="s-box np-rule"></div>
+   Slate brushes outline all four sides or none, so a one-sided border is a
+   thin SBox with a colour brush instead.                                    */
+.np-rule { --h: var(--line); background-color: var(--col-line); }
+
+/* --- np-panel-header: heading row; follow it with an np-rule ------------- */
+.np-panel-header { padding-bottom: var(--sp-2); }
+
+/* --- Contact markers (world-projected) and off-screen pips ----------------
+   🔴 Same glyph + colour on both sides of the screen edge (space/18 §2).   */
+.np-contact { color: var(--col-neutral); }
+.np-contact[data-kind='derelict'] { color: var(--col-derelict); }
+.np-contact[data-kind='hostile']  { color: var(--col-hostile); }
+.np-contact[data-kind='body']     { color: var(--col-body); }
+
+.np-marker { gap: var(--sp-2); align-items: center; }
+.np-marker .glyph { --w: 18px; --h: 18px; }
+.np-marker .label { gap: 1px; }
+.np-marker .name  { font: 600 calc(10 * var(--pt)) / 1 var(--font-display); letter-spacing: 1.5px; text-transform: uppercase; color: inherit; text-shadow: 1px 1px 0 rgba(0,0,0,0.8); }
+.np-marker .dist  { font: 400 calc(10 * var(--pt)) / 1 var(--font-mono); color: var(--col-text); text-shadow: 1px 1px 0 rgba(0,0,0,0.8); }
+
+.np-offscreen { gap: 2px; align-items: center; }
+.np-offscreen .arrow { --w: 16px; --h: 16px; }
+.np-offscreen .glyph { --w: 14px; --h: 14px; }
+.np-offscreen .dist  { font: 400 calc(9 * var(--pt)) / 1 var(--font-mono); color: var(--col-text); text-shadow: 1px 1px 0 rgba(0,0,0,0.8); }

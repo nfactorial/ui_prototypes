@@ -1,0 +1,127 @@
+/* ============================================================================
+   feedback.css — toasts (core/notify.js) and tooltips (core/tooltip.js).
+   Global, always loaded, themed through the gb/--th-* variables like the
+   grey-box screens. Prefixes: nt- (notifications), tt- (tooltips).
+   ========================================================================== */
+
+/* --- toast placement ------------------------------------------------------ */
+.nt { padding: 0; }
+/* Stack: left, about a third down: clear of the demo note and the top-centre tip, and of the
+   HUD corner at the bottom (user, 2026-09-29: "should be a bit lower"). The anchor is the
+   h-left/v-top slot alignment in notify.js; only margins here (a bare align-self loses to it). */
+.nt-stack  { margin: 300px 0 0 64px; gap: 10px; width: 420px; }
+.nt-banner-slot { margin-top: 190px; }
+.nt-alerts { margin-top: 200px; gap: 10px; }   /* below the onboarding tip (top centre) */
+
+/* With the witch's book open, its left page is busy: stack toasts bottom-right instead.
+   Port: the notification widget picks a placement per context (HUD vs menu). */
+#ui-root:has([data-screen='book']) .nt-stack {
+  justify-self: end;
+  align-self: end;
+  margin: 0 72px 110px 0;
+}
+
+/* --- stack toast (collected, caught, info) ----------------------------------- */
+.nt-toast {
+  position: relative;
+  padding: 14px 18px 16px 14px;
+  background-color: var(--gb-bg);
+  border: var(--gb-border-w) solid var(--gb-line);
+  border-radius: var(--gb-radius);
+  overflow: hidden;
+  backdrop-filter: blur(8px);            /* SLATE: SBackgroundBlur, or drop it */
+}
+.nt-toast-row { gap: 14px; }
+.nt-toast-icon {
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: calc(var(--gb-radius) * 0.75);
+  background-color: color-mix(in srgb, var(--gb-accent) 12%, transparent);
+  color: var(--gb-accent);
+}
+.nt-toast-icon .s-image { --w: 26px; --h: 26px; }
+.nt-toast-text { gap: 3px; }
+.nt-toast[data-kind='collected'] .nt-toast-icon,
+.nt-toast[data-kind='caught'] .nt-toast-icon { color: var(--gb-good); background-color: color-mix(in srgb, var(--gb-good) 14%, transparent); }
+.nt-toast[data-kind='collected'] .nt-toast-label,
+.nt-toast[data-kind='caught'] .nt-toast-label { color: var(--gb-good); }
+
+/* time-left bar along the bottom edge */
+.nt-drain {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background-color: var(--gb-accent);
+  opacity: 0.5;
+  transform-origin: 0 50%;
+}
+.nt-toast[data-kind='collected'] .nt-drain,
+.nt-toast[data-kind='caught'] .nt-drain { background-color: var(--gb-good); }
+
+/* --- banner (learned, milestone) ----------------------------------------- */
+.nt-banner { --nt-c: var(--gb-accent); width: 1000px; gap: 10px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6); }
+.nt-banner[data-kind='learned'] { --nt-c: var(--gb-good); }
+/* Power-up: its own colour and a glow, so it reads as energy, not a report.
+   SLATE: the glow is a texture/material behind the icon and label */
+.nt-banner[data-kind='milestone'] { --nt-c: var(--gb-power); }
+.nt-banner[data-kind='milestone'] .nt-banner-icon { --w: 48px; --h: 48px; filter: drop-shadow(0 0 10px var(--gb-power)); }
+.nt-banner[data-kind='milestone'] .nt-banner-label { text-shadow: 0 0 14px color-mix(in srgb, var(--gb-power) 70%, transparent), 0 2px 12px rgba(0, 0, 0, 0.6); }
+.nt-banner[data-kind='milestone'] .nt-line { box-shadow: 0 0 10px var(--gb-power); }
+.nt-banner-head { align-items: center; gap: 22px; }
+.nt-line { height: 2px; background-color: var(--nt-c); opacity: 0.7; }
+.nt-line.left  { transform-origin: 100% 50%; }  /* grows outward from the icon */
+.nt-line.right { transform-origin: 0 50%; }
+.nt-banner-icon { --w: 40px; --h: 40px; color: var(--nt-c); }
+.nt-banner-label {
+  font: 600 18px/1 var(--gb-font);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: var(--nt-c);
+  margin-top: 6px;
+}
+.nt-banner-title { font-size: 52px; }
+.nt-banner-body { color: var(--gb-dim); }
+
+/* --- alert (notice) ------------------------------------------------------ */
+.nt-alert {
+  min-width: 440px;
+  padding: 14px 22px;
+  background-color: var(--gb-bg);
+  border: var(--gb-border-w) solid var(--gb-warn);
+  border-radius: var(--gb-radius);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--gb-warn) 30%, transparent), 0 8px 30px rgba(0, 0, 0, 0.4); /* SLATE: glow texture */
+}
+.nt-alert-row { gap: 16px; }
+.nt-alert-icon { --w: 34px; --h: 34px; color: var(--gb-warn); }
+.nt-alert-label { color: var(--gb-warn); }
+
+/* --- tooltips ------------------------------------------------------------- */
+/* Disabled controls with a tooltip: let the pointer through, tooltip.js hit-tests them. */
+[disabled][data-tip], [disabled][data-tip-title] { pointer-events: none; }
+
+.tt-canvas { width: 100%; height: 100%; }
+.tt {
+  width: max-content;   /* don't shrink when positioned near the right edge */
+  max-width: 380px;
+  padding: 12px 16px 14px;
+  background-color: var(--gb-bg-solid);
+  border: var(--gb-border-w) solid var(--gb-line-hi);
+  border-radius: var(--gb-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);   /* SLATE: shadow texture, or drop it */
+  pointer-events: none;
+}
+.tt-inner { gap: 6px; }
+.tt-plain { font-size: 16px; }
+.tt-meta { color: var(--gb-accent); opacity: 0.85; }
+.tt-body { color: var(--gb-dim); }
+.tt-stats {
+  grid-template-columns: 1fr auto;
+  gap: 6px 24px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gb-line);
+  align-items: baseline;
+}
+.tt-stats .gb-body { font-size: 16px; }
+.tt[data-kind='unavailable'] { border-color: var(--gb-line); }
+.tt[data-kind='unavailable'] .tt-meta { color: var(--gb-warn); }

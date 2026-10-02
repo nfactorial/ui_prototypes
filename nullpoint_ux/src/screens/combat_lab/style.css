@@ -1,0 +1,13 @@
+/* Combat lab (test bench). Prefix: clab- */
+.clab { pointer-events: none; }
+.clab-panel { pointer-events: auto; width: 360px; margin-right: 24px; padding: 18px 20px; }
+.clab-body { gap: 10px; }
+.clab-head { align-items: center; gap: 8px; }
+.clab-mini { padding: 6px 12px; font-size: 14px; }
+.clab-content { gap: 10px; }
+.clab-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+.clab-grid .gb-button, .clab-seg .gb-button { font-size: 15px; padding: 10px 12px; text-align: center; }
+.clab-seg { gap: 6px; }
+.clab-seg .gb-button { flex: 1 1 0; }
+.clab-toggle { padding: 10px 14px; }
+.clab-readout { grid-template-columns: 70px 1fr; gap: 4px 12px; margin-top: 4px; align-items: baseline; }

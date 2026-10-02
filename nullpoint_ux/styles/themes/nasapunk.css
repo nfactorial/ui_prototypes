@@ -1,0 +1,60 @@
+/* ============================================================================
+   Style set: NASA-punk  (reference: Starfield)
+   Clean, friendly, used hardware. Off-white type on deep navy-black, a warm
+   orange accent, and the four-colour stripe as the signature mark.
+   ========================================================================== */
+
+#ui-root[data-style='nasapunk'] {
+  --th-font: 'Barlow', sans-serif;
+  --th-font-display: 'Barlow', sans-serif;
+  --th-display-weight: 600;
+  --th-display-spacing: 14px;
+  --th-heading-weight: 600;
+  --th-label-spacing: 2.5px;
+
+  --th-panel: rgba(16, 20, 26, 0.9);
+  --th-panel-solid: #12161c;
+  --th-raise: rgba(32, 38, 46, 0.92);
+  --th-raise-hi: #3a4452;
+  --th-line: #36404c;
+  --th-line-hi: #c9ced6;
+  --th-backing: rgba(10, 14, 20, 0.6);
+  --th-backing-solid: #0f1318;
+  --th-scrim: rgba(8, 10, 14, 0.7);
+
+  --th-text: #f3efe6;
+  --th-dim: #a9adb3;
+  --th-faint: #5d636b;
+  --th-accent: #f08a2b;
+  --th-primary-bg: #f3efe6;
+  --th-primary-text: #14181e;
+
+  --th-radius: 6px;
+  --th-shield: #6fb0e0;
+  --th-health: #f3efe6;
+
+  /* the signature stripe */
+  --np-stripes: linear-gradient(90deg, #d8432b 0 25%, #f08a2b 25% 50%, #f2b233 50% 75%, #3a79b8 75% 100%);
+
+  /* HUD tokens (the HUD screens still use tokens.css) */
+  --col-primary: #f08a2b;
+  --col-text: #f3efe6;
+  --col-ref: #6fb0e0;
+  --col-panel: rgba(16, 20, 26, 0.8);
+  --col-line: rgba(243, 239, 230, 0.25);
+}
+
+/* --- decoration ------------------------------------------------------------ */
+/* SLATE: the stripe is a small texture (or 4 colour SBoxes) */
+[data-style='nasapunk'] .gb-panel {
+  background-image: var(--np-stripes);
+  background-size: 100% 4px;
+  background-repeat: no-repeat;
+}
+[data-style='nasapunk'] .comp-frame > .gb-rule { height: 4px; background: var(--np-stripes); border-radius: 2px; }
+[data-style='nasapunk'] .mm-sub { padding-top: 16px; background: var(--np-stripes) top left / 320px 5px no-repeat; }
+
+[data-style='nasapunk'] .gb-tab[aria-selected='true'] { color: var(--gb-text); border-bottom-color: var(--gb-accent); }
+[data-style='nasapunk'] .gb-card[aria-selected='true'] { border-color: var(--gb-line-hi); box-shadow: inset 5px 0 0 var(--gb-accent); }
+[data-style='nasapunk'] .gb-button:focus { border-color: var(--gb-accent); }
+[data-style='nasapunk'] .gb-button.primary:focus { box-shadow: 0 0 0 3px var(--gb-accent); }

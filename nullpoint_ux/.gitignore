@@ -1,0 +1,16 @@
+# OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Node (no dependencies today, but just in case)
+node_modules/
+
+# Tessera scratch output (bakes that the prototype uses live in assets/tessera and ARE committed)
+output/
+
+# Logs
+*.log

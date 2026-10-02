@@ -1,0 +1,62 @@
+/* ============================================================================
+   widgets.css — reusable game widgets (wc-*), each a future widget/WBP.
+   ========================================================================== */
+
+/* --- wc-slot: an item or spell tile (icon, count badge, affinity tint) ------
+   inventory_ui_prd: icon grid, count badge only above 1, hover = name + desc. */
+.wc-slot {
+  position: relative;
+  width: 84px; height: 84px;
+  display: grid; place-items: center;
+  border: var(--gb-border-w) solid var(--gb-line);
+  border-radius: var(--gb-radius);
+  background-color: var(--gb-raise);
+  color: var(--aff, var(--gb-text));
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+}
+.wc-slot .s-image { --w: 44px; --h: 44px; }
+.wc-slot:focus { background-color: var(--gb-raise-hi); border-color: var(--gb-accent); }
+.wc-slot[aria-selected='true'] { border-color: var(--gb-accent); box-shadow: inset 0 0 0 2px var(--gb-accent); }
+.wc-slot.empty { background-color: transparent; border-style: dashed; cursor: default; opacity: 0.55; }
+.wc-slot .wc-count {
+  position: absolute; right: 6px; bottom: 4px;
+  font: 800 16px/1 var(--gb-font);
+  color: var(--gb-text);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+/* A small affinity dot, top-left. Whether affinity is shown at all is open. */
+.wc-slot .wc-aff {
+  position: absolute; left: 7px; top: 7px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background-color: var(--aff);
+}
+[data-v-affinity='hidden'] .wc-aff { display: none; }
+[data-v-affinity='hidden'] .wc-slot { color: var(--gb-text); }
+
+/* --- wc-key: a key/button glyph for prompts -------------------------------- */
+.wc-key {
+  display: inline-grid; place-items: center;
+  min-width: 34px; height: 34px; padding: 0 9px;
+  border-radius: 9px;
+  background-color: rgba(255, 250, 240, 0.92);
+  color: #2a1f18;
+  font: 800 16px/1 'Nunito', sans-serif;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* --- wc-glyph: an action's input glyph, keyboard AND gamepad (src/input.js) ---
+   Both render; the harness Input variant (data-v-input) hides one.
+   Port: CommonUI's input action widget / an SInputGlyph fed by the last device. */
+.wc-glyph { display: inline-flex; }
+.wc-glyph .pad { display: none; }
+[data-v-input='gamepad'] .wc-glyph .kb  { display: none; }
+[data-v-input='gamepad'] .wc-glyph .pad { display: inline-grid; }
+.wc-key.pad { border-radius: 999px; font-size: 14px; background-color: rgba(40, 34, 28, 0.9); color: #fffaf0; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1.5px rgba(255, 250, 240, 0.5); }
+.wc-key.pad.face { width: 34px; padding: 0; }
+.wc-key.sm.pad.face { width: 22px; }
+.wc-key.face-a { color: #7fd06a; }
+.wc-key.face-b { color: #f07060; }
+.wc-key.face-x { color: #6ab0f0; }
+.wc-key.face-y { color: #f0c850; }

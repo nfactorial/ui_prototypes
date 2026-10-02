@@ -1,0 +1,53 @@
+/* ============================================================================
+   Style set: Parchment  (reference: Animal Crossing / Stardew menus, a sketchbook)
+   Light, warm paper panels with ink-brown text. The daylit screenshots are
+   bright, so this tests whether light panels hold up over sky and grass.
+   Cormorant Garamond display, Nunito body, very round corners.
+   ========================================================================== */
+
+#ui-root[data-style='parchment'] {
+  --th-font: 'Nunito', sans-serif;
+  --th-font-display: 'Cormorant Garamond', serif;
+  --th-display-weight: 600;
+  --th-display-spacing: 2px;
+  --th-heading-weight: 700;
+  --th-label-size: 13px;
+  --th-label-spacing: 1.5px;
+
+  --th-panel: rgba(247, 239, 220, 0.94);
+  --th-panel-solid: #f5ecd6;
+  --th-raise: rgba(120, 90, 50, 0.08);
+  --th-raise-hi: rgba(120, 90, 50, 0.18);
+  --th-line: rgba(110, 80, 45, 0.25);
+  --th-line-hi: rgba(90, 64, 34, 0.7);
+  --th-backing: rgba(250, 243, 226, 0.25);
+  --th-backing-solid: #efe4c8;
+  --th-scrim: rgba(60, 44, 26, 0.35);
+  --th-blur: 6px;
+
+  --th-text: #3a2c1e;
+  --th-dim: rgba(58, 44, 30, 0.7);
+  --th-faint: rgba(58, 44, 30, 0.38);
+  --th-accent: #5f8a3a;               /* leaf green */
+  --th-primary-bg: #5f8a3a;
+  --th-primary-text: #fbf6e8;
+
+  --th-good: #4f8a37;
+  --th-warn: #b8742a;
+  --th-power: #c28f1f;
+  --th-note: #8a6d00;
+
+  --th-radius: 18px;
+
+  /* White affinity would vanish on paper: a warm pale grey instead. */
+  --aff-white: #a89c7c;
+  --th-border-w: 2px;
+}
+
+/* --- decoration ------------------------------------------------------------ */
+[data-style='parchment'] .gb-label { color: #8a6a3e; }
+/* Big text over the world (title, banners) stays light with an ink shadow: the paper is for panels. */
+[data-style='parchment'] .mm-title,
+[data-style='parchment'] .nt-banner,
+[data-style='parchment'] .zb { --gb-text: #fbf6e8; }
+[data-style='parchment'] .gb-card[aria-selected='true'] { background-color: rgba(95, 138, 58, 0.14); }

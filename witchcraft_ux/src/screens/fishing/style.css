@@ -1,0 +1,33 @@
+/* Fishing feedback. Prefix: fi- */
+.fi[data-rarity='common']    { --rar: var(--rar-common); }
+.fi[data-rarity='uncommon']  { --rar: var(--rar-uncommon); }
+.fi[data-rarity='rare']      { --rar: var(--rar-rare); }
+.fi[data-rarity='legendary'] { --rar: var(--rar-legendary); }
+
+/* Bite mark: over the bobber (here: centre-right of the frame, roughly where she's looking) */
+.fi-bite { margin: -140px 0 0 260px; font: 900 96px/1 var(--gb-font); color: #fffaf0; opacity: 0; }
+
+/* --- hold-up ------------------------------------------------------------- */
+.fi-bar { height: 110px; background-color: #000; }
+.fi-bar.top { transform-origin: 50% 0; }
+.fi-bar.bottom { transform-origin: 50% 100%; }
+.fi-holdup { margin-top: 170px; gap: 6px; align-items: center; opacity: 0; }
+.fi-you  { font: 600 28px/1 var(--gb-font); }
+.fi-name { font-size: 88px; color: #fffaf0; }
+.fi-rarity { color: var(--rar); letter-spacing: 6px; }
+.fi-new { font: italic 600 22px/1 var(--gb-font-display); color: var(--gb-accent); margin-bottom: 6px; }
+.fi-continue { margin-bottom: 140px; }
+.fi-continue .gb-button { display: flex; gap: 10px; align-items: center; }
+.fi-note { margin: 0 0 128px 48px; max-width: 460px; }
+[data-clean] .fi-note { display: none; }
+
+/* --- card ------------------------------------------------------------------ */
+.fi-card { margin: 0 64px 160px 0; padding: 18px 22px; width: 440px; }
+.fi-card-row { gap: 18px; align-items: center; }
+.fi-card-icon { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background-color: var(--gb-raise); color: var(--rar); }
+.fi-card-icon .s-image { --w: 36px; --h: 36px; }
+.fi-card .fi-rarity { letter-spacing: 2px; }
+
+/* --- got away --------------------------------------------------------------- */
+.fi-away { margin-bottom: 200px; align-items: center; gap: 6px; }
+.fi-away-sub { color: #fffaf0; opacity: 0.8; }

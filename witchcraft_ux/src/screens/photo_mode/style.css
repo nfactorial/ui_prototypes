@@ -1,0 +1,121 @@
+/* Photo mode. Prefix: pm2- (pm- is the pause menu) */
+.pm2 { background-color: #000; }
+.pm2-view { background-repeat: no-repeat; }
+
+/* The world HUD, zone banner and toast stack step aside while the camera is up. */
+#ui-root:has([data-screen='photo-mode']) [data-screen='world-hud'],
+#ui-root:has([data-screen='photo-mode']) [data-screen='zone-banner'] { visibility: hidden; }
+
+/* --- the camera look ------------------------------------------------------ */
+.pm2-vignette { background: radial-gradient(ellipse at 50% 50%, transparent 62%, rgba(0, 0, 0, 0.35) 100%); } /* SLATE: material */
+.pm2-marks { margin: 70px 90px; }
+.pm2-corner { width: 44px; height: 44px; border: 0 solid rgba(255, 250, 240, 0.85); }
+.pm2-corner.tl { place-self: start start; border-width: 3px 0 0 3px; }
+.pm2-corner.tr { place-self: start end;   border-width: 3px 3px 0 0; }
+.pm2-corner.bl { place-self: end start;   border-width: 0 0 3px 3px; }
+.pm2-corner.br { place-self: end end;     border-width: 0 3px 3px 0; }
+
+/* The view: the scene through the lens (photo.js sceneMarkup). */
+.pm2 { overflow: hidden; }
+.pm2-view { display: grid; overflow: hidden; }
+
+/* --- each camera's viewfinder (variant 'photoui' = body; 2026-10-01) ---------------
+   A nod to the real thing, never its trade dress. Drawn only when looking through
+   (viewfinder view), hidden by Hide UI and while a frame is previewed.
+   SLATE: each is an overlay of textures (masks, frame lines) + text blocks. */
+.pm2[data-body]:not([data-body='']) .pm2-marks { display: none; }
+.pm2-finder { --ink: rgba(255, 250, 240, 0.8); }
+.pm2-finder > * { place-self: center; }
+.pm2-finder .s-hbox { gap: 34px; }
+
+/* Box camera: peering through a vintage box camera, a hand-drawn focus ring. */
+.pm2[data-body='box'] .pm2-vignette { background: radial-gradient(ellipse 46% 50% at 50% 50%, transparent 88%, rgba(10, 8, 6, 0.96) 100%); }
+.pm2-f-ring { width: 90px; height: 90px; border-radius: 50%; border: 2px solid rgba(255, 250, 240, 0.55); }
+
+/* SLRs (Onnik, Aconn): a dark surround round the frame, a readout beneath it. */
+.pm2-f-gate { place-self: stretch; margin: 40px 70px 210px; border-radius: 8px; box-shadow: 0 0 0 3000px rgba(6, 6, 6, 0.95); } /* SLATE: mask texture */
+.pm2-f-lcd { place-self: end center; margin-bottom: 172px; font: 600 26px/1 ui-monospace, 'Consolas', monospace; color: #8fe08a; letter-spacing: 0.04em; }
+/* Onnik: a split-image circle in a ring of microprisms, the classic focusing screen. */
+.pm2-f-prism { width: 230px; height: 230px; border-radius: 50%; border: 2px dotted rgba(255, 250, 240, 0.35); }
+.pm2-f-split { width: 110px; height: 110px; border-radius: 50%; border: 2px solid var(--ink);
+  background: linear-gradient(transparent calc(50% - 1px), var(--ink) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)); }
+/* Aconn: a scatter of focus points; the one it found blinks red. */
+.pm2-f-af { display: grid; place-items: center; }
+.pm2-f-pt { grid-area: 1 / 1; width: 24px; height: 18px; border: 2px solid rgba(255, 250, 240, 0.55);
+  translate: calc(var(--x) * 120px) calc(var(--y) * 90px); }
+.pm2-f-pt.on { border-color: #ff4b3a; background-color: rgba(255, 75, 58, 0.25); }
+
+/* Nyso: an electronic finder, full of readouts. */
+.pm2-f-evf { place-self: start stretch; margin: 46px 70px 0; font: 600 24px/1 ui-monospace, 'Consolas', monospace; color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); padding-left: 420px; padding-right: 380px; } /* clear of the mode + place labels */
+.pm2-f-level { width: 420px; height: 2px; background: linear-gradient(90deg, #7be07b 0 42%, transparent 42% 58%, #7be07b 58%); }
+.pm2-f-focus { width: 130px; height: 96px; border: 3px solid #7be07b; border-radius: 4px; }
+.pm2-f-histo { place-self: center end; margin-right: 80px; width: 170px; height: 70px; padding: 6px;
+  background-color: rgba(0, 0, 0, 0.45); fill: rgba(255, 255, 255, 0.7); }
+
+/* Icale: a rangefinder. You see past the edges; bright lines mark the photo, and
+   they shrink for a longer lens (the view itself doesn't zoom). */
+.pm2-f-lines { width: var(--frame); aspect-ratio: 16 / 9; display: grid; }
+.pm2-f-lines .c { width: 44px; height: 44px; border: 0 solid #fff3cf; filter: drop-shadow(0 0 3px rgba(255, 236, 170, 0.8)); }
+.pm2-f-lines .c.tl { place-self: start start; border-width: 3px 0 0 3px; }
+.pm2-f-lines .c.tr { place-self: start end;   border-width: 3px 3px 0 0; }
+.pm2-f-lines .c.bl { place-self: end start;   border-width: 0 0 3px 3px; }
+.pm2-f-lines .c.br { place-self: end end;     border-width: 0 3px 3px 0; }
+.pm2-f-patch { width: 120px; height: 76px; background-color: rgba(255, 214, 120, 0.2); border: 1px solid rgba(255, 236, 170, 0.5); }
+.pm2-f-led { place-self: end center; margin-bottom: 176px; gap: 18px; font: 700 24px/1 ui-monospace, monospace; color: #ff4b3a; }
+
+/* Blassi: looked down into, onto ground glass. Square, gridded, and the scene is
+   back to front, as a waist-level finder shows it. */
+.pm2[data-body='blassi'] .pm2-view { transform: scaleX(-1); }
+.pm2-f-hood { place-self: stretch; margin: 40px 70px; display: grid; border-radius: 6px;
+  box-shadow: 0 0 0 3000px rgba(8, 7, 6, 0.97), inset 0 0 120px rgba(0, 0, 0, 0.55); } /* SLATE: mask texture */
+.pm2-f-hood.square { place-self: center; margin: 0; height: 860px; aspect-ratio: 1; }
+.pm2-f-grid { place-self: stretch;
+  background: linear-gradient(90deg, transparent calc(33.33% - 1px), rgba(255, 250, 240, 0.3) 0 calc(33.33% + 1px), transparent 0 calc(66.66% - 1px), rgba(255, 250, 240, 0.3) 0 calc(66.66% + 1px), transparent 0),
+              linear-gradient(transparent calc(33.33% - 1px), rgba(255, 250, 240, 0.3) 0 calc(33.33% + 1px), transparent 0 calc(66.66% - 1px), rgba(255, 250, 240, 0.3) 0 calc(66.66% + 1px), transparent 0); }
+.pm2-f-circle { grid-area: 1 / 1; place-self: center; width: 150px; height: 150px; border-radius: 50%; border: 2px solid rgba(255, 250, 240, 0.45); }
+.pm2-f-grid { grid-area: 1 / 1; }
+/* Selfie: the phone-less "held out" camera, a softer frame. */
+.pm2[data-view='selfie'] .pm2-corner { border-color: rgba(255, 250, 240, 0.55); border-radius: 14px; }
+
+/* --- frame preview, drawn round the whole screen (AC:NH does this) --------- */
+.pm2-frame[data-frame='polaroid'] { border: solid #f7f3ea; border-width: 40px 40px 150px 40px; }
+.pm2-frame[data-frame='postcard'] { border: solid #efe4c8; border-width: 50px 50px 130px 50px; }
+.pm2-frame[data-frame='pressed']  { border: 60px solid #3b2c20; }
+.pm2-frame-cap { place-self: end center; margin-bottom: -110px; font: 600 54px/1 'Caveat', cursive; color: #3a2c1e; }
+.pm2-frame[data-frame='postcard'] .pm2-frame-cap { margin-bottom: -95px; }
+
+/* --- UI --------------------------------------------------------------------- */
+.pm2-ui { padding: 100px 120px; }
+.pm2-top { gap: 4px; }
+.pm2-mode { font: italic var(--gb-heading-weight) 38px/1 var(--gb-font-display); }
+.pm2-sub, .pm2-where .gb-small { color: #fffaf0; }
+.pm2-where { gap: 4px; align-items: flex-end; }
+.pm2-pose { margin-bottom: 96px; gap: 10px; align-items: center; }
+.pm2-pose .gb-small { color: #fffaf0; }
+.pm2-bar {
+  gap: 6px; padding: 8px; border-radius: 999px;
+  background-color: color-mix(in srgb, var(--gb-bg-solid) 80%, transparent);
+  border: var(--gb-border-w) solid var(--gb-line);
+}
+.pm2-ctl {
+  pointer-events: auto;
+  gap: 8px; align-items: center; padding: 8px 14px 8px 8px; border-radius: 999px;
+  color: var(--gb-text); cursor: pointer; outline: none; display: flex;
+}
+.pm2-ctl .gb-small { color: var(--gb-text); }
+.pm2-ctl:hover, .pm2-ctl:focus { background-color: var(--gb-raise-hi); }
+.pm2-ctl.primary { background-color: var(--gb-primary-bg); }
+.pm2-ctl.primary .gb-small { color: var(--gb-primary-text); font-weight: 700; }
+.pm2-note { margin-bottom: 90px; max-width: 360px; }
+[data-clean] .pm2-note { display: none; }
+
+/* --- shutter + saved ----------------------------------------------------------- */
+.pm2-flash { background-color: #fff; opacity: 0; }
+.pm2-saved { margin: 0 70px 170px 0; opacity: 0; }
+.pm2-saved-card { gap: 10px; align-items: center; }
+.pm2-thumb { width: 300px; aspect-ratio: 4 / 3.4; font-size: 26px; }
+.pm2-saved-label { color: #fffaf0; font-weight: 700; }
+
+/* With a frame on, the frame is the composition: no brackets over it. */
+.pm2:has(.pm2-frame:not([data-frame='none'])) :is(.pm2-marks, .pm2-finder) { display: none; }

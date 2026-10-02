@@ -1,0 +1,39 @@
+/* Flight HUD. Prefix: fhud- */
+
+.fhud-frame { padding: var(--sp-6); }
+
+.fhud-reticle { color: var(--col-primary); opacity: 0.8; }
+
+/* --- rating readout (top-left) ------------------------------------------- */
+.fhud-rating { padding: var(--sp-4) var(--sp-5); min-width: 260px; }
+.fhud-rating-row { gap: var(--sp-5); margin: var(--sp-1) 0 var(--sp-1); }
+.fhud-rating-side { gap: 2px; padding-bottom: 3px; }
+
+.fhud-ladder { gap: 3px; margin-top: var(--sp-3); }
+.fhud-rung {
+  --w: 14px;
+  --h: 6px;
+  background-color: var(--col-text-faint);
+  opacity: 0.5;
+}
+.fhud-rung.is-below-floor { background-color: var(--col-danger); opacity: 0.35; }
+.fhud-rung.is-current     { background-color: var(--col-ref); opacity: 1; }
+.fhud-rung.is-current.is-below-floor { background-color: var(--col-danger); }
+
+.fhud-void {
+  margin-top: var(--sp-3);
+  padding: var(--sp-1) var(--sp-2);
+  border: var(--line) solid var(--col-danger);
+  background-color: rgba(229, 83, 61, 0.12);
+}
+
+/* --- ship status (bottom-left) ------------------------------------------- */
+.fhud-status { padding: var(--sp-4); width: 240px; }
+.fhud-bars { gap: var(--sp-3); }
+
+/* --- nav readout (bottom-right) ------------------------------------------ */
+.fhud-nav { padding: var(--sp-4) var(--sp-5); width: 300px; }
+.fhud-nav .ts-heading { margin-top: 2px; }
+.fhud-nav-row { gap: var(--sp-4); margin: var(--sp-3) 0; }
+.fhud-speed { gap: var(--sp-2); padding-top: var(--sp-3); }
+.fhud-unit { padding-bottom: 3px; }

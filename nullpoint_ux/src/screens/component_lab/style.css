@@ -1,0 +1,10 @@
+/* Component lab. Prefix: lab- */
+.lab { pointer-events: none; }
+.lab-panel { pointer-events: auto; width: 440px; margin: 24px; padding: 24px; overflow-y: auto; }
+.lab-body { gap: 12px; }
+.lab-head { margin-top: 12px; }
+.lab-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+.lab-grid .gb-button { font-size: 16px; padding: 12px 14px; }
+.lab-wide { grid-column: 1 / -1; }
+.lab-tips { gap: 8px; }
+.lab-tips .gb-button { font-size: 16px; padding: 12px 14px; }

@@ -1,0 +1,33 @@
+/* Study: something learned. Prefix: sr- */
+#ui-root:has([data-screen='study-reveal']) [data-screen='world-hud'] { visibility: hidden; }
+
+.sr-shade { background: radial-gradient(ellipse at 50% 45%, rgba(10, 6, 2, 0.35) 0%, transparent 70%); }  /* SLATE: material, or none */
+.sr-card {
+  place-self: center; width: 560px; padding: 30px 40px 32px; gap: 10px; align-items: center; text-align: center;
+  background-color: var(--th-speech, var(--gb-bg-solid));
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);             /* SLATE: shadow texture, or drop it */
+}
+/* Card: smaller, off to the side, gone by itself. */
+.sr[data-look='card'] .sr-card { place-self: start end; margin: 150px 80px 0 0; width: 440px; padding: 22px 28px 24px; }
+.sr[data-look='card'] .sr-shade { display: none; }
+.sr[data-look='card'] .sr-name { font-size: 30px; }
+
+.sr-head { gap: 10px; align-items: center; transform-origin: 50% 60%; }
+.sr-spark { width: 34px; height: 34px; color: var(--gb-accent); }
+.sr-spark .s-image { --w: 34px; --h: 34px; }
+.sr-aha { font: 700 58px/1 'Caveat', cursive; color: var(--gb-accent); }    /* in her hand */
+.sr-sub { margin-top: 2px; }
+.sr-name { font-size: 40px; }
+
+.sr-pips { gap: 8px; margin: 6px 0 4px; }
+.sr-pip { width: 42px; height: 8px; border-radius: 4px; background-color: var(--gb-line); }
+.sr-pip.on { background-color: var(--gb-accent); }
+.sr-pip.new { box-shadow: 0 0 12px color-mix(in srgb, var(--gb-accent) 70%, transparent); }  /* SLATE: glow texture */
+
+.sr-learned { gap: 8px; align-items: center; margin-top: 8px; }
+.sr-chip { font-size: 20px; }
+.sr-hint { color: var(--gb-warn); }
+.sr-complete { margin-top: 8px; color: var(--gb-good); font-weight: 700; }
+.sr-ok { margin-top: 14px; display: flex; gap: 10px; align-items: center; }
+
+.sr-note { margin: 0 0 40px 48px; max-width: 460px; }

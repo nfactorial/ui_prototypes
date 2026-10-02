@@ -1,0 +1,9 @@
+/* Zone banner. Prefix: zb- */
+.zb-banner { margin-top: 150px; gap: 6px; align-items: center; opacity: 0; width: 900px; }
+.zb-kicker { font: 600 15px/1 var(--gb-font); letter-spacing: 6px; text-transform: uppercase; opacity: 0.85; }
+.zb-name { font: var(--gb-display-weight) 64px/1.1 var(--gb-font-display); letter-spacing: 1px; color: #fffaf0; }
+.zb-rules { width: 420px; align-items: center; gap: 12px; margin-top: 6px; }
+.zb-rule { height: 1.5px; background-color: rgba(255, 250, 240, 0.8); box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+.zb-rule.l { transform-origin: 100% 50%; }
+.zb-rule.r { transform-origin: 0 50%; }
+.zb-dot { width: 7px; height: 7px; rotate: 45deg; background-color: #fffaf0; box-shadow: 0 1px 2px rgba(0,0,0,0.5); }

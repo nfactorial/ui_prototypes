@@ -1,0 +1,10 @@
+/* In-world prompts. Prefix: wp- */
+.wp-hints { margin: 28px 40px 0 0; gap: 20px; }
+.wp-hint { gap: 8px; align-items: center; color: var(--gb-text); text-shadow: 0 1px 2px #000; }
+.wp-hint .gb-key { height: 26px; min-width: 26px; font-size: 13px; }
+
+.wp-tip-pos { margin-bottom: 250px; }
+.wp-tip { padding: 20px 24px; }
+.wp-tip-row { gap: 20px; align-items: center; }
+.wp-tip-key { min-width: 52px; height: 52px; font-size: 24px; border-radius: 10px; }
+.wp-demo { opacity: 0.6; }

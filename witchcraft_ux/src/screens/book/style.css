@@ -1,0 +1,239 @@
+/* The witch's book. Prefix: bk- */
+
+/* --- backing: panel (world softened behind) vs spread (full-screen book) --- */
+.bk-backing { background-color: var(--gb-backing); backdrop-filter: blur(var(--gb-blur)); } /* SLATE: SBackgroundBlur */
+.bk[data-look='spread'] .bk-backing {
+  background: radial-gradient(ellipse at 50% 40%, color-mix(in srgb, var(--gb-backing-solid) 80%, #fff 6%) 0%, var(--gb-backing-solid) 75%); /* SLATE: material or texture */
+  backdrop-filter: none;
+}
+
+.bk-frame { width: 1360px; height: 800px; gap: 18px; }
+.bk[data-look='spread'] .bk-frame { width: 1680px; height: 940px; }
+
+/* --- head: tabs + close ---------------------------------------------------- */
+.bk-head { align-items: center; gap: 16px; }
+.bk-tabs { align-items: center; gap: 6px; }
+.bk-q { opacity: 0.8; }
+.bk-close { display: flex; gap: 10px; align-items: center; padding: 10px 16px; }
+
+/* --- pages -------------------------------------------------------------------- */
+.bk-pages { gap: 0; min-height: 0; }
+.bk-page {
+  gap: 14px; padding: 28px 32px; min-height: 0;
+  background-color: var(--gb-bg);
+  border: var(--gb-border-w) solid var(--gb-line);
+}
+.bk-left  { width: 440px; border-radius: var(--gb-radius) 0 0 var(--gb-radius); border-right: none; }
+.bk-right { border-radius: 0 var(--gb-radius) var(--gb-radius) 0; }
+.bk-wide  { border-radius: var(--gb-radius); }
+/* Spread: two facing pages with a spine shadow. SLATE: page textures + a spine image */
+.bk[data-look='spread'] .bk-left  { box-shadow: inset -24px 0 30px -20px rgba(0, 0, 0, 0.45); border-right: none; }
+.bk[data-look='spread'] .bk-right { box-shadow: inset 24px 0 30px -20px rgba(0, 0, 0, 0.45); }
+.bk[data-look='spread'] .bk-left  { width: 700px; }
+.bk-page-head { align-items: baseline; }
+.bk-note { margin-top: auto; }
+
+/* --- satchel -------------------------------------------------------------------- */
+.bk-portrait {
+  width: 376px; height: 470px; /* 4:5 (inventory_ui_umg_walkthrough) */
+  border-radius: var(--gb-radius); overflow: hidden;
+  border: var(--gb-border-w) solid var(--gb-line);
+}
+.bk[data-look='spread'] .bk-portrait { width: 440px; height: 550px; align-self: center; }
+.bk-name { margin-top: 4px; }
+.bk-strong { color: var(--gb-text); font-weight: 700; }
+
+.bk-grid { grid-template-columns: repeat(8, 84px); gap: 10px; align-content: start; justify-content: start; }
+.bk-detail {
+  margin-top: 8px; padding: 18px 20px; min-height: 130px;
+  border-radius: var(--gb-radius);
+  background-color: var(--gb-raise);
+}
+.bk-detail-row { gap: 18px; align-items: flex-start; }
+.bk-detail-icon {
+  width: 72px; height: 72px; display: grid; place-items: center;
+  border-radius: var(--gb-radius); background-color: var(--gb-raise);
+  color: var(--aff, var(--gb-text));
+}
+.bk-detail-icon .s-image { --w: 42px; --h: 42px; }
+.bk-aff-label { color: var(--aff); margin-top: 8px; }
+[data-v-affinity='hidden'] .bk-aff-label { display: none; }
+[data-v-affinity='hidden'] .bk-detail-icon { color: var(--gb-text); }
+
+/* --- spells ------------------------------------------------------------------ */
+.bk-slots { gap: 10px; margin-top: 8px; }
+.bk-lslot { padding: 12px 16px; }
+.bk-lslot.empty { border-style: dashed; }
+.bk-lslot-row { gap: 14px; align-items: center; }
+.bk-num { font: 800 16px/1 var(--gb-font); color: var(--gb-dim); width: 16px; }
+.bk-spell-icon {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  border-radius: 50%; border: 2px solid var(--aff); color: var(--aff);
+}
+.bk-spell-icon .s-image { --w: 22px; --h: 22px; }
+.bk-spell-icon.big { width: 56px; height: 56px; flex: none; }
+.bk-spell-icon.big .s-image { --w: 30px; --h: 30px; }
+[data-v-affinity='hidden'] .bk-spell-icon { --aff: var(--gb-text); }
+
+.bk-known { grid-template-columns: 1fr 1fr; gap: 12px; padding-right: 8px; }
+.bk-spell-row { gap: 16px; align-items: flex-start; }
+.bk-spell .s-vbox { gap: 4px; }
+.bk-spell[aria-selected='true'] .gb-h3::after { content: '  · ready'; color: var(--gb-accent); font-size: 15px; font-weight: 600; } /* SLATE: a separate text block */
+.bk-cost[data-cost='reagent'] { color: var(--gb-warn); }
+.bk-cost[data-cost='ritual'] { color: var(--gb-good); }
+
+/* --- collection cards (fish, flowers) ------------------------------------------ */
+.bk-fish { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.bk-fishcard { padding: 16px 18px; }
+.bk-fish-row { gap: 16px; align-items: center; }
+.bk-fish-icon { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background-color: var(--gb-raise); color: var(--rar); flex: none; }
+.bk-fish-icon .s-image { --w: 32px; --h: 32px; }
+.bk-fishcard .s-vbox { gap: 4px; }
+.bk-rarity { color: var(--rar); }
+.bk-fishcard[data-rarity='common']    { --rar: var(--rar-common); }
+.bk-fishcard[data-rarity='uncommon']  { --rar: var(--rar-uncommon); }
+.bk-fishcard[data-rarity='rare']      { --rar: var(--rar-rare); }
+.bk-fishcard[data-rarity='legendary'] { --rar: var(--rar-legendary); }
+.bk-fishcard.unknown { opacity: 0.55; }
+.bk-fishcard.unknown .bk-fish-icon { color: var(--gb-faint); }
+.bk-fishcard.unknown .bk-rarity { color: var(--gb-faint); }
+
+/* --- collections: fish, flowers ------------------------------------------ */
+.bk-fish-meta { gap: 10px; align-items: baseline; }
+.bk-where { color: var(--gb-text); }
+.bk-count { color: var(--gb-faint); }
+
+/* --- creatures (study) ------------------------------------------------------ */
+.bk-creatures { gap: 12px; }
+.bk-creature { padding: 16px 20px; }
+.bk-creature-row { gap: 28px; align-items: center; }
+.bk-creature-name { width: 260px; gap: 6px; }
+.bk-study { gap: 6px; }
+.bk-study-pip { width: 28px; height: 6px; border-radius: 3px; background-color: var(--gb-line); }
+.bk-study-pip.on { background-color: var(--gb-accent); }
+.bk-reagents { gap: 10px; }
+.bk-reagent {
+  gap: 8px; align-items: center; padding: 8px 14px 8px 10px;
+  border-radius: 999px; background-color: transparent; border: var(--gb-border-w) solid var(--gb-line);
+  opacity: 0.75;
+}
+.bk-reagent.carried { background-color: var(--gb-raise-hi); border-color: var(--gb-line-hi); opacity: 1; }
+.bk-reagent.unknown, .bk-reagent.unlearned { opacity: 1; }
+.bk-reagent .s-image { --w: 22px; --h: 22px; }
+.bk-reagent.unknown { border-style: dashed; color: var(--gb-dim); }
+.bk-reagent.unknown .gb-body { color: var(--gb-dim); font-style: italic; }
+.bk-reagent.unlearned { background: none; border-style: dashed; }
+.bk-reagent.unlearned .gb-body { color: var(--gb-faint); font-style: italic; }
+
+/* --- rail: categories down the left (Recipes, Almanac) ----------------------
+   Two levels, never more: tabs across (LB/RB), the rail down (LT/RT).          */
+.bk-rail { width: 240px; gap: 8px; border-radius: var(--gb-radius) 0 0 var(--gb-radius); border-right: none; padding: 20px 16px; }
+.bk-rail-item { padding: 12px 14px; }
+.bk-rail-row { gap: 12px; align-items: center; }
+.bk-rail-row .s-image { --w: 24px; --h: 24px; }
+.bk-rail-item[aria-selected='true'] { color: var(--gb-accent); }
+.bk-rail-glyph { align-self: center; opacity: 0.8; }
+.bk-body { min-height: 0; gap: 0; }
+/* Pages beside the rail lose their left rounding: the rail is the book's left edge. */
+.bk-body .bk-left { border-radius: 0; }
+.bk-body .bk-wide { border-radius: 0 var(--gb-radius) var(--gb-radius) 0; }
+.bk[data-look='spread'] .bk-rail { box-shadow: inset -24px 0 30px -20px rgba(0, 0, 0, 0.45); }
+
+/* --- recipes ----------------------------------------------------------------- */
+.bk-creature.unlearnt { opacity: 0.6; border-style: dashed; }
+/* Recipe icon slot (user, 2026-09-29): placeholder until icons are bought. SLATE: SImage 72×72 */
+.bk-recipe-icon {
+  flex: none; width: 72px; height: 72px; display: grid; place-items: center;
+  border-radius: calc(var(--gb-radius) * 0.8); border: var(--gb-border-w) dashed var(--gb-line-hi);
+  background-color: var(--gb-raise); color: var(--gb-dim);
+}
+.bk-recipe-icon .s-image { --w: 34px; --h: 34px; }
+.bk-recipe-icon.unknown { border-color: var(--gb-line); color: var(--gb-faint); font: 800 30px/1 var(--gb-font-display); }
+.bk-creature-row:has(.bk-recipe-icon) .bk-creature-name { width: 250px; }
+.bk-ready { color: var(--gb-good); font-weight: 700; }
+.bk-recipe-desc { color: var(--gb-dim); max-width: 240px; }
+.bk-study-row { gap: 10px; align-items: center; margin-top: 2px; }
+
+/* --- spells: one list + a read-only "ready" strip ------------------------------- */
+.bk-spells { gap: 12px; }
+.bk-spells .bk-known { grid-template-columns: 1fr 1fr; }
+.bk-ready-strip {
+  gap: 16px; align-items: center; min-height: 64px; padding: 12px 16px;
+  border-radius: var(--gb-radius); background-color: var(--gb-raise);
+}
+.bk-ready-pips { gap: 10px; flex-wrap: wrap; }
+.bk-ready-pip {
+  gap: 8px; align-items: center; padding: 6px 12px 6px 8px; border-radius: 999px;
+  border: var(--gb-border-w) solid var(--aff, var(--gb-line)); color: var(--aff, var(--gb-text));
+}
+.bk-ready-pip .s-image { --w: 20px; --h: 20px; }
+.bk-ready-pip .gb-small { color: var(--gb-text); }
+.bk-ready-pip.empty { border-style: dashed; border-color: var(--gb-line); }
+.bk-ready-pip.empty .gb-small { color: var(--gb-faint); }
+[data-v-affinity='hidden'] .bk-ready-pip { --aff: var(--gb-line-hi); }
+.bk-ready-pip .wc-glyph { margin-right: 2px; }
+.bk-ready-strip.assigning { box-shadow: inset 0 0 0 2px var(--gb-accent); }   /* it's asking */
+.bk-ready-strip.assigning .bk-strip-label { color: var(--gb-accent); }
+.bk-ready-strip.assigning .bk-ready-pip { display: flex; flex-direction: row; cursor: pointer; background-color: var(--gb-raise); font: inherit; outline: none; }
+.bk-ready-strip.assigning .bk-ready-pip:focus,
+.bk-ready-strip.assigning .bk-ready-pip:hover { background-color: var(--gb-raise-hi); border-color: var(--gb-accent); }
+.bk-spell.assigning { border-color: var(--gb-accent); box-shadow: inset 0 0 0 2px var(--gb-accent); }
+.bk-strip-head { gap: 6px; width: 190px; }
+.bk-cancel { gap: 6px; align-items: center; }
+.bk-ready-strip > .bk-ready-pips { flex: 1 1 0; }   /* take the room left, wrap if short: Cancel never clips */
+
+/* --- keepsakes ---------------------------------------------------------------- */
+.bk-task, .bk-milestone { padding: 14px 18px; gap: 20px; align-items: center; cursor: default; }
+.bk-task.done, .bk-milestone.done { border-color: var(--gb-good); }
+.bk-task-text { gap: 8px; }
+.bk-task-progress { gap: 12px; align-items: center; }
+.bk-bar { --h: 6px; width: 260px; color: var(--gb-good); background-color: var(--gb-raise-hi); border-radius: 3px; overflow: hidden; }
+.bk-task-reward { width: 230px; gap: 4px; }
+.bk-claim { display: flex; gap: 10px; align-items: center; padding: 10px 16px; }
+.bk-claim-space { width: 118px; }
+
+.bk-ms-name { width: 300px; gap: 4px; }
+.bk-stamps { gap: 12px; align-items: center; }
+.bk-stamp {                                   /* a tier: empty ring → reached (dashed gold) → claimed (filled). SLATE: stamp textures */
+  width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+  border: 2px solid var(--gb-line); color: var(--gb-faint); font: 800 14px/1 var(--gb-font);
+}
+.bk-stamp.ready { border: 2px dashed var(--gb-accent); color: var(--gb-accent); }
+.bk-stamp.claimed { background-color: var(--gb-accent); border-color: var(--gb-accent); color: var(--gb-primary-text); rotate: -8deg; }
+
+.bk-album { grid-template-columns: repeat(3, 1fr); gap: 34px 30px; padding: 16px 12px 24px; }
+.bk-album-item { padding: 0; rotate: var(--tilt); outline: none; transition: rotate 120ms ease-out, scale 120ms ease-out; }
+.bk-album-item:focus, .bk-album-item:hover { rotate: 0deg; scale: 1.04; }
+.bk-album-photo { width: 100%; aspect-ratio: 4 / 3.4; font-size: 24px; }
+
+/* --- camera kit ---------------------------------------------------------------- */
+.bk-kit-wrap { gap: 12px; padding-right: 8px; }
+.bk-kit { grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 14px; }
+.bk-kit-item { padding: 12px; gap: 6px; display: flex; flex-direction: column; align-items: stretch; text-align: left; }
+.bk-kit-sample { display: grid; aspect-ratio: 4 / 3.2; border-radius: calc(var(--gb-radius) * 0.6); overflow: hidden; background-color: var(--gb-raise); }
+.bk-kit-photo { width: 100%; height: 100%; font-size: 12px; }
+.bk-kit-unknown { place-self: center; font: 800 34px/1 var(--gb-font-display); color: var(--gb-faint); }
+.bk-kit-item.missing { border-style: dashed; }
+.bk-kit-item.missing .gb-h3 { color: var(--gb-dim); font-style: italic; }
+.bk-kit-meta { color: var(--gb-dim); margin-top: -4px; }
+
+/* --- milestone cards (variant 'milestones' = cards) ------------------------------------ */
+.bk-mcards { grid-template-columns: repeat(3, 1fr); gap: 14px; padding-right: 8px; }
+.bk-mcard { padding: 14px 16px 14px; gap: 4px; align-items: center; text-align: center; cursor: default; }
+.bk-mcard.done { border-color: var(--gb-good); }
+.bk-mcard-stamp {                                   /* the milestone's stamp. SLATE: an illustrated stamp texture later */
+  width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 2px;
+  border: 2px dashed var(--gb-line-hi); color: var(--gb-dim);
+}
+.bk-mcard-stamp .s-image { --w: 30px; --h: 30px; }
+.bk-mcard-stamp.earned { border: 2px solid var(--gb-accent); color: var(--gb-accent); background-color: color-mix(in srgb, var(--gb-accent) 12%, transparent); rotate: -6deg; }
+.bk-mpips { gap: 6px; margin: 4px 0 2px; }
+.bk-mpip { width: 14px; height: 14px; border-radius: 50%; }
+.bk-mpip.claimed { background-color: var(--gb-accent); }
+.bk-mpip.ready { border: 2px dashed var(--gb-accent); }
+.bk-mpip.next { border: 2px solid var(--gb-line-hi); }
+.bk-mprogress { gap: 10px; align-items: center; }
+.bk-mprogress .bk-bar { width: 150px; }
+.bk-mdone { color: var(--gb-good); font-weight: 700; }
+.bk-mcard .bk-claim { margin-top: 4px; padding: 8px 14px; }
+.bk-mgoal { color: var(--gb-text); font-weight: 700; }   /* the next goal, said as a sentence */

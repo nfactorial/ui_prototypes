@@ -1,0 +1,70 @@
+/* Dialogue. Prefix: dl- */
+
+/* World bits step aside while talking (the prompt would sit under the panel). */
+#ui-root:has([data-screen='dialogue']) [data-screen='world-hud'] { visibility: hidden; }
+
+.dl-shade { background: linear-gradient(0deg, rgba(10, 6, 2, 0.45) 0%, transparent 38%); }   /* SLATE: gradient texture */
+
+/* --- the speech box (shared) ---------------------------------------------------- */
+.dl {
+  /* The speech surface: a theme value (--th-speech). Hedgewitch: the original tone, lifted and more
+     golden (user, 2026-09-29: original "a bit too dark"; a cream mix was "bright and desaturated"). */
+  --dl-bg: var(--th-speech, var(--gb-bg-solid));
+  --dl-bg-hi: var(--th-speech-hi, var(--gb-raise-hi));
+}
+.dl-box {
+  position: relative; outline: none; cursor: pointer;
+  background-color: var(--dl-bg);
+  border: var(--gb-border-w) solid var(--gb-line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);                  /* SLATE: shadow texture, or drop it */
+}
+.dl-name {                                                    /* the tilted name tag (AC:NH) */
+  position: absolute; left: 34px; top: -26px; rotate: -3deg;
+  padding: 8px 22px; border-radius: 999px;
+  background-color: var(--who); color: #fffaf0;
+  font: 800 24px/1 var(--gb-font); letter-spacing: 0.5px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+.dl-text { font: 600 30px/1.45 var(--gb-font); color: var(--gb-text); min-height: 88px; padding-right: 64px; }
+.dl-em { color: var(--who); font-weight: 800; }
+.dl-next { position: absolute; right: 28px; bottom: 18px; }
+
+/* --- panel (AC:NH) --------------------------------------------------------------- */
+.dl[data-look='panel'] .dl-box {
+  place-self: end center; width: 1180px; margin-bottom: 70px;
+  padding: 44px 60px 34px; border-radius: 48px;              /* SLATE: rounded-box brush */
+}
+.dl[data-look='panel'] .dl-mark { display: none; }
+
+/* --- bubble ----------------------------------------------------------------------------
+   Anchored above where the speaker stands (in the game: projected from the NPC's head
+   socket each frame). Here: a fixed spot right of the witch, with a placeholder marker. */
+.dl[data-look='bubble'] .dl-box {
+  place-self: start start; margin: 170px 0 0 1060px; width: 620px;
+  padding: 40px 36px 30px; border-radius: 34px;
+}
+.dl[data-look='bubble'] .dl-text { font-size: 26px; min-height: 76px; }
+.dl-tail { display: none; }
+.dl[data-look='bubble'] .dl-tail {                            /* the tail. SLATE: part of a bubble texture */
+  display: block; position: absolute; left: 110px; bottom: -22px; width: 36px; height: 36px;
+  background-color: var(--dl-bg); rotate: 45deg; border-radius: 0 0 8px 0;
+}
+.dl-mark {
+  place-self: start start; margin: 330px 0 0 1110px; width: 140px; height: 260px;
+  border: 2px dashed rgba(255, 250, 240, 0.6); border-radius: 70px 70px 20px 20px;
+  display: grid; place-items: center; text-align: center;
+}
+.dl-mark .gb-small { color: #fffaf0; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); white-space: normal; padding: 8px; }
+
+/* --- replies ------------------------------------------------------------------------ */
+.dl-choices { gap: 10px; align-items: flex-end; }
+.dl[data-look='panel'] .dl-choices { place-self: end end; margin: 0 calc(50% - 590px + 24px) 286px 0; }   /* right edge of the panel, just above it */
+.dl[data-look='bubble'] .dl-choices { place-self: end start; margin: 0 0 200px 520px; }
+.dl .dl-choice {
+  padding: 14px 24px; border-radius: 999px; font: 700 22px/1 var(--gb-font);
+  background-color: var(--dl-bg); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+/* Hover moves focus; keep the fill solid (the shared card focus colour is translucent). */
+.dl .dl-choice:focus, .dl .dl-choice:hover { background-color: var(--dl-bg-hi); border-color: var(--who); box-shadow: 0 0 0 2px var(--who), 0 6px 16px rgba(0, 0, 0, 0.3); }
+
+.dl-note { margin: 40px 48px; max-width: 520px; }

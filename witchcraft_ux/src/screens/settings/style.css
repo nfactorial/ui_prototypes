@@ -1,0 +1,12 @@
+/* Settings (stub). Prefix: set- */
+.set-scrim { background-color: var(--gb-backing-solid); }
+.set-frame { margin: 72px 120px; gap: 24px; }
+.set-head { align-items: center; gap: 16px; }
+.set-head .gb-button { display: flex; gap: 12px; align-items: center; }
+.set-body { gap: 32px; }
+.set-tabs { width: 300px; gap: 8px; }
+.set-tabs .gb-card { font-size: 20px; }
+.set-rows { gap: 8px; }
+.set-row { padding: 18px 22px; }
+.set-value { color: var(--gb-dim); }
+.set-row:focus .set-value { color: var(--gb-text); }

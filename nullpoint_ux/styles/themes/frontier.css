@@ -1,0 +1,66 @@
+/* ============================================================================
+   Style set: Frontier  (reference: Firefly)
+   Lived-in and warm. Condensed industrial caps, rust accent with a teal
+   second colour, heavier borders, and a little grime in the panels.
+   ========================================================================== */
+
+#ui-root[data-style='frontier'] {
+  --th-font: 'Barlow Condensed', sans-serif;
+  --th-font-display: 'Barlow Condensed', sans-serif;
+  --th-display-weight: 600;
+  --th-display-spacing: 5px;
+  --th-heading-weight: 600;
+  --th-label-size: 14px;
+  --th-label-spacing: 2px;
+
+  --th-panel: rgba(30, 25, 20, 0.94);
+  --th-panel-solid: #1d1914;
+  --th-raise: #2a231c;
+  --th-raise-hi: #3b3127;
+  --th-line: #5b4a38;
+  --th-line-hi: #c9a878;
+  --th-backing: rgba(20, 15, 10, 0.72);
+  --th-backing-solid: #16120e;
+  --th-scrim: rgba(12, 9, 6, 0.75);
+  --th-blur: 6px;
+
+  --th-text: #efe4cd;
+  --th-dim: #a8977c;
+  --th-faint: #66584a;
+  --th-accent: #d8742f;
+  --th-primary-bg: #d8742f;
+  --th-primary-text: #1a130d;
+
+  --th-radius: 2px;
+  --th-border-w: 2px;
+  --th-shield: #7fb2a8;
+  --th-health: #efe4cd;
+
+  --col-primary: #d8742f;
+  --col-text: #efe4cd;
+  --col-ref: #7fb2a8;
+  --col-panel: rgba(30, 25, 20, 0.8);
+  --col-line: rgba(216, 116, 47, 0.35);
+}
+
+/* --- decoration ------------------------------------------------------------ */
+/* Grime: the tessera panel_grime texture washed to ~10% under a panel-coloured
+   layer. SLATE: a tiled SImage overlay (as in the style guide), not a material. */
+[data-style='frontier'] .gb-panel,
+[data-style='frontier'] .gb-card,
+[data-style='frontier'] .gb-button:not(.primary) {
+  background-image:
+    linear-gradient(rgba(30, 25, 20, 0.9), rgba(30, 25, 20, 0.9)),
+    url(/assets/tessera/panel_grime.png);
+  background-size: auto, 160px 160px;
+}
+[data-style='frontier'] .gb-card:focus,
+[data-style='frontier'] .gb-button:not(.primary):focus {
+  background-image:
+    linear-gradient(rgba(59, 49, 39, 0.9), rgba(59, 49, 39, 0.9)),
+    url(/assets/tessera/panel_grime.png);
+}
+[data-style='frontier'] .gb-label { color: #8fb5a9; }
+[data-style='frontier'] .gb-tab { text-transform: uppercase; letter-spacing: 2px; }
+[data-style='frontier'] .gb-tab[aria-selected='true'] { border-bottom-width: 4px; }
+[data-style='frontier'] .gb-button { text-transform: uppercase; letter-spacing: 1.5px; }

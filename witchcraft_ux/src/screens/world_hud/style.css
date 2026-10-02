@@ -1,0 +1,65 @@
+/* World HUD. Prefix: wh- */
+.wh { padding: 48px 64px; }
+
+/* Interaction prompt: low centre, no panel, world text. */
+.wh-prompt { margin-bottom: 150px; gap: 12px; align-items: center; opacity: 0; }
+.wh-verb   { font: 700 26px/1 var(--gb-font); }
+.wh-target { font: 400 22px/1 var(--gb-font); opacity: 0.85; }
+
+/* Change hint: the spell strip / tool name, centre-low above the prompt. */
+.wh-hint { margin-bottom: 220px; gap: 10px; align-items: center; opacity: 0; }
+.wh-hint-row { gap: 12px; align-items: center; }
+.wh-hint-row .s-image { --w: 30px; --h: 30px; }
+.wh-strip { gap: 10px; align-items: center; }
+.wh-pip {
+  width: 46px; height: 46px; display: grid; place-items: center;
+  border-radius: 50%;
+  background-color: rgba(20, 14, 8, 0.45);
+  border: 2px solid rgba(255, 250, 240, 0.35);
+  color: rgba(255, 250, 240, 0.6);
+}
+.wh-pip .s-image { --w: 24px; --h: 24px; }
+.wh-pip.on {
+  width: 58px; height: 58px;
+  border-color: var(--aff); color: var(--aff);
+  background-color: rgba(20, 14, 8, 0.65);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--aff) 50%, transparent); /* SLATE: glow texture */
+}
+
+/* Day card */
+.wh-day { gap: 4px; align-items: flex-end; opacity: 0; }
+.wh-day-phase { font: var(--gb-heading-weight) 34px/1 var(--gb-font-display); font-style: italic; }
+.wh-day-meta { color: #fffaf0; }
+.wh[data-mode='present'] .wh-day { opacity: 1; }
+.wh[data-mode='present'] .wh-day-phase { font-size: 24px; }
+
+/* Always-on corner */
+.wh-corner { gap: 14px; }
+.wh:not([data-mode='present']) .wh-corner { display: none; }
+.wh-corner-slot { gap: 6px; align-items: flex-start; }
+.wh-corner-slot .gb-label { color: #fffaf0; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7); display: flex; gap: 4px; align-items: center; }
+.wh-chip {
+  display: flex; gap: 8px; align-items: center;
+  padding: 8px 14px 8px 10px;
+  background-color: var(--gb-bg);
+  border: var(--gb-border-w) solid var(--gb-line);
+  border-radius: 999px;
+}
+.wh-chip .s-image { --w: 24px; --h: 24px; }
+.wh-chip .gb-small { color: var(--gb-text); }
+.wh-aff { color: var(--aff); }
+.wc-key.sm { min-width: 22px; height: 22px; padding: 0 5px; font-size: 12px; border-radius: 6px; }
+
+/* While a menu is up (book, selector, pause…), the in-world bits step aside. */
+#ui-root:has([data-layer='gamemenu'] > *) .wh-prompt,
+#ui-root:has([data-layer='gamemenu'] > *) .wh-hint,
+#ui-root:has([data-layer='gamemenu'] > *) .wh-tip-pos,
+#ui-root:has([data-layer='gamemenu'] > *) .wh-demo { visibility: hidden; }
+
+/* Onboarding tip */
+.wh-tip-pos { margin-top: 24px; }
+.wh-tip { padding: 16px 20px; }
+.wh-tip-row { gap: 16px; align-items: center; }
+
+.wh-demo { max-width: 560px; }
+[data-clean] .wh-demo { display: none; }

@@ -1,0 +1,6 @@
+/* Pause menu. Prefix: pm- */
+.pm-scrim { background-color: var(--gb-scrim); backdrop-filter: blur(6px); } /* SLATE: SBackgroundBlur */
+.pm-panel { gap: 10px; width: 420px; }
+.pm-panel .gb-button.big { min-width: 0; }
+.pm-title { margin-bottom: 20px; text-align: center; }
+.pm-note { margin-top: 20px; }

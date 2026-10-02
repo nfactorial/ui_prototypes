@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NullPoint UX</title>
+  <link rel="stylesheet" href="styles/harness.css">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/slate.css">
+  <link rel="stylesheet" href="styles/widgets.css">
+  <link rel="stylesheet" href="styles/greybox.css">
+  <link rel="stylesheet" href="styles/feedback.css">
+  <link rel="stylesheet" href="styles/themes/fonts.css">
+</head>
+<body>
+  <!-- Harness chrome (never ported) -->
+  <header class="hx-bar">
+    <span class="hx-brand">NULLPOINT UX</span>
+    <label class="hx-field"><span>Scene</span><select id="hx-scene"></select></label>
+    <label class="hx-field"><span>Backdrop</span><select id="hx-backdrop"></select></label>
+    <label class="hx-field"><span>Aspect</span><select id="hx-aspect"></select></label>
+    <label class="hx-field"><span>HUD scale</span>
+      <input id="hx-scale" type="range" min="0.75" max="1.5" step="0.05">
+      <span id="hx-scale-value" class="hx-scale-value"></span>
+    </label>
+    <label class="hx-field"><span>Safe zone</span><select id="hx-safe"></select></label>
+    <label class="hx-field"><span>Style</span><select id="hx-style"></select></label>
+    <label class="hx-field"><span>Motion</span><select id="hx-speed"></select></label>
+    <span id="hx-variants" class="hx-variants"></span>
+    <div class="hx-toggles">
+      <button class="hx-toggle" id="hx-replay" title="Replay the scene (Shift+R)"><u>R</u>eplay</button>
+      <button class="hx-toggle" data-toggle="outline" title="Slate outline (Shift+O)"><u>O</u>utline</button>
+      <button class="hx-toggle" data-toggle="grid" title="8px grid (Shift+G)"><u>G</u>rid</button>
+      <button class="hx-toggle" data-toggle="paused" title="Pause simulation (Shift+P)"><u>P</u>ause</button>
+      <button class="hx-toggle" data-toggle="clean" title="Clean mode for screenshots (Shift+C)"><u>C</u>lean</button>
+    </div>
+  </header>
+
+  <main class="hx-viewport" id="hx-viewport">
+    <div id="stage">
+      <!-- The "3D view": a 2D backdrop image -->
+      <div id="backdrop"></div>
+
+      <!-- The game UI root: an SOverlay of layers (CommonUI-style layer stack) -->
+      <div id="ui-root" class="s-overlay">
+        <div class="layer s-overlay" data-layer="game"></div>
+        <div class="layer s-overlay" data-layer="gamemenu"></div>
+        <div class="layer s-overlay" data-layer="menu"></div>
+        <div class="layer s-overlay" data-layer="modal"></div>
+        <div class="layer s-overlay" data-layer="notify"></div>   <!-- toasts + tooltips, above all -->
+      </div>
+
+      <!-- Harness overlays (never ported) -->
+      <div class="hx-overlay hx-grid collapsed" id="hx-grid"></div>
+      <div class="hx-overlay collapsed" id="hx-safe-overlay"><div class="hx-safe" id="hx-safe-rect"></div></div>
+    </div>
+  </main>
+
+  <footer class="hx-status">
+    <span class="hx-path" id="hx-path"></span>
+    <span class="hx-info" id="hx-info"></span>
+  </footer>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

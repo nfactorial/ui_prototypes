@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- 9-slice panel, margin 12px (0.25). Chamfered top-left and bottom-right. Export to PNG for Unreal. -->
+  <path d="M10.5 .5H47.5V37.5L37.5 47.5H.5V10.5Z" fill="rgba(10,13,12,0.74)" stroke="rgba(232,163,58,0.55)" stroke-width="1"/>
+  <path d="M.5 10.5 10.5 .5" stroke="#e8a33a" stroke-width="2"/>
+</svg>

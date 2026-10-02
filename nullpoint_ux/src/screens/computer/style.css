@@ -1,0 +1,70 @@
+/* The computer. Prefix: comp- */
+
+/* --- presentation variants ------------------------------------------------
+   overlay:    world visible, blurred and dimmed, behind a floating frame
+   fullscreen: an opaque display of its own                                 */
+.comp-backing {
+  background-color: var(--gb-backing);
+  backdrop-filter: blur(var(--gb-blur)) saturate(0.8);   /* SLATE: SBackgroundBlur (real cost, ui/05 §6) */
+}
+.comp-frame { margin: 48px 64px; }
+
+[data-v-computer='fullscreen'] .comp-backing { background-color: var(--gb-backing-solid); backdrop-filter: none; }
+[data-v-computer='fullscreen'] .comp-frame { margin: 0; padding: 40px 64px; }
+
+/* --- header ------------------------------------------------------------- */
+.comp-head { align-items: center; gap: 32px; padding-bottom: 8px; }
+.comp-ship { gap: 4px; min-width: 260px; }
+.comp-tabs { justify-content: center; align-items: center; gap: 4px; }
+.comp-tabkey { color: var(--gb-dim); margin: 0 10px; }
+.comp-close { display: flex; gap: 12px; align-items: center; }
+
+/* --- body --------------------------------------------------------------- */
+.comp-body { margin-top: 28px; }
+.comp-section { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
+.comp-foot { margin-top: 20px; }
+
+.comp-split { gap: 32px; min-height: 0; }
+.comp-list { width: 440px; gap: 10px; overflow-y: auto; }
+.comp-card { gap: 6px; }
+.comp-badge { color: var(--gb-accent); }
+.comp-options-head { margin-bottom: 4px; }
+.comp-options .gb-card { display: flex; flex-direction: column; gap: 6px; }
+
+.comp-detail { gap: 14px; overflow-y: auto; }
+.comp-center { gap: 16px; }
+
+/* missions */
+.comp-hero { height: 280px; margin-bottom: 8px; }
+.comp-summary { max-width: 900px; }
+.comp-facts { grid-template-columns: 120px 1fr; gap: 10px 20px; margin-top: 8px; max-width: 900px; align-items: baseline; }
+.comp-actions { gap: 12px; margin-top: 8px; }
+
+/* ship */
+.comp-hull-head { align-items: flex-end; gap: 16px; }
+.comp-pin {
+  display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--gb-line-hi); background-color: var(--gb-bg-solid);
+  font: 700 16px/1 var(--gb-font); color: var(--gb-dim);
+}
+.comp-pin.is-selected { border-color: var(--gb-accent); color: var(--gb-accent); scale: 1.25; }
+
+/* records */
+.comp-numbers { gap: 12px; max-width: 720px; }
+.comp-number { padding: 14px 18px; gap: 6px; }
+.comp-number-v { font: var(--gb-heading-weight) 44px/1 var(--gb-font-display); }
+.comp-scan { gap: 24px; min-height: 260px; margin-top: 8px; }
+.comp-schematic { width: 520px; }
+.comp-readings { gap: 10px; }
+.comp-reading { gap: 16px; align-items: baseline; padding: 10px 14px; border: 1px solid var(--gb-line); }
+.comp-reading-k { width: 130px; }
+.comp-flag { width: 24px; font: 700 20px/1 var(--gb-font); text-align: center; }
+.comp-reading.uncertain .comp-flag { color: var(--gb-note); }
+.comp-reading.conflict { border-color: var(--gb-note); }
+.comp-reading.conflict .comp-flag { color: var(--gb-note); }
+
+/* artwork (assets/art): rounded to match the style's corners */
+.comp-hero-img, .comp-figure { border-radius: var(--gb-radius); box-shadow: inset 0 0 0 1px var(--gb-line); }
+/* s-image.cover resets height; the banner needs its explicit one back (higher specificity) */
+.s-image.comp-hero-img { height: 280px; flex: 0 0 auto; }

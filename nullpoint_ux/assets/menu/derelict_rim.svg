@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="1200" height="520">
+  <!-- Sunlit edges only; faded in and out to fake light sweeping over the hull. -->
+  <g fill="none" stroke="#dfe8ef" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
+    <path d="M40 200 L150 180 L170 190"/>
+    <path d="M200 170 L270 170 M280 170 L350 170 M440 170 L510 170"/>
+    <path d="M170 238 L560 232 L585 250 L600 236 L640 262"/>
+    <path d="M690 236 L1000 240"/>
+    <path d="M720 178 L790 178 M800 178 L870 178"/>
+    <path d="M1000 210 L1110 196 L1160 222 L1170 262"/>
+    <path d="M1060 196 L1080 150 L1096 150"/>
+  </g>
+</svg>

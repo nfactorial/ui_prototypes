@@ -1,0 +1,42 @@
+[meta]
+name = "scanner_sweep"
+description = "A radar/scanner sweep: a bright leading edge with a fading trail, inside a disc. Greyscale; rotated at runtime."
+
+[nodes.angle]
+type = "ramp"
+shape = "angular"
+
+[nodes.trail]
+type = "levels"
+input = "angle"
+in_low = 0.6
+in_high = 1.0
+gamma = 2.2
+
+[nodes.disc]
+type = "disc"
+radius = 0.48
+
+[nodes.disc_mask]
+type = "contour"
+input = "disc"
+
+[nodes.sweep]
+type = "blend"
+a = "trail"
+b = "disc_mask"
+mode = "multiply"
+
+# Tintable UI texture: white RGB, the mask in alpha. A Slate brush tint
+# multiplies RGB, so coverage must live in alpha; CSS uses the same file as a mask.
+[nodes.out]
+type = "pack"
+rgb = [1.0, 1.0, 1.0]
+a = "sweep"
+
+[[outputs]]
+name = "scanner_sweep"
+node = "out"
+size = [256, 256]
+samples = 2
+format = "RGBA"

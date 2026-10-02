@@ -1,0 +1,53 @@
+/* ============================================================================
+   Style set: Hedgewitch  (reference: wand.md "made by hand, and it looks it")
+   Folk-craft. Warm walnut panels, parchment text, a soft serif display face
+   (Fraunces), rounded friendly body type (Nunito). Gold-and-moss accents like
+   the brim of her hat. Starting point, not a decision.
+   ========================================================================== */
+
+#ui-root[data-style='hedgewitch'] {
+  --th-font: 'Nunito', sans-serif;
+  --th-font-display: 'Fraunces', serif;
+  --th-display-weight: 600;
+  --th-display-spacing: 1px;
+  --th-heading-weight: 600;
+  --th-label-size: 13px;
+  --th-label-spacing: 2px;
+
+  --th-panel: rgba(38, 28, 22, 0.86);
+  --th-panel-solid: #2a1f18;
+  --th-raise: rgba(255, 240, 210, 0.07);
+  --th-raise-hi: rgba(255, 240, 210, 0.16);
+  --th-line: rgba(232, 205, 150, 0.22);
+  --th-line-hi: rgba(232, 205, 150, 0.75);
+  --th-backing: rgba(30, 20, 14, 0.45);
+  --th-backing-solid: #21180f;
+  --th-scrim: rgba(22, 14, 8, 0.6);
+  --th-blur: 10px;
+
+  --th-text: #f6ecd6;
+  --th-dim: rgba(240, 226, 196, 0.7);
+  --th-faint: rgba(240, 226, 196, 0.35);
+  --th-accent: #e2bf6a;               /* hat-brim gold */
+  --th-primary-bg: #e2bf6a;
+  --th-primary-text: #2a1f18;
+
+  --th-good: #a9cf7a;                 /* moss */
+  --th-warn: #e8b05c;
+  --th-power: #f3d27a;
+
+  --th-speech: #3b2a1c;               /* dialogue box: warm, golden, a step up from the panel */
+  --th-speech-hi: #4c3623;            /* a hovered reply */
+
+  --th-radius: 12px;
+  --th-border-w: 1.5px;
+}
+
+/* --- decoration ------------------------------------------------------------ */
+[data-style='hedgewitch'] .gb-display { font-style: normal; font-variation-settings: 'SOFT' 100, 'WONK' 1; }
+[data-style='hedgewitch'] .gb-title,
+[data-style='hedgewitch'] .gb-h2 { font-variation-settings: 'SOFT' 100; }
+[data-style='hedgewitch'] .gb-label { color: #cdb47c; }
+[data-style='hedgewitch'] .gb-button:focus,
+[data-style='hedgewitch'] .gb-card:focus { box-shadow: 0 0 0 1px var(--th-accent), 0 0 18px rgba(226, 191, 106, 0.25); } /* SLATE: glow = material or texture */
+[data-style='hedgewitch'] .gb-tab { font-family: 'Fraunces', serif; font-style: italic; }

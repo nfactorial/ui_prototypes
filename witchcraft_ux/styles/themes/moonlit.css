@@ -1,0 +1,47 @@
+/* ============================================================================
+   Style set: Moonlit  (reference: Spiritfarer's calm, the night screenshot)
+   Deep indigo glass with heavy blur, cream text, starlight-gold accents,
+   an elegant italic serif display. Quiet and grand rather than cute.
+   ========================================================================== */
+
+#ui-root[data-style='moonlit'] {
+  --th-font: 'Nunito', sans-serif;
+  --th-font-display: 'Cormorant Garamond', serif;
+  --th-display-weight: 500;
+  --th-display-spacing: 4px;
+  --th-heading-weight: 600;
+  --th-label-size: 12px;
+  --th-label-spacing: 3px;
+
+  --th-panel: rgba(20, 22, 48, 0.62);
+  --th-panel-solid: #15173a;
+  --th-raise: rgba(220, 225, 255, 0.07);
+  --th-raise-hi: rgba(220, 225, 255, 0.16);
+  --th-line: rgba(200, 210, 255, 0.16);
+  --th-line-hi: rgba(240, 225, 180, 0.8);
+  --th-backing: rgba(12, 14, 36, 0.4);
+  --th-backing-solid: #0e1030;
+  --th-scrim: rgba(8, 10, 28, 0.55);
+  --th-blur: 24px;
+
+  --th-text: #f3eedf;
+  --th-dim: rgba(225, 225, 240, 0.68);
+  --th-faint: rgba(225, 225, 240, 0.32);
+  --th-accent: #f0dc9c;               /* starlight */
+  --th-primary-bg: #f0dc9c;
+  --th-primary-text: #15173a;
+
+  --th-good: #9fd8b4;
+  --th-warn: #f0c27a;
+  --th-power: #f5e3a8;
+
+  --th-radius: 10px;
+}
+
+/* --- decoration ------------------------------------------------------------ */
+[data-style='moonlit'] .gb-display,
+[data-style='moonlit'] .gb-title { font-style: italic; }
+[data-style='moonlit'] .gb-label { color: #b9c0f0; }
+[data-style='moonlit'] .gb-button:focus,
+[data-style='moonlit'] .gb-card:focus { box-shadow: 0 0 0 1px var(--th-accent), 0 0 24px rgba(240, 220, 156, 0.22); } /* SLATE: glow */
+[data-style='moonlit'] .gb-tab { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-style: italic; }

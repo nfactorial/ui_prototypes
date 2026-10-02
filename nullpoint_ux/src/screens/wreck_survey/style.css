@@ -1,0 +1,27 @@
+/* Wreck survey modal. Prefix: wsv- */
+
+.wsv-panel { padding: var(--sp-6); }
+.wsv-reg { gap: 2px; }
+.wsv-rule { margin-bottom: var(--sp-4); }
+
+.wsv-facts { gap: var(--sp-4); margin-bottom: var(--sp-5); }
+
+.wsv-numbers { gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.wsv-number {
+  padding: var(--sp-3) var(--sp-4);
+  border: var(--line) solid var(--col-line);
+  background-color: rgba(232, 163, 58, 0.04);
+}
+.wsv-number-value {
+  font: 400 calc(40 * var(--pt)) / 1 var(--font-mono);
+  color: var(--col-text);
+  margin-top: var(--sp-2);
+}
+.wsv-number.is-breach { border-color: var(--col-danger); background-color: rgba(229, 83, 61, 0.1); }
+.wsv-number.is-breach .wsv-number-value { color: var(--col-danger); }
+
+/* A one-sided rule is not a brush Slate has: it's a 2px SBox beside the text. */
+.wsv-finding { gap: var(--sp-4); margin-bottom: var(--sp-5); }
+.wsv-finding-rule { background-color: var(--col-danger); }
+
+.wsv-actions { gap: var(--sp-2); }

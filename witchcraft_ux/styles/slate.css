@@ -1,0 +1,168 @@
+/* ============================================================================
+   slate.css — Slate-shaped primitive vocabulary.
+   Each s-* class behaves like the Slate widget it's named after, including
+   its defaults, so screens built from them port easily. A default, not a
+   rule: step outside it when a design wants to (see CLAUDE.md).
+   See CLAUDE.md "Primitive → Slate map".
+   ========================================================================== */
+
+[class^="s-"], [class*=" s-"] { box-sizing: border-box; min-width: 0; min-height: 0; }
+
+/* --- SOverlay: every child in the same cell. Default slot align = Fill. --- */
+.s-overlay {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+}
+/* Later slots draw over earlier ones, always — like Slate's layer order.
+   (Without the stacking context, positioned descendants of an earlier slot
+   would paint over a later, unpositioned one.)                              */
+.s-overlay > * { grid-area: 1 / 1; position: relative; isolation: isolate; }
+
+/* Slot alignment (HAlign / VAlign) for single-cell slots: overlay, box,
+   border, safe zone, switcher, grid. (Box-panel slots are handled below —
+   in a flex column, a bare align-self would act on the wrong axis.)       */
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .h-fill   { justify-self: stretch; }
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .h-left   { justify-self: start; }
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .h-center { justify-self: center; }
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .h-right  { justify-self: end; }
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .v-fill   { align-self: stretch; }
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .v-top    { align-self: start; }
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .v-center { align-self: center; }
+:is(.s-overlay, .s-box, .s-border, .s-safezone, .s-switcher, .s-grid, .s-uniformgrid) > .v-bottom { align-self: end; }
+
+/* --- SHorizontalBox / SVerticalBox. Slots are Auto unless marked Fill. ---- */
+.s-hbox, .s-vbox { display: flex; align-items: stretch; }
+.s-hbox { flex-direction: row; }
+.s-vbox { flex-direction: column; }
+.s-hbox > *, .s-vbox > * { flex: 0 0 auto; }
+.s-hbox > .fill,   .s-vbox > .fill   { flex: 1 1 0; }
+.s-hbox > .fill-2, .s-vbox > .fill-2 { flex: 2 1 0; }
+.s-hbox > .fill-3, .s-vbox > .fill-3 { flex: 3 1 0; }
+/* cross-axis alignment in a box slot: v-* in an hbox, h-* in a vbox */
+.s-hbox > .v-top    { align-self: flex-start; }
+.s-hbox > .v-center { align-self: center; }
+.s-hbox > .v-bottom { align-self: flex-end; }
+.s-vbox > .h-left   { align-self: flex-start; }
+.s-vbox > .h-center { align-self: center; }
+.s-vbox > .h-right  { align-self: flex-end; }
+
+/* --- SWrapBox ------------------------------------------------------------ */
+.s-wrapbox { display: flex; flex-wrap: wrap; align-items: flex-start; }
+
+/* --- SGridPanel / SUniformGridPanel -------------------------------------- */
+.s-grid        { display: grid; }
+.s-uniformgrid { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+
+/* --- SBox: size overrides. Unset vars leave the axis at desired size. ---- */
+.s-box {
+  display: grid;                      /* one child, filling by default */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  width: var(--w, auto);
+  height: var(--h, auto);
+  min-width: var(--min-w, 0);
+  max-width: var(--max-w, none);
+  min-height: var(--min-h, 0);
+  max-height: var(--max-h, none);
+}
+
+/* --- SBorder: one brush + padding, one child ----------------------------- */
+.s-border { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
+
+/* --- SSpacer ------------------------------------------------------------- */
+.s-spacer { width: var(--w, 0); height: var(--h, 0); }
+
+/* --- SSafeZone: padding set by the harness safe-zone option -------------- */
+.s-safezone {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  padding: var(--safe-t, 0) var(--safe-r, 0) var(--safe-b, 0) var(--safe-l, 0);
+}
+
+/* --- SConstraintCanvas: anchors + offset + alignment ----------------------
+   <div class="anchored" style="--ax:1; --ay:0; --x:-24px; --y:24px; --px:1; --py:0">
+   ⚠️ Data-positioned content only (markers). Not for static layout.       */
+.s-canvas { position: relative; overflow: visible; }
+.s-canvas > .anchored {
+  position: absolute;
+  left: calc(var(--ax, 0) * 100% + var(--x, 0px));
+  top:  calc(var(--ay, 0) * 100% + var(--y, 0px));
+  translate: calc(var(--px, 0) * -100%) calc(var(--py, 0) * -100%);
+}
+
+/* --- SWidgetSwitcher ----------------------------------------------------- */
+.s-switcher { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
+.s-switcher > * { grid-area: 1 / 1; }
+.s-switcher > :not(.active) { display: none; }
+
+/* --- SScrollBox ---------------------------------------------------------- */
+.s-scroll { overflow-y: auto; overflow-x: hidden; }
+
+/* --- SScaleBox (contain) ------------------------------------------------- */
+.s-scalebox { display: grid; overflow: hidden; }
+.s-scalebox > img { width: 100%; height: 100%; object-fit: contain; }
+
+/* --- SImage: --img brush, --w/--h ImageSize. .tint = white icon × colour -- */
+.s-image {
+  width: var(--w, 32px);
+  height: var(--h, 32px);
+  background: var(--img) center / 100% 100% no-repeat;
+}
+.s-image.tint {
+  background: currentColor;
+  -webkit-mask: var(--img) center / 100% 100% no-repeat;
+  mask: var(--img) center / 100% 100% no-repeat;
+}
+
+/* Tiled brush (Tiling = Both): the image repeats at --tile-w × --tile-h
+   (the brush's ImageSize) across however big the widget is.               */
+.s-image.tile { background-size: var(--tile-w, 256px) var(--tile-h, 256px); background-repeat: repeat; }
+.s-image.tint.tile {
+  -webkit-mask-size: var(--tile-w, 256px) var(--tile-h, 256px);
+  mask-size: var(--tile-w, 256px) var(--tile-h, 256px);
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+.s-image.stretch { width: auto; height: auto; } /* fill the slot instead of ImageSize */
+/* cover: fill the slot, crop the overflow, --focus picks what stays in view.
+   Slate: SScaleBox (ScaleToFill) around the image, or brush UV region. */
+.s-image.cover { width: auto; height: auto; background-size: cover; background-position: var(--focus, 50% 50%); }
+
+/* --- STextBlock: no wrap by default, like Slate -------------------------- */
+.s-text     { white-space: pre; }
+.s-text.wrap, .s-richtext { white-space: normal; }
+.s-text.just-center { text-align: center; }
+.s-text.just-right  { text-align: right; }
+
+/* --- SProgressBar: --pct 0..1, left-to-right fill ------------------------ */
+.s-progress {
+  position: relative;
+  height: var(--h, 6px);
+  background-color: var(--bar-bg, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
+}
+.s-progress::after {             /* the fill image — no text, just a brush */
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(clamp(0, var(--pct, 0), 1) * 100%);
+  background-color: var(--bar-fill, currentColor);
+}
+
+/* --- SButton: Normal / Hovered / Pressed / Disabled ---------------------- */
+.s-button {
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  user-select: none;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.s-button[disabled] { cursor: default; }
+
+/* --- Visibility ---------------------------------------------------------- */
+.collapsed     { display: none !important; }      /* Collapsed */
+.hidden        { visibility: hidden !important; } /* Hidden */
+.hit-invisible { pointer-events: none; }          /* HitTestInvisible */

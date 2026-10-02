@@ -1,0 +1,7 @@
+/* Font faces used by style sets. All OFL (licences in assets/fonts/): the same .ttf files import into Unreal. */
+@font-face { font-family: 'Inter'; src: url('../../assets/fonts/Inter-Variable.ttf') format('truetype'); font-weight: 100 900; }
+@font-face { font-family: 'Nunito'; src: url('../../assets/fonts/Nunito-Variable.ttf') format('truetype'); font-weight: 200 1000; }
+@font-face { font-family: 'Fraunces'; src: url('../../assets/fonts/Fraunces-Variable.ttf') format('truetype'); font-weight: 100 900; }
+@font-face { font-family: 'Cormorant Garamond'; src: url('../../assets/fonts/CormorantGaramond-Variable.ttf') format('truetype'); font-weight: 300 700; }
+@font-face { font-family: 'IM Fell English'; src: url('../../assets/fonts/IMFellEnglish-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Caveat'; src: url('../../assets/fonts/Caveat-Variable.ttf') format('truetype'); font-weight: 400 700; }

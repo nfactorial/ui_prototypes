@@ -1,0 +1,121 @@
+/* harness.css — the prototype's own chrome. NOT part of the game UI; never ported.
+   Everything here is prefixed hx- or scoped to the harness elements.        */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  display: flex;
+  flex-direction: column;
+  background: #141617;
+  color: #c9ccce;
+  font: 13px/1.3 system-ui, 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* --- toolbar ------------------------------------------------------------- */
+.hx-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  padding: 8px 12px;
+  background: #1d2022;
+  border-bottom: 1px solid #2c3033;
+}
+.hx-brand { font-weight: 700; letter-spacing: 1px; color: #b9d27a; margin-right: 4px; }
+.hx-field { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.hx-field > span { color: #8b9094; }
+.hx-bar select, .hx-bar input[type='range'] {
+  background: #2a2e31;
+  color: #dfe2e4;
+  border: 1px solid #3a3f43;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font: inherit;
+}
+.hx-bar input[type='range'] { padding: 0; width: 90px; accent-color: #b9d27a; }
+.hx-scale-value { width: 3.2em; font-variant-numeric: tabular-nums; }
+.hx-toggles { display: flex; gap: 4px; }
+.hx-toggle {
+  background: #2a2e31;
+  color: #b8bcbf;
+  border: 1px solid #3a3f43;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font: inherit;
+  cursor: pointer;
+}
+.hx-toggle[aria-pressed='true'] { background: #b9d27a; border-color: #b9d27a; color: #141617; }
+.hx-toggle u { text-decoration-thickness: 1px; }
+
+/* --- viewport + stage ---------------------------------------------------- */
+.hx-viewport { position: relative; flex: 1; overflow: hidden; }
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 0 1px #2c3033, 0 10px 40px rgba(0, 0, 0, 0.5);
+  transform-origin: 50% 50%;
+}
+#backdrop {
+  position: absolute;
+  inset: 0;
+  background: #000 center / cover no-repeat;
+}
+#ui-root {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+#ui-root > .layer { pointer-events: none; }
+#ui-root > .layer > * { pointer-events: auto; }
+.hx-overlay { position: absolute; inset: 0; pointer-events: none; }
+
+/* safe-zone rectangle */
+.hx-safe { position: absolute; border: 1px dashed rgba(255, 60, 200, 0.7); }
+
+/* 8px grid, 64px major */
+.hx-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 220, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 220, 0.18) 1px, transparent 1px),
+    linear-gradient(rgba(0, 255, 220, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 220, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px, 8px 8px, 8px 8px;
+}
+
+/* --- Slate outline mode -------------------------------------------------- */
+[data-outline] #ui-root [class^='s-'],
+[data-outline] #ui-root [class*=' s-'] {
+  outline: 1px dashed rgba(0, 255, 200, 0.45);
+  outline-offset: -1px;
+}
+[data-outline] #ui-root [data-widget] { outline: 1px solid rgba(255, 170, 0, 0.8); }
+[data-outline] #ui-root .hx-hover { outline: 2px solid #ff3cc8 !important; }
+[data-outline] #ui-root .layer * { pointer-events: auto !important; } /* layers themselves stay transparent to the mouse */
+
+/* --- footer status ------------------------------------------------------- */
+.hx-status {
+  display: flex;
+  gap: 16px;
+  padding: 5px 12px;
+  background: #1d2022;
+  border-top: 1px solid #2c3033;
+  color: #8b9094;
+  font: 12px/1.3 ui-monospace, Consolas, monospace;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.hx-status .hx-path { color: #7fe9d6; overflow: hidden; text-overflow: ellipsis; }
+.hx-status .hx-info { margin-left: auto; }
+
+/* --- clean mode: stage only, for screenshots ----------------------------- */
+[data-clean] .hx-bar, [data-clean] .hx-status { display: none; }
+[data-clean] #stage { box-shadow: none; }
+
+/* --- design variants (per scene) ----------------------------------------- */
+.hx-variants { display: contents; }
+.hx-variant > span { color: #b9d27a; }

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="1200" height="520">
+  <!-- PLACEHOLDER: a derelict freighter in silhouette. In Unreal this is a live 3D menu scene. -->
+  <g fill="#07090b" stroke="#1c232a" stroke-width="2" stroke-linejoin="round">
+    <!-- engine block -->
+    <path d="M40 200 L150 180 L170 190 L170 330 L150 340 L40 320 Z"/>
+    <rect x="18" y="215" width="26" height="36"/><rect x="18" y="270" width="26" height="36"/>
+    <!-- spine, broken midway -->
+    <path d="M170 238 L560 232 L585 250 L600 236 L640 262 L620 272 L585 262 L560 286 L170 282 Z"/>
+    <path d="M660 250 L690 236 L1000 240 L1000 280 L690 284 L672 270 Z"/>
+    <!-- cargo pods (gaps where some are missing) -->
+    <rect x="200" y="170" width="70" height="62"/><rect x="280" y="170" width="70" height="62"/>
+    <rect x="440" y="170" width="70" height="62"/>
+    <rect x="200" y="288" width="70" height="62"/><rect x="360" y="288" width="70" height="62"/>
+    <rect x="440" y="288" width="70" height="62"/>
+    <path d="M362 176 L426 168 L432 226 L368 232 Z" transform="rotate(8 395 200)"/>
+    <rect x="720" y="178" width="70" height="60"/><rect x="800" y="178" width="70" height="60"/>
+    <rect x="720" y="282" width="70" height="60"/>
+    <!-- bridge / habitation block -->
+    <path d="M1000 210 L1110 196 L1160 222 L1170 262 L1160 300 L1110 322 L1000 308 Z"/>
+    <path d="M1060 196 L1080 150 L1096 150 L1100 198 Z"/>
+    <!-- antenna mast, bent -->
+    <path d="M1088 150 L1092 70 L1120 40" fill="none" stroke-width="4"/>
+    <!-- debris -->
+    <path d="M600 330 L628 322 L632 342 L606 348 Z"/><path d="M640 200 L656 196 L660 212 L644 214 Z"/>
+    <rect x="690" y="360" width="14" height="10" transform="rotate(30 697 365)"/>
+  </g>
+  <!-- a few lit windows, most dark -->
+  <g fill="#c9d6e0"><rect x="1120" y="236" width="6" height="4" opacity=".7"/><rect x="1134" y="252" width="6" height="4" opacity=".35"/></g>
+  <g fill="#e2533d"><circle cx="1119" cy="41" r="3"/></g>
+</svg>

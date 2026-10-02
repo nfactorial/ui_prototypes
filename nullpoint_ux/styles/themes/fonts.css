@@ -1,0 +1,5 @@
+/* Font faces used by style sets. All OFL (licences in assets/fonts/): the same .ttf files import into Unreal. */
+@font-face { font-family: 'Barlow'; src: url('../../assets/fonts/Barlow-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Barlow'; src: url('../../assets/fonts/Barlow-SemiBold.ttf') format('truetype'); font-weight: 600; }
+@font-face { font-family: 'Inter'; src: url('../../assets/fonts/Inter-Variable.ttf') format('truetype'); font-weight: 100 900; }
+/* Barlow Condensed and Share Tech Mono are declared in styles/tokens.css */

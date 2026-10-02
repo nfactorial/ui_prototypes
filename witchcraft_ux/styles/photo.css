@@ -1,0 +1,36 @@
+/* ============================================================================
+   photo.css — a photo (src/photo.js): image + filter + frame + caption.
+   Used by photo mode and Keepsakes › Photos. Prefix: ph-
+   ========================================================================== */
+
+.ph-photo { position: relative; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); background-color: #111; }
+.ph-image { background-repeat: no-repeat; min-height: 0; }
+
+/* Polaroid: white, deep bottom edge with a handwritten caption.  SLATE: 9-slice brush + text */
+.ph-photo[data-frame='polaroid'] { background-color: #f7f3ea; padding: 4% 4% 16% 4%; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); }
+/* Postcard: cream card, dashed inner edge, a stamp in the corner. */
+.ph-photo[data-frame='postcard'] { background-color: #efe4c8; padding: 5% 5% 14% 5%; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); }
+.ph-photo[data-frame='postcard'] .ph-image { outline: 2px dashed rgba(110, 80, 45, 0.5); outline-offset: 6px; }
+.ph-stamp { position: absolute; right: 4%; bottom: 3%; width: 9%; aspect-ratio: 4 / 5; background: repeating-linear-gradient(45deg, #c9573f 0 6px, #d9745c 6px 12px); border: 3px dotted #efe4c8; }
+/* Pressed flowers: a dark mount with flowers at the corners. SLATE: texture */
+.ph-photo[data-frame='pressed'] { background-color: #3b2c20; padding: 6%; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); }
+.ph-flower { position: absolute; width: 11%; aspect-ratio: 1; color: #e9b8c8; display: grid; place-items: center; }
+.ph-flower .s-image { width: 100%; height: 100%; }
+.ph-flower.tl { left: 0; top: 0; rotate: -20deg; }
+.ph-flower.tr { right: 0; top: 0; rotate: 25deg; color: #f0d27a; }
+.ph-flower.bl { left: 0; bottom: 0; rotate: 160deg; color: #b9d27a; }
+.ph-flower.br { right: 0; bottom: 0; rotate: 200deg; }
+
+.ph-caption {
+  position: absolute; left: 6%; right: 6%; bottom: 3.5%;
+  font: 600 1em/1 'Caveat', cursive; color: #3a2c1e; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* The scene inside the photo: lens zoom + depth of field (src/photo.js sceneMarkup). */
+.ph-image { position: relative; overflow: hidden; display: grid; }
+.ph-scene { grid-area: 1 / 1; background-repeat: no-repeat; }
+/* Out of focus: a blurred copy, masked away over the subject. SLATE: post-process DoF (camera), not UMG */
+.ph-dof { mask-image: radial-gradient(ellipse var(--rx) var(--ry) at 50% 50%, transparent 55%, #000 100%); }
+/* Blassi (variant 'square'): a square photo inside the same card. */
+.ph-photo[data-shape='square'] .ph-image { aspect-ratio: 1; height: 100%; justify-self: center; }

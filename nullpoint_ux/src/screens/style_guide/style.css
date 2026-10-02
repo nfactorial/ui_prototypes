@@ -1,0 +1,29 @@
+/* Style guide. Prefix: sg- */
+
+.sg { margin: var(--sp-7); }
+.sg-body { padding: var(--sp-6) var(--sp-7); gap: var(--sp-6); }
+.sg-sub { margin-top: calc(-1 * var(--sp-5)); }
+
+.sg-section { gap: var(--sp-3); }
+.sg-rule { margin-bottom: var(--sp-2); }
+
+.sg-row { gap: var(--sp-5); align-items: flex-start; }
+.sg-list { gap: var(--sp-3); }
+
+.sg-swatches { gap: var(--sp-4); }
+.sg-swatch { gap: var(--sp-2); }
+.sg-chip { border: var(--line) solid rgba(255, 255, 255, 0.15); }
+
+.sg-text-row { gap: var(--sp-4); align-items: center; }
+
+.sg-icons { gap: var(--sp-4); }
+
+.sg-grime { opacity: 0.12; }
+.sg-scope { border: var(--line) solid var(--col-line); border-radius: 50%; background-color: var(--col-panel); }
+
+.sg-slots { gap: var(--sp-2); width: 720px; }
+.sg-slot {
+  padding: var(--sp-2) var(--sp-3);
+  border: var(--line) dashed var(--col-line-strong);
+  background-color: rgba(232, 163, 58, 0.06);
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1080" width="2560" height="1080" preserveAspectRatio="xMidYMid slice">
+<!-- PLACEHOLDER backdrop — replace with an in-engine screenshot. -->
+<defs>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="2"/></filter>
+  
+  <radialGradient id="lamp" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e9d6a8" stop-opacity=".55"/><stop offset="1" stop-color="#e9d6a8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="75%"><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".92"/></radialGradient>
+</defs>
+<rect width="2560" height="1080" fill="#0a0c0d"/>
+<polygon points="0,0 2560,0 1340,514 1220,514" fill="#101315"/>
+<polygon points="0,1080 2560,1080 1340,566 1220,566" fill="#15191b"/>
+<polygon points="0,0 0,1080 1220,566 1220,514" fill="#0d1011"/>
+<polygon points="2560,0 2560,1080 1340,566 1340,514" fill="#0c0f10"/>
+<rect x="-220" y="-100" width="3000" height="1280" fill="none" stroke="#2c3236" stroke-opacity="0.90" stroke-width="28.0"/><rect x="200" y="79.20000000000005" width="2160" height="921.5999999999999" fill="none" stroke="#2c3236" stroke-opacity="0.82" stroke-width="20.7"/><rect x="502.4000000000001" y="208.22400000000005" width="1555.1999999999998" height="663.5519999999999" fill="none" stroke="#2c3236" stroke-opacity="0.74" stroke-width="15.5"/><rect x="720.128" y="301.12128" width="1119.744" height="477.75744" fill="none" stroke="#2c3236" stroke-opacity="0.66" stroke-width="11.7"/><rect x="876.8921600000001" y="368.0073216" width="806.2156799999999" height="343.9853568" fill="none" stroke="#2c3236" stroke-opacity="0.58" stroke-width="9.0"/><rect x="989.7623552" y="416.16527155200004" width="580.4752895999999" height="247.66945689599996" fill="none" stroke="#2c3236" stroke-opacity="0.50" stroke-width="7.0"/><rect x="1071.028895744" y="450.83899551744" width="417.9422085119999" height="178.32200896511995" fill="none" stroke="#2c3236" stroke-opacity="0.42" stroke-width="5.6"/><rect x="1129.5408049356802" y="475.8040767725568" width="300.9183901286399" height="128.39184645488638" fill="none" stroke="#2c3236" stroke-opacity="0.34" stroke-width="4.6"/><rect x="1171.6693795536896" y="493.77893527624093" width="216.66124089262073" height="92.44212944751817" fill="none" stroke="#2c3236" stroke-opacity="0.26" stroke-width="3.9"/>
+<rect x="1210" y="510" width="140" height="60" fill="#020303"/>
+<ellipse cx="1100" cy="330" rx="420" ry="260" fill="url(#lamp)"/>
+<rect x="1040" y="304" width="120" height="10" fill="#f3e2b5" opacity=".8"/>
+<rect x="1800" y="700" width="46" height="18" fill="#b8281c" opacity=".7"/>
+<rect width="2560" height="1080" fill="url(#vig)"/>
+</svg>
