@@ -56,6 +56,7 @@ Record reactions to each here as they come.
 | 2026-09-28 | **Director (Destiny-ish) is the favourite** of the first three |
 | 2026-09-28 | **Hard edges look too technical.** Wants a slight border radius on boxes. Director's radius raised 2px → 8px: *"a big improvement"* |
 | 2026-09-28 | **Director is now the default style.** Frontier deliberately stays hard-edged, as the gritty contrast |
+| 2026-10-02 | ✅ **Director is the look.** Handed off with the menu system and the components (toasts, tooltips): `handoff/`, tag `ui-handoff-core`. The in-world UI (HUDs, prompts) and the computer are not decided |
 | 2026-09-28 | **Shield/health logic is exactly right** (*"works exactly as hoped"*). The vitals visuals are *"a little plain"*: fine for now, refine later |
 | 2026-09-28 | 🔴 **Banners are only for must-know progress**: *"extremely important progress information"*, never routine pickups (*"not for 'picked up weapon pack'"*). Those are stack toasts. "Super charged" power-up banner added |
 | 2026-09-28 | **"Super charged" stays as a capability example**, not a planned feature: it shows a banner can carry its own colour, icon and glow. Other must-know events could use it the same way, e.g. *"Self destruct activated"* |

@@ -10,7 +10,7 @@ export default {
       <div class="s-overlay gb" data-widget="WBP_ConfirmDialog">
         <div class="s-border" style="background-color:var(--gb-scrim)"></div>
         <div class="s-box h-center v-center" style="--w:560px">
-          <div class="s-border gb-panel" style="padding:32px 36px">
+          <div class="s-border gb-panel" style="padding:32px 36px; background-color:var(--gb-bg-solid)"> <!-- solid: a translucent panel lets the screen below read through -->
             <div class="s-vbox" style="gap:24px">
               <div class="s-text gb-h2">Quit to desktop?</div>
               <div class="s-text gb-body wrap gb-dim">Progress since your last save will be lost.</div>

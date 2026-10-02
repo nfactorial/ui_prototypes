@@ -1,4 +1,7 @@
-# Main menu (grey-box)
+# Main menu
+
+✅ **Handed off** (2026-10-02, tag `ui-handoff-core`): the menu widget. Spec: `documents/handoff/main_menu.md`.
+🔴 **The background is still open** (derelict vs flyby, below). Change the menu widget only with the spec.
 
 **Serves:** `flow.md` F1 (basic menu) and F10 (derelict background).
 
@@ -22,7 +25,7 @@ derelict against the planet → hold on it (rim light sweeps the hull) → fade 
 - The menu stays up throughout. The hold is framed with the subject right of centre, clear of the menu.
 
 Open: the beats and their pacing, the hold length, whether the menu waits for the sequence, whether to
-add a phenomenon beat (storm, pulsar, a wreck graveyard), and frame cost (not yet measured).
+add a phenomenon beat (storm, pulsar, a wreck graveyard). Frame cost: runs smoothly on the dev machine (user, 2026-10-02).
 
 ## Port notes (flyby)
 - A **menu level + Level Sequence** (CineCamera, keys from `flyby_sequence.js`), looping. Geometry is

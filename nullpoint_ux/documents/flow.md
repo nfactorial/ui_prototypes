@@ -66,20 +66,20 @@ Grey-box built 2026-09-28: play it through the **Flow** scenes in the harness (`
 
 | Screen | Status | Notes |
 |---|---|---|
-| Main menu | Grey-box | Basic options; the background is the design problem |
+| Main menu | ✅ Handed off (widget) | `handoff/main_menu.md`. The background is still the design problem |
 | Settings | Stub | From the main menu, and from pause in-game |
 | In-world prompts | Grey-box | Contextual input hints and onboarding tips. A *component family*, not a screen |
 | Computer: shell | Grey-box | The frame: how it opens, section navigation, overlay vs full-screen |
 | Computer: Missions | Grey-box | Browse, accept, track. Shape of a mission is open |
 | Computer: Loadout | Grey-box | Personal kit for boarding |
 | Computer: Ship | Grey-box | Hull + hardpoint modules (exists as game data: `UShipHullDefinition`, hardpoints) |
-| Pause / system menu | Grey-box | Esc, everywhere (F9) |
+| Pause / system menu | ✅ Handed off | Esc, everywhere (F9). `handoff/pause_and_confirm.md`, with the confirm dialog |
 | Scanning | Needed | Flight HUD interaction + result card; plan in `scanning.md` |
 | Drone console | Needed | Aboard the ship; deploy / control the survey drone |
 | Drone HUD | Needed | The drone's camera feed. Its look is a post-process per drone (game's `drone.md`) |
 | Flight HUD | Exists (placeholder) | |
 | Boarding HUD | Exists (placeholder) | |
-| Computer: Map | Open | Free exploration makes a system map likely. Destiny-style map-as-hub is a candidate |
+| Computer: Map | Open | Free exploration makes a system map likely. Destiny-style map-as-hub is a candidate. Star data: stargen (`E:\dev\prototype\stargen`) |
 | Computer: Crew | Speculative | Pillars §6. Hired crew, alone vs squad per boarding |
 | Computer: Records / logs | Grey-box (speculative) | Survey records (the three numbers), recovered nav logs |
 

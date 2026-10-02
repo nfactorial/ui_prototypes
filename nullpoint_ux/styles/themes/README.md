@@ -1,7 +1,8 @@
 # Style sets
 
-Selectable looks for the menu screens: an exploration tool for colour, type and shape. None is decided
-(`documents/direction.md`). Pick one from the harness **Style** dropdown, or cycle with **Shift+S**. The
+Selectable looks for the menu screens: an exploration tool for colour, type and shape.
+✅ **Director is the decided look** (user, 2026-10-02), handed off as `documents/handoff/style_set.md`.
+The other sets stay as a record; changing Director now means updating that spec. Pick one from the harness **Style** dropdown, or cycle with **Shift+S**. The
 choice is in the URL (`style=…`), so a look can be shared as a link.
 
 ## How it works
@@ -57,5 +58,5 @@ A chosen style becomes the Slate style set (colours, fonts, brushes). Decoration
 |---|---|---|
 | `greybox` | — | Neutral, for judging flow and layout (`style=greybox` in the URL) |
 | `nasapunk` | Starfield | Off-white on navy-black, warm orange accent, the four-colour stripe, rounded corners, Barlow |
-| `director` | Destiny | **Default.** White on deep-blue glass, heavy blur, thin wide-spaced Inter display type, white-outline selection, 8px corners |
+| `director` | Destiny | **Decided (2026-10-02).** White on deep-blue glass, heavy blur, thin wide-spaced Inter display type, white-outline selection, 8px corners |
 | `frontier` | Firefly | Warm browns, rust + teal, condensed caps, 2px borders, tessera grime in the panels |

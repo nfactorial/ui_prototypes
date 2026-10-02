@@ -20,6 +20,7 @@ screen's `README.md` current, because it's the handoff note the Unreal work will
 | **The world** | `E:\learning\story_writing\stories\nullpoint\nullpoint.md`. The **reference rating** (A1.0), the insurance instrument (A1.0e) and the three-number wreck record (A1.0c) are the world's most UI-shaped ideas |
 | **Engine evidence** | `E:\learning\unreal_engine\ui\` (Slate/UMG; read its `README.md` first) and `space\18-ui-hud-and-readability.md` (the HUD problem in space). Use these when a port question comes up, not as a design constraint |
 | **Textures** | tessera, `E:\dev\terrain\tessera`. See *Textures* below |
+| **Star map data** | stargen, `E:\dev\prototype\stargen` (unfinished). Grows Null Space as data: every star, its band, systems on demand. Read its `documents/design/stargen.md` before designing the map |
 
 🔴 **How it reads is the user's call**, as with everything look-critical in this project. Build, show,
 ask. Don't declare a screen "done" on your own judgement.
@@ -268,10 +269,10 @@ themed by the style sets. Try them in the **Components — toasts & tooltips** s
 
 ### Style sets
 
-The harness **Style** dropdown (Shift+S cycles) re-skins every menu screen at once. **Director is the default** (the user's favourite so far). A style set is one CSS
+The harness **Style** dropdown (Shift+S cycles) re-skins every menu screen at once. **Director is the decided look** (user, 2026-10-02; spec `documents/handoff/style_set.md`). A style set is one CSS
 file in `styles/themes/`, registered in `src/styles.js`, that sets the `--th-*` variables grey-box reads,
-plus optional decoration. **Read `styles/themes/README.md` for the contract.** The sets are explorations,
-not decisions. Adding experimental ones is encouraged, and rejected ones are kept with a note on why.
+plus optional decoration. **Read `styles/themes/README.md` for the contract.** The other sets are explorations,
+kept as a record. Adding experimental ones is encouraged, and rejected ones are kept with a note on why.
 When a screen needs a new visual value, add a `--th-*` variable to the contract (with a grey fallback)
 rather than hard-coding a colour, so every style can answer it.
 
@@ -315,7 +316,11 @@ Open it in the browser (Claude in Chrome, if connected), look at the scene you c
 console for errors. For layout changes, glance at 21:9 and HUD scale 1.25 too. Then show the user; the
 look is theirs to sign off.
 
-## The path to Unreal (agreed approach, 2026-09-28; not started)
+## The path to Unreal (agreed approach, 2026-09-28)
+
+✅ **Started 2026-10-02:** the Director look, the menu system and the components (toasts, tooltips) are
+handed off, tag `ui-handoff-core`. Index: `documents/handoff/README.md`. 🔴 **Changing a handed-off piece
+means updating its spec and re-tagging**, or the Unreal side builds from something that no longer exists.
 
 The prototype is the **design stage** of the game repo's pipeline (design doc → technical design → PRD →
 implementation, see the game's `CLAUDE.md`). It shows *what must be true*: layout, flow, states, timing,
