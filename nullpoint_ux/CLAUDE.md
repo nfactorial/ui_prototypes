@@ -58,7 +58,10 @@ reaches some other server (it answers "Ok"). The server uses 5310, listens on bo
 and exits with a message if the port is taken rather than falling back silently.
 
 **No build step and no npm packages** so far. Adding a library is allowed if it earns its place, but ask
-first. 3D content is represented by 2D backdrop images; there's no 3D library.
+first. 3D content is usually a 2D backdrop image, for simplicity. When a design genuinely needs 3D
+(camera motion, perspective, lighting), a small hand-written WebGL shader is fine (user, 2026-10-02): no
+3D library, simple analytic geometry, and only as much as the idea needs. Example: the main menu flyby
+(`src/screens/main_menu/flyby_render.js`), a ray-traced system of spheres and a ring disc.
 
 ### The harness (the chrome around the stage, never ported)
 

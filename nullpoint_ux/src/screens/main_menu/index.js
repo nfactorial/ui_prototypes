@@ -1,5 +1,6 @@
 // Main menu (flow.md F1, F10): basic options over an animated derelict in space.
 import { defineAnimation } from '../../core/motion.js';
+import { startFlyby } from './flyby_render.js';
 
 // Background motion. In Unreal this is a live 3D menu scene; here it's layered 2D.
 const STARS_FAR = defineAnimation('StarsFar', { translate: [[0, [0, 0], 'linear'], [240, [-1024, 0]]] });
@@ -27,6 +28,7 @@ export default {
 
         <!-- Stand-in for the 3D menu scene -->
         <div class="s-overlay mm-bg hit-invisible" data-widget="(3D menu scene)">
+          <canvas class="mm-flyby"></canvas> <!-- menubg = flyby only -->
           <div class="mm-stars far"></div>
           <div class="mm-stars near"></div>
           <div class="s-box mm-derelict-pos h-center v-center">
@@ -60,14 +62,20 @@ export default {
     root.querySelectorAll('[data-action]').forEach((b) => { b.onclick = () => ctx.action(b.dataset.action); });
 
     const bg = root.querySelector('.mm-bg');
-    const derelict = root.querySelector('.mm-derelict');
-    ctx.play(bg, BG_IN);
-    ctx.play(root.querySelector('.mm-stars.far'), STARS_FAR, { loops: Infinity });
-    ctx.play(root.querySelector('.mm-stars.near'), STARS_NEAR, { loops: Infinity });
     const style = ctx.variant('menubg');
-    if (style !== 'drift') ctx.play(derelict, TUMBLE, { loops: Infinity });
-    ctx.play(root.querySelector('.mm-derelict-pos'), DRIFT, { loops: Infinity, mode: 'pingpong' });
-    ctx.play(root.querySelector('.mm-rim'), GLINT, { loops: Infinity, delay: 2 });
+    let stopFlyby = () => {};
+    if (style === 'flyby') {
+      // The flyby is its own sequence (flyby_sequence.js), with its own fades.
+      stopFlyby = startFlyby(root.querySelector('.mm-flyby'), ctx.uiSize);
+    } else {
+      ctx.play(bg, BG_IN);
+      ctx.play(root.querySelector('.mm-stars.far'), STARS_FAR, { loops: Infinity });
+      ctx.play(root.querySelector('.mm-stars.near'), STARS_NEAR, { loops: Infinity });
+      if (style !== 'drift') ctx.play(root.querySelector('.mm-derelict'), TUMBLE, { loops: Infinity });
+      ctx.play(root.querySelector('.mm-derelict-pos'), DRIFT, { loops: Infinity, mode: 'pingpong' });
+      ctx.play(root.querySelector('.mm-rim'), GLINT, { loops: Infinity, delay: 2 });
+    }
     ctx.play(root.querySelector('.mm-menu'), MENU_IN, { delay: 0.8 });
+    return () => stopFlyby();
   },
 };

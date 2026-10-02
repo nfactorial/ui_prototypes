@@ -87,7 +87,9 @@ Grey-box built 2026-09-28: play it through the **Flow** scenes in the harness (`
 
 - **The derelict background, in detail** (F10). Tumbling slowly in silhouette, catching light now and
   then? Drifting past a planet? Try variants here as layered 2D motion. In Unreal it would likely be a live
-  3D menu scene.
+  3D menu scene. **2026-10-02: trying a flyby** (`menubg = flyby`): a Star-Trek-opening-style camera flight
+  past a ringed giant and a moon, ending on the derelict, replaying on a loop. Simple geometry, but the
+  visual bar (and the Unreal material work) goes up. See `src/screens/main_menu/README.md`.
 - **Overlay or "in the computer"** (from `direction.md`). Try the computer shell both ways.
 - **What a mission is** and how it starts (`direction.md`). Leads vs markers; where offers come from.
 - **Boarding party** (pillars §6). If crew happen, choosing who comes is part of the pre-departure loadout.

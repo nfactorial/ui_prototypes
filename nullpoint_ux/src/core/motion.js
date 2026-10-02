@@ -70,6 +70,19 @@ export function wait(seconds) {
   return { finished: a.finished.then(() => {}, () => {}), stop: () => a.cancel() };
 }
 
+// A looping playhead on UI time, for motion keyed in code rather than on a
+// widget (a Level Sequence's playhead). Respects the harness Motion speed.
+export function clock(length) {
+  const a = document.documentElement.animate([], { duration: length * 1000, iterations: Infinity });
+  a.npSpeed = 1;
+  a.playbackRate = timeScale;
+  return {
+    time: () => ((a.currentTime ?? 0) / 1000) % length,
+    seek: (t) => { a.currentTime = t * 1000; },
+    stop: () => a.cancel(),
+  };
+}
+
 // Play an animation on an element. Options, mirroring UMG's PlayAnimation:
 //   delay     seconds before starting
 //   loops     number of plays, Infinity to loop (UMG NumLoopsToPlay = 0)

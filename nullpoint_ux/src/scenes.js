@@ -44,7 +44,7 @@ const VITALS_VARIANT = {
   hudvis: { label: 'Show vitals', options: { always: 'Always', contextual: 'Only when relevant' } },
 };
 const MENU_BG_VARIANT = {
-  menubg: { label: 'Menu bg', options: { tumble: 'Derelict tumbling', drift: 'Derelict drifting, no spin' }, remount: true },
+  menubg: { label: 'Menu bg', options: { tumble: 'Derelict tumbling', drift: 'Derelict drifting, no spin', flyby: 'Flyby sequence (WebGL)' }, remount: true },
 };
 
 // A scene = a backdrop + the screens showing at once (across layers), or a flow

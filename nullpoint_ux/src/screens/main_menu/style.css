@@ -14,6 +14,12 @@
 .mm-derelict-pos { --w: 1150px; --h: 500px; margin-left: 420px; margin-top: -120px; }
 [data-v-menubg='drift'] .mm-derelict-pos { --w: 1500px; --h: 650px; margin-left: 360px; }
 .mm-derelict { rotate: 0deg; }
+
+/* Flyby: a WebGL canvas replaces the layered stars + derelict. */
+.mm-flyby { display: none; width: 100%; height: 100%; }
+[data-v-menubg='flyby'] .mm-flyby { display: block; }
+[data-v-menubg='flyby'] .mm-stars,
+[data-v-menubg='flyby'] .mm-derelict-pos { display: none; }
 .mm-rim { opacity: 0; }
 
 .mm-vignette {
