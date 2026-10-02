@@ -42,7 +42,9 @@ bench), but label them *speculative* and don't let them drive design.
 1. **Read the game first**: its `CLAUDE.md`, the design docs for every player-facing system, its
    tone/art-direction statements. Get in-engine screenshots from the user: they're the backdrops.
 2. **Copy the framework** (below) from the most recent bench. Don't share it by symlink: benches
-   diverge, and a fix worth having in both is copied by hand.
+   diverge, and a fix worth having in both is copied by hand. Give `tools/serve.mjs` the new port and
+   name, check `node tools/serve.mjs` starts it from the bench's folder, and add its row to the
+   **Running it** table.
 3. **Write the game-specific layer**: `CLAUDE.md`, `documents/direction.md` (the reading of the game,
    reference points to ask the user about, open questions), `documents/flow.md` (the screen flow and
    inventory, all *proposed* until the user decides), `src/scenes.js`, `src/mock/`, `src/flows/`, screens.
@@ -66,9 +68,28 @@ name a screen, and domain formatters in `core/format.js`.
 
 ## Running it
 
+🔴 **Every bench runs from the command line with one command.** Open a console in the bench's folder and:
+
 ```sh
 node tools/serve.mjs          # static server + live reload, no dependencies
 ```
+
+| Bench | From `ui_prototypes/` | Open |
+|---|---|---|
+| Null Point | `cd nullpoint_ux` then `node tools/serve.mjs` | http://localhost:5310 |
+| A Little Witchcraft | `cd witchcraft_ux` then `node tools/serve.mjs` | http://localhost:5320 |
+
+Keep it that way for every bench, so testing any of them is just "cd in, run the command":
+
+- **Only Node is needed.** No `npm install`, no build, no setup step, no environment variables
+  (`PORT=…` is an optional override, never required).
+- **The command is the same in every bench**: `node tools/serve.mjs`, run from the bench's root folder.
+  The server finds its files from its own location, so it also works from elsewhere
+  (`node nullpoint_ux/tools/serve.mjs`).
+- **It prints the URL on start** and serves the harness at `/`, so there's nothing else to know.
+- Ctrl+C stops it. Each bench has its own port, so several can run at once in separate consoles.
+
+When a bench is added, add its row to this table.
 
 CSS edits hot-swap without losing state; JS/HTML reload the page. `file://` doesn't work (ES modules).
 ⚠️ Not port 8080: on this machine Docker holds it and WSL relays `[::1]:8080` to something else. The
