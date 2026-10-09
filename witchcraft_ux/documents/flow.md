@@ -45,6 +45,10 @@ world carrying on. Keys are placeholders (D4).
 | D12 | 2026-09-29 | **Photo mode**: viewfinder and selfie views; photos go to Keepsakes › Photos |
 | D8 | 2026-09-29 | **Spells: click → "Assign to where" → press the spell button**; replaces what was there. 1–5 are the spell buttons in the world too |
 | D7 | 2026-09-29 | **Book = Satchel · Recipes · Almanac**, each with a category rail where needed. Two levels, never three |
+| D25 | 2026-10-09 | **Tools live in her collection, not the satchel.** One page per kind; the one she makes active is on the tool wheel. The first of a kind is made active for her and announced (D28) |
+| D30 | 2026-10-09 | **Fifth tab: Tools** (Broom · Fishing · Camera). Camera kit moves there as "Camera"; Keepsakes keeps Small tasks · Milestones · Photos. Only a Map could ever be added (a sixth: open, `direction.md`) |
+| D27 | 2026-10-09 | **The book opens on the Satchel**, except in photo mode (camera raised): then on Tools › Camera. Merely holding the camera doesn't count |
+| D31 | 2026-10-09 | **Recipes › Bait** joins Cooking, Potions, Spells, Charms. Bait she makes goes in the satchel |
 
 ## Proposed (built in the bench, not decided)
 
@@ -53,8 +57,8 @@ world carrying on. Keys are placeholders (D4).
 | M1 | Main menu is basic (Continue / New / Settings / Quit) over the living world, like Null Point's F1 |
 | W1 | The game launches straight into the world; onboarding is in-world tips ("I  Your satchel") |
 | B1 | One in-game menu, **the witch's book** (D7). I opens the Satchel; K opens Recipes › Spells, so the loadout stays one press away. LB/RB (Q/E) change tab, LT/RT (W/S) change category |
-| K1 | Keepsakes = Small tasks (a handful, never expire, replaced when claimed) · Milestones (lifetime, tiered, fed by existing counts) · Photos (the album) · Camera kit. Rewards wait until claimed |
-| P2 | **P** lifts the camera. Filters, frames with a handwritten caption, hide UI; only kit pieces she owns are offered |
+| K1 | Keepsakes = Small tasks (a handful, never expire, replaced when claimed) · Milestones (lifetime, tiered, fed by existing counts) · Photos (the album) · ~~Camera kit~~ (moving to Tools › Camera, D30). Rewards wait until claimed |
+| P2 | ~~P lifts the camera, with filter/frame/camera/lens controls in it~~ Superseded 2026-10-05: the camera is a **wheel tool** (the game's PRD): F (*use tool*) raises it and is the shutter, Esc puts it away, **I opens the book on Camera kit** where everything is chosen (D21). P stays as a bench shortcut |
 | I1 | Input glyphs come from one table (`src/input.js`); the prompt follows the last device used (CommonUI-style). The gamepad mapping there is a first guess |
 | S1 | Tools and spells each get a **quick selector** (wheel or bar) that opens in play, picks, and closes |
 | S2 | Q/E cycle spells without opening anything; the loadout shows as a strip for ~2 s |
@@ -67,7 +71,7 @@ world carrying on. Keys are placeholders (D4).
 | Main menu | Grey-box | Variant: which shot (golden cliff, night, golden path) |
 | World HUD | Grey-box | Variant `hud`: quiet / contextual / always-on |
 | Zone banner | Grey-box (rules are the game's) | Variant: with or without the map name |
-| Tool selector | Grey-box | Variant `selector`: radial / bar |
+| Tool selector | Grey-box | Variant `selector`: radial / bar. A fixed place per kind, its active piece (D25); variant `wheelempty`: a missing kind hidden / "Something goes here". I on an aimed tool opens its page (proposed) |
 | Spell selector | Grey-box, speculative content | Loadout from `spell-grammar-and-loadout.md` |
 | Book: Satchel | Grey-box, follows `inventory_ui_prd` v0.1 | Portrait + grid + detail |
 | Book: Recipes › Cooking | Grey-box, speculative | No cooking design yet; the campfire as a station is an idea |
@@ -83,9 +87,12 @@ world carrying on. Keys are placeholders (D4).
 | Quit confirm | Grey-box | |
 | Dialogue (villagers) | Grey-box (D15) | Panel (AC-style) or bubble; typed text with a babble stand-in; replies. G on a "Talk" prompt |
 | Screen transitions | Needed | AC:NH-style shape wipe (broom silhouette, cauldron…), `todo_prd.md` |
-| Photo mode | Grey-box, speculative (D12) | Viewfinder + selfie; filters, frames; poses for the future (D14) |
+| Viewfinder (photo mode) | Grey-box (D12, D21) | Plain overlay (stage 3); variant: brackets, or each camera's own finder. Camera and lens chosen in Tools › Camera; Q / E switch the enabled filters / frames (D26). Selfie kept but unadvertised (deferred in the game) |
 | Study progress ("Aha!") | Grey-box (D17) | Moment or card; reveals a charm reagent. N in the world |
-| Book: Keepsakes | Grey-box (D11) | Small tasks · Milestones · Photos · Camera kit (D13) |
+| Book: Keepsakes | Grey-box (D11) | Small tasks · Milestones · Photos · Camera kit (D13); Camera kit moves to Tools (D30) |
+| Book: Tools › Broom, Fishing, Camera | Grey-box (D25, D30) | One page design for every kind: the main piece (broom, rod, camera) and its parts (trinket; line, bait; lens, filter, frame). Only what she owns. Camera kit moved here |
+| Book: Recipes › Bait | Grey-box (D31), speculative content | Same shape as the other recipe pages |
+| New tool ("You received a new tool!") | Grey-box (D28) | The catch's hold-up. J in the world gives the next tool; scene *Flow — a new tool* |
 | Broom | Open | Mounting is item-driven from the inventory; no fuel, no stats. Race timer + ghost (design only) |
 | Wand crafting | Open | Ideas only (`wand.md`); could be a Recipes category |
 | Map | Open | No map is designed. "The limiter is the map, not a meter" (broom) |

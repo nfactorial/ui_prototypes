@@ -34,3 +34,5 @@
 .ph-dof { mask-image: radial-gradient(ellipse var(--rx) var(--ry) at 50% 50%, transparent 55%, #000 100%); }
 /* Blassi (variant 'square'): a square photo inside the same card. */
 .ph-photo[data-shape='square'] .ph-image { aspect-ratio: 1; height: 100%; justify-self: center; }
+/* Expanse: a panoramic strip (65 : 24, PANO_RATIO in photo.js) across the card. */
+.ph-photo[data-shape='pano'] .ph-image { aspect-ratio: 65 / 24; width: 100%; align-self: center; }

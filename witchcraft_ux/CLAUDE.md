@@ -50,12 +50,14 @@ decided it, but don't treat "no HUD" as a rule. `documents/flow.md` holds the sc
 | Colour affinity | `documents/design/color_affinity.md` | Green, Yellow, Blue, Red, Black, White, Void (colours in `styles/tokens.css`) |
 
 Mock data is in `src/mock/`: `world.js` (time, zone, prompt, tool, active spell) and `witch.js` (items,
-satchel, spells, fish). Fields the game lacks are marked PROPOSED.
+satchel, spells, fish, and her tool collection: `TOOL_KINDS`, `TOOLS`, what's active). Tools live in the
+collection, never the satchel (D25); `world.tool` is a kind (`'fishing'`), meaning its active piece.
+Fields the game lacks are marked PROPOSED.
 
 ## Screens and scenes
 
 Flow scenes (`src/flows/game_flow.js`) are the main way in: main menu → world, with I (satchel), K
-(spells), T (tools), Tab (spell wheel), 1–5 (spell buttons), Q/E (cycle spell), G (interact), F (fish), Z (next zone), 6–0
+(spells), T (tools), Tab (spell wheel), 1–5 (spell buttons), Q/E (cycle spell), G (interact), F (use tool: the rod fishes, the camera raises and shoots; in the viewfinder Q/E switch filter/frame), P (raise the camera), J (given the next tool, a demo), Z (next zone), 6–0
 (toasts), Esc (pause/back). There are also variants of the flow scene: at night (dark test) and on a
 bright hill (light test). Each screen folder's `README.md` says what's decided, what's open and the
 port notes.

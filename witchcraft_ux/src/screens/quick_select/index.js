@@ -8,8 +8,18 @@
 // Toggle behaviour here: the same key again (or Enter / click) picks the focused
 // one, Esc cancels. Hold-to-open / release-to-pick is the likely gamepad version
 // (a setting sketched in Settings > Controls).
+//
+// Tools (user, 2026-10-09: D25): one place per KIND, at a fixed angle (the game's
+// tool_wheel_prd), showing that kind's active piece from her collection. Hands free at
+// the bottom. A kind she hasn't got:
+//   variant 'wheelempty'  hidden  (default) no place at all: the kinds stay unknown
+//                         empty   an empty place reading "Something goes here"
+// Naming the missing kind ("A place for a fishing rod") is out: it gives it away (2026-10-09).
+// The book key while aiming at a tool opens that tool's page (proposed, from the user's idea).
 import { defineAnimation } from '../../core/motion.js';
-import { ITEMS, SPELLS } from '../../mock/witch.js';
+import { glyph } from '../../input.js';
+import { SPELLS, TOOL_KINDS, activeTool } from '../../mock/witch.js';
+import { bodyName, BODIES } from '../../photo.js';
 
 const IN = defineAnimation('QuickIn', {
   opacity: [[0, 0, 'quadOut'], [0.15, 1]],
@@ -21,13 +31,16 @@ const OUT = defineAnimation('QuickOut', { opacity: [[0, 1, 'quadIn'], [0.12, 0]]
 const icon = (name) => `<div class="s-image tint" style="--img:url(/assets/icons/${name}.svg)"></div>`;
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-function entries(kind, vm) {
+function entries(kind, vm, { showEmpty, camera }) {
   if (kind === 'tool') {
-    const tools = vm.witch.get('satchel').filter((s) => s && ITEMS[s.item]?.tool).map((s) => s.item);
-    return [
-      { id: null, name: 'Hands free', icon: 'circle', desc: 'Put it away.', current: vm.world.get('tool') === null },
-      ...tools.map((id) => ({ id, name: ITEMS[id].name, icon: ITEMS[id].icon, desc: ITEMS[id].desc, affinity: ITEMS[id].affinity, current: vm.world.get('tool') === id })),
-    ];
+    const held = vm.world.get('tool');
+    const places = TOOL_KINDS.flatMap((k) => {
+      const t = activeTool(vm.witch, k.id, camera);
+      if (t) return [{ id: k.id, tool: k.id, angle: k.angle, name: t.name, icon: t.icon, desc: t.desc, current: held === k.id }];
+      return showEmpty ? [{ id: null, angle: k.angle, empty: true, name: 'Something goes here', icon: null, desc: '' }] : [];
+    });
+    return [...places, { id: null, angle: 180, name: 'Hands free', icon: 'circle', desc: 'Put it away.', current: held === null }]
+      .sort((a, b) => a.angle - b.angle);
   }
   return vm.witch.get('loadout').map((id, i) => {
     const s = SPELLS.find((x) => x.id === id);
@@ -46,16 +59,20 @@ export default {
   mount(root, ctx) {
     const kind = ctx.params.kind ?? 'spell';
     const shape = ctx.variant('selector') ?? 'radial';
-    const list = entries(kind, ctx.vm);
+    const list = entries(kind, ctx.vm, {
+      showEmpty: ctx.variant('wheelempty') === 'empty',
+      camera: (id) => ({ name: bodyName(id, ctx.variant('names') ?? 'anagram'), desc: BODIES[id]?.desc }),
+    });
     const R = 230; // wheel radius
 
     const slot = (e, i) => {
-      const a = (i / list.length) * Math.PI * 2 - Math.PI / 2;
+      // A tool's place is fixed by its kind (clockwise from the top); spells share the ring evenly.
+      const a = e.angle !== undefined ? (e.angle - 90) * Math.PI / 180 : (i / list.length) * Math.PI * 2 - Math.PI / 2;
       const pos = shape === 'radial' ? `style="--x:${Math.cos(a) * R}px; --y:${Math.sin(a) * R}px"` : '';
       return /* html */ `
         <button class="s-button qs-slot ${shape === 'radial' ? 'anchored' : ''} ${e.empty ? 'empty' : ''}" ${pos}
           data-i="${i}" data-aff="${e.affinity ?? ''}" aria-selected="${!!e.current}" ${e.current ? 'data-focus-default' : ''}>
-          ${icon(e.icon)}
+          ${e.icon ? icon(e.icon) : ''}
           ${kind === 'spell' ? `<span class="qs-num">${i + 1}</span>` : ''}
         </button>`;
     };
@@ -74,7 +91,7 @@ export default {
             <div class="s-border gb-panel qs-bar"><div class="s-hbox qs-row">${list.map(slot).join('')}</div></div>
           </div>`}
         <div class="s-vbox qs-note h-left v-bottom">
-          <div class="gb-note on-world">${kind === 'tool' ? 'T again / Enter picks · Esc cancels' : 'Tab again / Enter picks · Esc cancels'}. The world carries on while this is open (D3).</div>
+          <div class="gb-note on-world">${kind === 'tool' ? 'T again / Enter picks · I opens the aimed tool\'s page (proposed) · Esc cancels. One place per kind; variant <b>Wheel: missing tool</b>' : 'Tab again / Enter picks · Esc cancels'}. The world carries on while this is open (D3).</div>
         </div>
       </div>`;
 
@@ -85,7 +102,8 @@ export default {
         <div class="s-text gb-label just-center">${title}</div>
         <div class="s-text gb-h2 just-center">${esc(e.name)}</div>
         ${e.meta ? `<div class="s-text gb-small just-center qs-meta">${esc(e.meta)}</div>` : ''}
-        <div class="s-text gb-small wrap just-center qs-desc">${esc(e.desc)}</div>`;
+        <div class="s-text gb-small wrap just-center qs-desc">${esc(e.desc)}</div>
+        ${e.tool ? `<div class="s-hbox qs-page">${glyph('satchel', 'sm')}<span class="s-text gb-small">Its page in the book</span></div>` : ''}`;
     };
     const buttons = [...root.querySelectorAll('.qs-slot')];
     const pick = (i) => {
@@ -101,8 +119,11 @@ export default {
 
     const key = kind === 'tool' ? 't' : 'tab';
     ctx.onKey((e) => {
-      if (e.key.toLowerCase() !== key) return false;
+      const k = e.key.toLowerCase();
       const f = buttons.indexOf(document.activeElement);
+      // The book key while aiming: the aimed tool's page (Hands free, or nothing: the Satchel).
+      if (kind === 'tool' && k === 'i') { ctx.action('tool-page', { kind: list[f]?.tool ?? null }); return true; }
+      if (k !== key) return false;
       if (f >= 0) pick(f);
       return true;
     });

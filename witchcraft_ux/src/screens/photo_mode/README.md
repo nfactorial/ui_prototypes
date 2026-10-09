@@ -1,26 +1,23 @@
-# Photo mode (grey-box, speculative)
+# Viewfinder (photo mode; grey-box)
 
-**Serves:** the user's two views (2026-09-29), and the captured ideas in the game's
-`documents/design/characters/witch/take_photo_mode.md` and `todo_prd.md` (filters, borders, stickers à la
-AC:NH, an album). Photo mode isn't designed in the game yet, so everything here is a proposal.
-
-**P** in the world lifts the camera.
+**Serves:** the game's `documents/design/characters/witch/take_photo_mode.md` and its PRD (2026-10-05:
+viewfinder built to stage 2, stage 3 = shutter + plain overlay next), plus D12/D13/D21 here.
 
 | | |
 |---|---|
-| **Viewfinder** | She lifts the camera; we see through it. World photos from her viewpoint |
-| **Selfie** | The camera is out in front, looking back at her. **Poses** (Q/E): wanted but **for the future** (D14): they need pose animations, from a library if one exists, or an animator. A label here |
-| **Filters** (F) | Old photo · Faded film · Dusk · Ink & wash · Storybook (post-process presets in the game). **Liked** (D12). Only the ones in her **camera kit** are offered (D13) |
-| **Frames** (R, from her kit) | Polaroid · Postcard · Pressed flowers. Previewed round the whole screen, as AC:NH does. Polaroid and postcard carry a handwritten caption: place + time |
-| **Camera** (B, from her kit) | Speculative (user's idea, 2026-10-01). Box camera (her first) · Icale · Blassi · Onnik · Aconn · Nyso. Each brings its **viewfinder** (drawn only in the viewfinder view) and a **colour grade**. Collectibles, never a stat |
-| **Lens** (L, from her kit) | Everyday 50 · Wide 24 · Portrait 85 · Long 300 · Macro 100: how much fits (zoom) and what's out of focus (DoF). Any lens fits any camera (open) |
-| **Hide UI** (H) | For a clean frame; the first Esc brings it back |
-| **Take** (Space) | Shutter flash, then the framed photo drops in bottom-right: "Saved to Keepsakes". It appears in Keepsakes › Photos and counts toward the Photographer milestone |
+| **Raising** | The camera is a **wheel tool**, as in the game. T puts it in her hands; **F** (*use tool*, pad X) raises it. **P** is a bench shortcut that does both |
+| **Shutter** | **F** again (each press is a photo; Space is a bench alias). Flash, then the photo drops in bottom-right ("Saved to Keepsakes"); in the game saving is a stub for now |
+| **Put away** | Esc / B |
+| **The overlay** | Variant `photoui`: **plain** (default, the game's stage 3: nothing over the view), **clean** (corner brackets + vignette), **body** (the viewfinder of the camera she has on, table below) |
+| **Hints** | A row on raising (Take photo · Filter · Frame · Camera · Put away), faded after 4 s. Filter / Frame only show with two or more enabled. Buttons, so the mouse works |
+| **Choosing** 🔴 | **The camera and lens are chosen in the book (D21, D27).** I opens the book over the viewfinder on **Tools › Camera** (moved from Keepsakes › Camera kit, D30); picking there sets `witch.camera`, and the view follows (a blink for a new camera or lens). Esc closes the book first, then the camera |
+| **Switching** | **Filters and frames switch in the viewfinder** (user, 2026-10-08: D26), among the ones **enabled** on Tools › Camera: **Q** the next filter, **E** the next frame (pad LB / RB, placeholders). The name shows low centre for a moment. In selfie (unadvertised), Q/E are still the poses |
+| **Frame** | The chosen frame is previewed round the whole screen (AC:NH) |
+| **Selfie** | V and Q/E (poses) still work but aren't shown: selfie is deferred in the game |
 
-- **Variant `photoui`:** `body` (each camera's own viewfinder) or `clean` (corner brackets for all).
-- **Variant `kit`:** `all` hands her the whole kit to try (the photo and kit scenes' default); `earned` is
-  only what she owns (box camera + everyday lens to start).
-- **Variant `blassi`:** `square` photos, or the look only.
+- **Variant `kit`:** `all` (the photo scene's default) hands her the whole kit to try; `earned` is only what
+  she owns. **`blassi`:** square photos, or the look only. **`names`:** anagrams, birds or makers.
+- World HUD and zone banner step aside while the camera is up (in the game: the overlay tops the Game stack).
 
 ### The viewfinders (nods to the real makers, no trade dress)
 
@@ -32,18 +29,28 @@ AC:NH, an album). Photo mode isn't designed in the game yet, so everything here 
 | Nyso | Sony | Electronic finder: readouts across the top, level line, focus box, histogram | cool, clean | Under the stars, or in a storm |
 | Icale | Leica | Rangefinder: the view **doesn't zoom**; bright frame lines shrink with a longer lens; centre patch, red LED meter | rich, contrasty | Folk in town (street photography) |
 | Blassi | Hasselblad | Waist-level: a square of ground glass in a dark hood, grid, centre circle, **mirrored left-right** | soft | The moon |
+| Expanse | Hasselblad XPan (pun: "ex-PAN-se") | A **true panorama** (user, 2026-10-05): the strip is the whole screen width, letterbox bars above and below, bright corner lines, red LED meter. Photos are 65 : 24 | neutral | A whole horizon: the sea at sunset |
 
-The readouts follow the light (shutter slows at evening/night) and the lens (its f-number). They are dressing.
+**The Expanse is wider, not cropped** (user, 2026-10-05). Its frame is wider, so the same lens takes in more
+of the world sideways, as the real XPan did; the photo is then saved at the same output width as any other,
+just shorter. ⚠️ The bench can't show the extra width: its viewfinder shot is 16:9, so the strip is the
+middle of it. An in-engine shot at about 76° horizontal, 65 : 24 (e.g. `HighResShot 3840x1418` from the
+viewfinder spot), would show it properly. Named by the user; not "Blassi Expanse", so one maker doesn't get two.
+
+The readouts follow the light (shutter slows at evening/night) and the lens (its f-number). They are dressing. 🔴 **Flavour only (D24):** they may change with the light and lens, but the player never adjusts them (D23: no ISO, white balance, autofocus).
 - World HUD and zone banner step aside while the camera is up.
 - The views are **in-engine screenshots** from each camera (`assets/backdrops/viewfinder.jpg`, `selfie.jpg`).
 
 ## Open
+- **The book hides the view.** Its backing blurs the viewfinder, so a change can't be judged until the book
+  closes. Try: in camera mode, a narrower kit page to one side with the view clear beside it?
+- Should the hints come back (when nothing's pressed for a while, or every raise)? Or never show at all?
 - Does the world pause? `todo_prd.md` mentions pausing, with optional time-of-day scrubbing. D3 says in-game
   UI doesn't pause, but photo mode might earn an exception ("hold the moment").
-- Zoom, tilt, depth of field, stickers, a "look at camera" toggle for the selfie?
+- Tilt, stickers, a "look at camera" toggle for the selfie? (Zoom waits for lenses, as in the game.)
 - A photo taken with no frame is saved as a polaroid here, so the album has captions. Keep that?
 - Cameras and lenses: how many of each? Does a lens belong to a camera (a mount) or fit any? Square Blassi
-  photos? Is the mirrored Blassi finder fun or just confusing when she turns? Do the readouts read as stats?
+  photos? Is the mirrored Blassi finder fun or just confusing when she turns? (Readouts: kept as flavour, D24.)
 - Unlock photos ("the moon", "a bird in flight") need the game to know what's in frame: a tag on actors
   in view at the shutter? Not designed.
 - Selfie: the camera's viewfinder isn't drawn (she isn't looking through it), but its grade and lens apply.
@@ -61,4 +68,11 @@ The readouts follow the light (shutter slows at evening/night) and the lens (its
   images, text blocks for the readouts. Blassi's mirror: flip the view (a material or a SceneCapture flip),
   not the saved photo. Icale: keep the camera's FOV wide and size the frame lines by the lens; the photo is
   the crop inside the lines.
+- **Expanse:** a body is a frame *format* as well as an overlay. Keep the normal view's vertical coverage
+  and widen it: horizontal FOV = 2·atan(tan(V/2) · 65/24) (≈ 76° at 35 mm, against 54.4°), or literally
+  `FCozyLens::HorizontalFieldOfView(35, 65)` ≈ 86° on a 65 mm frame. On screen, `UCameraComponent`
+  `bConstrainAspectRatio` with `AspectRatio` 65/24 draws the bars (engine letterbox, not UMG). The photo:
+  a `SceneCaptureComponent2D` into a 65 : 24 render target with the same FOV (Unreal's FOV is horizontal, so
+  it carries over), at the same long edge as other photos (e.g. 1920 × 709). `FScreenshotRequest` would
+  include the bars.
 - `box-shadow` surrounds, `filter: drop-shadow` on Icale's lines, gradients for Blassi's grid: textures in UMG.

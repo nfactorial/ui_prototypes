@@ -56,6 +56,17 @@
 /* Icale: a rangefinder. You see past the edges; bright lines mark the photo, and
    they shrink for a longer lens (the view itself doesn't zoom). */
 .pm2-f-lines { width: var(--frame); aspect-ratio: 16 / 9; display: grid; }
+/* Expanse: a true panorama. The strip is the whole width (65 : 24), dark bars above and
+   below, bright lines just inside. SLATE: the bars are the camera's constrained aspect
+   ratio (letterbox) in the game, not UMG; the lines are four corner images. */
+.pm2-f-strip { place-self: center stretch; aspect-ratio: 65 / 24; display: grid; padding: 22px 26px;
+  box-shadow: 0 0 0 3000px rgba(6, 6, 6, 0.96); }
+.pm2-f-strip .c { width: 44px; height: 44px; border: 0 solid #fff3cf; filter: drop-shadow(0 0 3px rgba(255, 236, 170, 0.8)); }
+.pm2-f-strip .c.tl { place-self: start start; border-width: 3px 0 0 3px; }
+.pm2-f-strip .c.tr { place-self: start end;   border-width: 3px 3px 0 0; }
+.pm2-f-strip .c.bl { place-self: end start;   border-width: 0 0 3px 3px; }
+.pm2-f-strip .c.br { place-self: end end;     border-width: 0 3px 3px 0; }
+.pm2[data-body='expanse'] .pm2-f-led { margin-bottom: 70px; }
 .pm2-f-lines .c { width: 44px; height: 44px; border: 0 solid #fff3cf; filter: drop-shadow(0 0 3px rgba(255, 236, 170, 0.8)); }
 .pm2-f-lines .c.tl { place-self: start start; border-width: 3px 0 0 3px; }
 .pm2-f-lines .c.tr { place-self: start end;   border-width: 3px 3px 0 0; }
@@ -85,30 +96,38 @@
 .pm2-frame-cap { place-self: end center; margin-bottom: -110px; font: 600 54px/1 'Caveat', cursive; color: #3a2c1e; }
 .pm2-frame[data-frame='postcard'] .pm2-frame-cap { margin-bottom: -95px; }
 
-/* --- UI --------------------------------------------------------------------- */
+/* --- UI: only a hint row, which fades (user, 2026-10-05: choices live in the book) --- */
 .pm2-ui { padding: 100px 120px; }
-.pm2-top { gap: 4px; }
-.pm2-mode { font: italic var(--gb-heading-weight) 38px/1 var(--gb-font-display); }
-.pm2-sub, .pm2-where .gb-small { color: #fffaf0; }
-.pm2-where { gap: 4px; align-items: flex-end; }
-.pm2-pose { margin-bottom: 96px; gap: 10px; align-items: center; }
+.pm2-pose { margin-bottom: 70px; gap: 10px; align-items: center; }
 .pm2-pose .gb-small { color: #fffaf0; }
-.pm2-bar {
-  gap: 6px; padding: 8px; border-radius: 999px;
-  background-color: color-mix(in srgb, var(--gb-bg-solid) 80%, transparent);
-  border: var(--gb-border-w) solid var(--gb-line);
-}
-.pm2-ctl {
+.pm2-hints { gap: 28px; }
+.pm2-hints.faded { opacity: 0; }
+.pm2-hint {
   pointer-events: auto;
-  gap: 8px; align-items: center; padding: 8px 14px 8px 8px; border-radius: 999px;
-  color: var(--gb-text); cursor: pointer; outline: none; display: flex;
+  gap: 8px; align-items: center; padding: 4px 6px; border-radius: 999px;
+  cursor: pointer; outline: none; display: flex; background: none;
 }
-.pm2-ctl .gb-small { color: var(--gb-text); }
-.pm2-ctl:hover, .pm2-ctl:focus { background-color: var(--gb-raise-hi); }
-.pm2-ctl.primary { background-color: var(--gb-primary-bg); }
-.pm2-ctl.primary .gb-small { color: var(--gb-primary-text); font-weight: 700; }
+.pm2-hint .gb-small { color: #fffaf0; }
+/* What a filter / frame switch changed to (D26): a word, low centre, gone in a moment. */
+.pm2-switched { margin-bottom: 64px; gap: 10px; align-items: baseline; opacity: 0; }
+.pm2-switched .gb-small { color: #fffaf0; opacity: 0.8; }
+.pm2-switched .gb-h3 { color: #fffaf0; }
 .pm2-note { margin-bottom: 90px; max-width: 360px; }
 [data-clean] .pm2-note { display: none; }
+
+/* The photo's shape over a plain view: outside it is dimmed. SLATE: borders round an SBox */
+.pm2-shape { place-self: center; box-shadow: 0 0 0 3000px rgba(6, 6, 6, 0.6); }
+/* Expanse in plain: letterbox bars, solid, as the game's constrained aspect would draw them. */
+.pm2-shape[data-shape='pano'] { box-shadow: 0 0 0 3000px #000; }
+.pm2-shape[data-shape='wide'] { display: none; }
+.pm2-shape[data-shape='pano'] { width: 100%; aspect-ratio: 65 / 24; }
+.pm2-shape[data-shape='square'] { height: 100%; aspect-ratio: 1; }
+.pm2-shape:not([data-shape='wide']) ~ .pm2-marks { margin: 0; place-self: center; width: auto; }
+.pm2-shape[data-shape='pano'] ~ .pm2-marks { width: calc(100% - 180px); height: auto; aspect-ratio: 65 / 24; }
+.pm2-shape[data-shape='square'] ~ .pm2-marks { height: calc(100% - 140px); aspect-ratio: 1; }
+
+/* Plain (the game's stage 3): nothing over the view. No vignette, no brackets. */
+.pm2[data-ui='plain'] :is(.pm2-marks, .pm2-vignette) { display: none; }
 
 /* --- shutter + saved ----------------------------------------------------------- */
 .pm2-flash { background-color: #fff; opacity: 0; }

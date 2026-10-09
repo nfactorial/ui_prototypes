@@ -37,6 +37,18 @@ Label them, and feed anything settled back into the game's design docs.
 | D18 | 2026-09-29 | **Milestones as square cards** (AC-style): earned stamps + one outline for the next, progress to the next tier only; later tiers aren't shown. The all-tiers rows stay as a variant for comparison |
 | D19 | 2026-09-29 | **Milestone goals as a count** ("Fish caught · 6 / 10"), not a sentence: preferred in general, and simpler to localise (fixed label + numbers, no plurals). The sentence option stays in the bench only for comparison |
 | D20 | 2026-10-01 | **One study pip per charm ingredient.** Each study step reveals one ingredient, so a creature whose charm takes one ingredient has one pip, five takes five. The Charms page shows a "?" for each ingredient still to learn |
+| D21 | 2026-10-05 | **The camera is set up in the book, not in the viewfinder.** While the camera is up the player can open the book; it opens on Keepsakes › Camera kit ("perhaps", user: the default while in camera mode), and camera, filter, frame (and lens) are chosen there. The viewfinder has no option controls. Its first overlay is **plain**, as the game's stage 3 |
+| D22 | 2026-10-05 | **A seventh camera, the Expanse** (a nod to the Hasselblad XPan: said aloud, "ex-PAN-se"). Not "Blassi Expanse": one maker shouldn't get two. **It takes a true panorama**: wider in the world, not a crop, then saved at the normal output size (so not a "bigger" image) |
+| D23 | 2026-10-05 | **Cameras: varied, but a fun sub-system, not a camera simulator.** Don't go too far, but once the base works most variety is *configuration* of the one system (a camera, a lens, a filter, a frame are data), so make what you can do fairly varied: an interested player gets an intricate kit for little work from us. **Out:** real-camera controls (ISO, white balance, autofocus and the like) |
+| D24 | 2026-10-05 | **Viewfinder readouts stay, as flavour.** They're dressing: they may change with the light and the lens, but the player never adjusts them; that's where it would go too far. (Adjustable settings only if photography ever became hugely popular, which isn't expected) |
+| D25 | 2026-10-09 | **Her tools live in a collection, not the satchel** (user's idea, 2026-10-08). **Things she keeps** (brooms, rods, lines, cameras and their kit) go into her collection, one page per kind (Broom, Fishing, Camera…); **everything else goes in the satchel**. On a kind's page she makes one **active**, and the active one is what the tool wheel shows. A new rod or broom never fills her bag. ⚠️ Reverses the game's `tools.md` (2026-09-30: a tool takes a satchel slot and is marked for the wheel there) |
+| D26 | 2026-10-08 | **Filters and frames switch in the viewfinder**, among the ones she has enabled on the camera's page; the camera and lens are chosen on the page. Refines D21 (which had no option controls in the viewfinder) |
+| D27 | 2026-10-09 | **The book opens on the Satchel**, the page used most, not on the page of the tool in her hands. **Except in photo mode (the camera raised, looking through it): then it opens on Tools › Camera** (she most likely wants the kit then, not the satchel). The camera merely in her hands doesn't count (user, 2026-10-09). Replaces D21's Keepsakes › Camera kit. (A way from the tool wheel to the aimed tool's page is open, below) |
+| D28 | 2026-10-09 | **The first of each kind is made active for her, and announced**: "You received a new tool! **BROOM**". Picking one up still puts it in her hands. Replaces `tools.md`'s "nothing is marked for her, not even the first" |
+| D29 | 2026-10-09 | **Rods differ in look and in what they can land** ("you can't catch a shark with a flimsy wooden rod"): more than aesthetic. **Strength is internal**: it drives what she can catch and is never shown as a value, nor spelled out in a description. The name carries it ("Waverly's Ocean Fishing Rod"). **A tool's flavour line describes it**, what it looks like ("Ornately decorated with iridescent abalone shell"), never what it can do. The rod specification isn't settled |
+| D30 | 2026-10-09 | **A Tools tab holds the tool pages**: Broom · Fishing · Camera (and kinds to come). **Camera kit moves here from Keepsakes, retitled "Camera"**; Keepsakes keeps Small tasks · Milestones · Photos. The book is Satchel · Recipes · Almanac · Keepsakes · Tools. **A Map is the only other tab that could be added**; nothing else gets a tab (⚠️ that would be a sixth, past D10's five: open, below) |
+| D31 | 2026-10-09 | **Bait recipes are Recipes › Bait**, a category beside Cooking, Potions, Spells and Charms. Bait she makes goes in her satchel |
+| D32 | 2026-10-09 | **Every detail string is flavour, never technical**: what a thing looks like, its character ("Ornately decorated with iridescent abalone shell"). Not what it does, how well, or a number: no "SLR, quick to focus", no "50 mm", no "Only bites after dark". The name says what it is. **For everything**: tools, camera pieces, satchel items, recipes, spells. (What a camera piece does shows in its sample photo on the card.) The factual lines are kept as possible **learnings** (Open, below) |
 | D7 | 2026-09-29 | **The book is two levels: tabs across, categories down a rail.** Tabs: **Satchel · Recipes · Almanac**. Recipes = Cooking, Potions, Spells, Charms. Almanac = Fish, Flowers, Creatures ("Almanac": user's pick). A studied creature's charm is a recipe (Recipes › Charms); what she knows of the animal is in Almanac › Creatures |
 
 ## Reading the game (a working interpretation, to check with the user)
@@ -89,19 +101,34 @@ Looks are selectable **style sets** (`styles/themes/`), applied live to every sc
 - **Location range** for fish/flowers (a game-data addition the user might make): *widespread* → "Various",
   *region* → the region, *specific* → one place. ⚠️ Called "Common / Region / Specific" in conversation;
   "Common" would clash with the rarity, so the bench calls it **Widespread**.
-- **Slot five of the book** (D10): held for something significant. Candidates: a Map (or a diegetic in-world
-  map instead), or Home/decorating if it becomes a pillar.
-- **Slot five of the book** (D10): held for something significant. Candidates: a Map (or a diegetic in-world
-  map instead), or Home/decorating if it becomes a pillar.
+- ~~**Slot five of the book** (D10): held for something significant. Candidates: a Map (or a diegetic in-world
+  map instead), or Home/decorating if it becomes a pillar.~~ **Resolved** by D30: Tools.
+- **A Map tab would be a sixth** (D30). The user keeps one tab possible for a Map, but Tools fills D10's
+  five. Raise the cap to six (Map only), or does a map go elsewhere (in the world, or a page)?
 - **The control scheme** (`src/input.js`, all proposed): which gamepad buttons open the wheels, the book,
   the spell tab.
 - **Cameras and lenses** (user's idea, 2026-10-01; the game's `take_photo_mode.md`): collectibles for the
   camera kit, "different, not better", each unlocked by a photo that plays on its maker (Blassi: the moon;
   Icale: street photography). Built speculatively in photo mode (B / L) and Keepsakes › Camera kit. Open:
   how many of each; whether a lens fits any camera (bench: yes); whether Blassi's photos are square (variant
-  `blassi`); whether Blassi's mirrored finder is charming or just confusing in motion; whether the
-  readouts (1/60, f/5.6, ISO) feel like numbers the game shouldn't show. **Names** (variant `names`):
+  `blassi`); whether Blassi's mirrored finder is charming or just confusing in motion; ~~whether the
+  readouts (1/60, f/5.6, ISO) feel like numbers the game shouldn't show~~ (resolved: D24, flavour only). **Names** (variant `names`):
   the anagrams, birds (Sparrow, Dipper, Kestrel, Nightjar, Magpie, Heron) or invented makers (Fathom & Co.,
   Swiftwell, Glimmer, Hollis, Lunetta). The user: the brands are in fun, never in marketing, no reference
   to the real makers in the game (2026-10-01). Konni is now **Onnik** in the bench (user, 2026-10-01: Konni sat close to Konica). Nothing here is final: the whole idea is still a notebook entry in the game.
 - ~~**Interaction prompt**: low centre or beside the thing; verb only, or verb + name?~~ **Resolved** by D16.
+- **Tools she doesn't have aren't shown** (user, 2026-10-09: "wondering", a leaning). The pages list only
+  what she owns, so she never feels she's missing something; the possible tools stay unknown until she
+  gets one, and the "new tool" prompt is the reward. Tools come easily, as part of early play, so there's
+  no hunting for them. Open: does it reach the camera kit, whose missing pieces now say how to get them
+  ("Photograph the moon")? **The wheel no longer names a kind she hasn't got** (user, 2026-10-09: "A place
+  for a fishing rod" would give it away): either the place is hidden, or it's an empty slot reading
+  "Something goes here" (the game's PRD fallback). Both in the bench: variant `wheelempty`.
+- **Learnings** (user's term, 2026-10-09). 🟡 **A hazy concept, deliberately not designed yet**: information
+  she learns about things over time ("Your wisp burns green for a while", "Roach and perch can't leave it
+  alone", "Only bites after dark"). It may need defining later. Until then, such lines are **kept with the
+  thing they're about** (a `learnings` field in `src/mock/witch.js` and `src/photo.js`, never shown) rather
+  than thrown away, so they're there when the idea firms up.
+- **From the tool wheel to a tool's page** (user's idea, 2026-10-09): a second button on the wheel opens
+  the page of the aimed tool. Proposed: the book key itself, pressed while aiming (today it closes the
+  wheel and opens the book), so no new button; nothing aimed opens the Satchel. Built in the bench to try.

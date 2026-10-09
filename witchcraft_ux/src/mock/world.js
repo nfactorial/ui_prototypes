@@ -16,7 +16,9 @@ export const world = createViewModel('world', {
   prompt: null,             // { verb: 'Pick', target: 'Birch sticks' }
   // Spells (USpellbookComponent): the active one, for a brief on-change hint.
   activeSpell: 0,           // index into witch.loadout
-  tool: 'Item.Tool.Rod',   // the one equipped tool slot (equipped_tool_prd), or null = hands free
+  // What's in her hands (equipped_tool_prd's one slot): a tool KIND, 'broom' | 'fishing' |
+  // 'camera', meaning that kind's active piece (witch.active, D25), or null = hands free.
+  tool: 'fishing',
 });
 
 // Zones (documents/design/world/zones/names.md). '' = an unnamed zone: no banner.

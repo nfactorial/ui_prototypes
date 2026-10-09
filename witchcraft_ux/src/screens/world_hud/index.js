@@ -7,7 +7,8 @@
 // Zone banners, toasts and the quick selectors are their own screens and show in every mode.
 import { defineAnimation } from '../../core/motion.js';
 import { glyph } from '../../input.js';
-import { ITEMS, SPELLS } from '../../mock/witch.js';
+import { SPELLS, activeTool } from '../../mock/witch.js';
+import { bodyName } from '../../photo.js';
 import { dayPhase } from '../../core/format.js';
 
 const FADE_IN = defineAnimation('HudFadeIn', {
@@ -100,7 +101,7 @@ export default {
     const spellChip = root.querySelector('[data-spell]');
     const hint = root.querySelector('.wh-hint');
     const currentSpell = () => spellById(witch.get('loadout')[world.get('activeSpell')]);
-    const currentTool = () => ITEMS[world.get('tool')];
+    const currentTool = () => activeTool(witch, world.get('tool'), (id) => ({ name: bodyName(id, ctx.variant('names') ?? 'anagram') }));
 
     const renderChips = () => {
       const t = currentTool();

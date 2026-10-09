@@ -1,20 +1,23 @@
-// Photo mode (user, 2026-09-29; not yet designed in the game). Two views:
-//   viewfinder  she lifts the camera and we see through it (world photos)
-//   selfie      the camera is out in front, looking back at her
-// Around that, proposals to react to: filters, frames (AC:NH-style, with a
-// handwritten caption), selfie poses, hide UI. Taking a photo flashes, then the
-// framed photo drops into the corner: "Saved to Keepsakes".
+// The viewfinder: she raises the camera and we look through it. Follows the game's
+// take_photo_mode.md / take_photo_mode_prd.md (2026-10-05):
+//   the camera is a wheel tool; use tool raises it, and each further press is the shutter
+//   back (Esc / B) puts it away; the world keeps running
+//   no zoom until lenses exist; the overlay is plain to begin with, and each camera
+//   body will bring its own later
 //
-//   variant 'photoui'  body    (the viewfinder of whichever camera she holds)
-//                      clean   (corner brackets over the view)
+// 🔴 The camera is set up in the book: it opens over the viewfinder on Tools › Camera
+// (D27, D30), where she picks the camera and lens and ENABLES filters and frames. In the
+// viewfinder she switches between the enabled ones (user, 2026-10-08: D26): Q the
+// filter, E the frame (pad LB / RB, placeholders). The view follows witch.camera live.
 //
-// Cameras and lenses (user, 2026-10-01): collectibles from her camera kit. A
-// camera brings a viewfinder look and a colour grade; a lens brings how much
-// fits (zoom) and what's out of focus. B / L cycle the ones she owns.
+//   variant 'photoui'  plain  nothing over the view but a hint row that fades (stage 3)
+//                      clean  corner brackets
+//                      body   the viewfinder of whichever camera she has on
+//
+// Selfie (V) and poses (Q/E) still work but aren't advertised: the game defers selfie.
 import { defineAnimation } from '../../core/motion.js';
 import { glyph } from '../../input.js';
-import { VIEWS, FILTERS, FRAMES, POSES, BODIES, LENSES, photoMarkup, sceneMarkup, isSquare, bodyName } from '../../photo.js';
-import { KIT } from '../../mock/witch.js';
+import { POSES, LENSES, FILTERS, FRAMES, photoMarkup, sceneMarkup, isSquare, photoShape } from '../../photo.js';
 import { clock, dayPhase } from '../../core/format.js';
 
 const IN = defineAnimation('PhotoIn', {         // lifting the camera: a quick dip to dark
@@ -28,71 +31,62 @@ const SAVED = defineAnimation('PhotoSaved', {
   translate: [[0, [0, 30], 'cubicOut'], [0.35, [0, 0]]],
   angle: [[0, -8, 'cubicOut'], [0.4, -3]],
 });
-// Changing camera or lens: a blink of dark while one comes off and the other goes on.
+// Changing camera or lens (from the book): a blink of dark while one comes off and the other goes on.
 const SWAP = defineAnimation('KitSwap', { opacity: [[0, 0.15, 'quadOut'], [0.3, 1]], scale: [[0, [0.97, 0.97], 'cubicOut'], [0.3, [1, 1]]] });
 const NUDGE = defineAnimation('PhotoNudge', { scale: [[0, [1.08, 1.08], 'cubicOut'], [0.2, [1, 1]]] });
+// The hint row: there on raising, gone after a few seconds.
+const HINTS_OUT = defineAnimation('ViewfinderHintsOut', { opacity: [[0, 1, 'quadIn'], [0.6, 0]] });
+// A filter or frame switched (D26): its name, briefly.
+const SWITCHED = defineAnimation('ViewfinderSwitched', {
+  opacity: [[0, 0, 'quadOut'], [0.12, 1, 'linear'], [1.2, 1, 'quadIn'], [1.6, 0]],
+  translate: [[0, [0, 8], 'cubicOut'], [0.2, [0, 0]]],
+});
+const HINT_SECONDS = 4;
 
-const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const cycle = (list, cur, dir = 1) => list[(list.indexOf(cur) + dir + list.length) % list.length];
 
 export default {
   id: 'photo-mode',
-  title: 'Photo mode',
+  title: 'Viewfinder',
   layer: 'gamemenu',
   styles: [new URL('./style.css', import.meta.url).href],
 
   mount(root, ctx) {
     const { world, witch } = ctx.vm;
-    const ui = ctx.variant('photoui') ?? 'body';
+    const ui = ctx.variant('photoui') ?? 'plain';
     const blassi = ctx.variant('blassi') ?? 'square';
-    const names = ctx.variant('names') ?? 'anagram';
-    // The camera kit: only pieces she owns can be chosen (Keepsakes › Camera kit).
-    // Harness variant 'kit' = 'all' hands her the whole kit, to try everything.
-    const kit = ctx.variant('kit') === 'all' ? KIT.map((k) => `${k.kind}:${k.id}`) : witch.get('kit');
-    const asList = (o) => Object.entries(o).map(([id, d]) => ({ id, ...d }));
-    const owned = (kind, list) => list.filter((x) => kit.includes(`${kind}:${x.id}`));
-    const filters = owned('filter', FILTERS);
-    const frames = owned('frame', FRAMES);
-    const bodies = owned('body', asList(BODIES));
-    const lenses = owned('lens', asList(LENSES));
-    const st = { view: ctx.params.view ?? 'viewfinder', body: bodies[0]?.id ?? 'box', lens: lenses[0]?.id ?? 'std',
-      filter: 'none', frame: 'none', pose: POSES[0], hidden: false };
+    // body / lens / filter / frame come from witch.camera: the book sets them.
+    const st = { view: ctx.params.view ?? 'viewfinder', pose: POSES[0], ...witch.get('camera') };
 
     root.innerHTML = /* html */ `
-      <div class="s-overlay gb pm2" data-widget="WBP_PhotoMode" data-ui="${ui}">
+      <div class="s-overlay gb pm2" data-widget="WBP_ViewfinderOverlay" data-ui="${ui}">
         <!-- The camera's view (in the game: the 3D scene through the photo camera + post-process) -->
         <div class="pm2-view" data-view></div>
         <div class="s-overlay pm2-frame hit-invisible" data-frame-preview></div>
         <div class="pm2-vignette hit-invisible"></div> <!-- camera look. SLATE: material -->
         <div class="s-overlay pm2-finder hit-invisible" data-finder></div> <!-- the camera's viewfinder. SLATE: textures + text -->
+        <!-- Plain and brackets: a camera whose photo isn't wide (Blassi square, Expanse panoramic)
+             dims what falls outside it. SLATE: four borders round an SBox, or a mask material -->
+        <span class="pm2-shape hit-invisible" data-shape="wide"></span>
         <div class="s-overlay pm2-marks hit-invisible">
           <span class="pm2-corner tl"></span><span class="pm2-corner tr"></span><span class="pm2-corner bl"></span><span class="pm2-corner br"></span>
         </div>
 
-        <!-- UI (Hide UI removes all of this) -->
-        <div class="s-overlay pm2-ui hit-invisible" data-ui-layer>
-          <div class="s-vbox pm2-top h-left v-top ts-world">
-            <div class="s-text pm2-mode" data-mode></div>
-            <div class="s-text gb-small pm2-sub" data-sub></div>
-          </div>
-          <div class="s-vbox pm2-where h-right v-top ts-world">
-            <div class="s-text gb-h3" data-bind="world.zoneName"></div>
-            <div class="s-text gb-small"><span data-bind="world.timeOfDay | dayPhase"></span> · <span data-bind="world.timeOfDay | clock"></span></div>
-          </div>
+        <div class="s-overlay pm2-ui hit-invisible">
           <div class="s-hbox pm2-pose h-center v-bottom ts-world" data-pose-row>
             ${glyph('photoPose', 'sm')}<span class="s-text gb-small">Pose</span><span class="s-text gb-h3" data-pose></span>
           </div>
-          <div class="s-hbox pm2-bar h-center v-bottom" data-widget="WBP_PhotoControls">
-            <button class="s-button s-hbox pm2-ctl primary" data-do="take" data-focus-default>${glyph('photoTake', 'sm')}<span class="s-text gb-small">Take photo</span></button>
-            <button class="s-button s-hbox pm2-ctl" data-do="view">${glyph('photoView', 'sm')}<span class="s-text gb-small" data-viewlabel></span></button>
-            <button class="s-button s-hbox pm2-ctl" data-do="body">${glyph('photoBody', 'sm')}<span class="s-text gb-small" data-bodylabel></span></button>
-            <button class="s-button s-hbox pm2-ctl" data-do="lens">${glyph('photoLens', 'sm')}<span class="s-text gb-small" data-lenslabel></span></button>
-            <button class="s-button s-hbox pm2-ctl" data-do="filter">${glyph('photoFilter', 'sm')}<span class="s-text gb-small" data-filterlabel></span></button>
-            <button class="s-button s-hbox pm2-ctl" data-do="frame">${glyph('photoFrame', 'sm')}<span class="s-text gb-small" data-framelabel></span></button>
-            <button class="s-button s-hbox pm2-ctl" data-do="hide">${glyph('photoHide', 'sm')}<span class="s-text gb-small">Hide UI</span></button>
-            <button class="s-button s-hbox pm2-ctl" data-do="exit">${glyph('back', 'sm')}<span class="s-text gb-small">Put away</span></button>
+          <!-- What the buttons do, shown on raising, then faded. Buttons, so the mouse
+               works and the screen takes input. SLATE: an SHorizontalBox of glyphs + text -->
+          <div class="s-hbox pm2-switched h-center v-bottom ts-world" data-switched></div>
+          <div class="s-hbox pm2-hints h-center v-bottom ts-world" data-widget="WBP_ViewfinderHints" data-hints>
+            <button class="s-button s-hbox pm2-hint" data-do="take" data-focus-default>${glyph('useTool', 'sm')}<span class="s-text gb-small">Take photo</span></button>
+            <button class="s-button s-hbox pm2-hint" data-do="filter" data-many="filters">${glyph('photoFilter', 'sm')}<span class="s-text gb-small">Filter</span></button>
+            <button class="s-button s-hbox pm2-hint" data-do="frame" data-many="frames">${glyph('photoFrame', 'sm')}<span class="s-text gb-small">Frame</span></button>
+            <button class="s-button s-hbox pm2-hint" data-do="kit">${glyph('cameraKit', 'sm')}<span class="s-text gb-small">Camera</span></button>
+            <button class="s-button s-hbox pm2-hint" data-do="exit">${glyph('back', 'sm')}<span class="s-text gb-small">Put away</span></button>
           </div>
-          <div class="s-box pm2-note h-left v-bottom"><div class="gb-note on-world">Speculative: photo mode isn't designed yet. The views are in-engine shots from each camera. Open: does the world pause?</div></div>
+          <div class="s-box pm2-note h-left v-bottom"><div class="gb-note on-world">Plain overlay, as the game's stage 3. Q / E switch between the filters and frames enabled on Tools › Camera (D26); the book opens there (I) to choose the camera and lens. Variant <b>Viewfinder</b> tries brackets, or each camera's own finder.</div></div>
         </div>
 
         <div class="pm2-flash hit-invisible"></div>
@@ -100,13 +94,10 @@ export default {
       </div>`;
     ctx.bind();
 
-    const view = root.querySelector('[data-view]');
-    const framePreview = root.querySelector('[data-frame-preview]');
     const $ = (sel) => root.querySelector(sel);
-
-    function caption() {
-      return `${world.get('zoneName') || 'Somewhere'} · ${clock(world.get('timeOfDay'))}`;
-    }
+    const view = $('[data-view]');
+    const framePreview = $('[data-frame-preview]');
+    const caption = () => `${world.get('zoneName') || 'Somewhere'} · ${clock(world.get('timeOfDay'))}`;
 
     // Is a camera's own viewfinder drawn? Only when she's looking through it.
     const through = () => ui === 'body' && st.view === 'viewfinder';
@@ -136,6 +127,16 @@ export default {
           <span class="pm2-f-lines" style="--frame:${(88 / lens.zoom).toFixed(1)}%"><span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span></span>
           <span class="pm2-f-patch"></span>
           <div class="s-hbox pm2-f-led"><span>▸</span><span>●</span><span>◂</span></div>`;
+        // Expanse: a TRUE panorama (user, 2026-10-05), not a crop. The frame is wider, so
+        // the same lens takes in more of the world sideways: the strip spans the whole
+        // screen and dark bars close in above and below. Bright lines just inside it.
+        // GAME: the camera's horizontal FOV from a 65 mm-wide frame (FCozyLens'
+        // SensorWidthMm) + a 65:24 constrained aspect. The bench's screenshot is 16:9,
+        // so the strip here shows less sideways than the game would: a pano shot is wanted.
+        case 'expanse': return /* html */ `
+          <span class="pm2-f-strip"><span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span></span>
+          <span class="pm2-f-patch"></span>
+          <div class="s-hbox pm2-f-led"><span>▸</span><span>●</span><span>◂</span></div>`;
         case 'blassi': return /* html */ `
           <span class="pm2-f-hood ${isSquare({ body: 'blassi' }, blassi) ? 'square' : ''}"><span class="pm2-f-grid"></span><span class="pm2-f-circle"></span></span>`;
         default: return '';
@@ -143,35 +144,35 @@ export default {
     }
 
     function render() {
-      const v = VIEWS[st.view];
-      // Icale is a rangefinder: the view doesn't zoom; its bright lines shrink instead.
+      // Icale and Expanse are rangefinders: the view doesn't zoom; their bright lines shrink instead.
       const zoom = through() && st.body === 'icale' ? 1 : undefined;
       view.innerHTML = sceneMarkup({ view: st.view, body: st.body, lens: st.lens, filter: st.filter }, { zoom });
-      const pm = root.querySelector('.pm2');
+      const pm = $('.pm2');
       pm.dataset.view = st.view;
       pm.dataset.body = through() ? st.body : '';
       const finder = $('[data-finder]');
       finder.dataset.finder = through() ? st.body : '';
       finder.innerHTML = through() ? finderMarkup() : '';
-      $('[data-mode]').textContent = v.label;
-      $('[data-sub]').textContent = `${bodyName(st.body, names)} · ${LENSES[st.lens].label}`;
-      $('[data-viewlabel]').textContent = st.view === 'viewfinder' ? 'Selfie' : 'Viewfinder';
-      $('[data-bodylabel]').textContent = `${bodyName(st.body, names)} · ${bodies.length} of ${Object.keys(BODIES).length}`;
-      $('[data-lenslabel]').textContent = `${LENSES[st.lens].label} · ${lenses.length} of ${Object.keys(LENSES).length}`;
-      $('[data-filterlabel]').textContent = `${FILTERS.find((f) => f.id === st.filter).label} · ${filters.length} of ${FILTERS.length}`;
-      $('[data-framelabel]').textContent = `${FRAMES.find((f) => f.id === st.frame).label} · ${frames.length} of ${FRAMES.length}`;
+      // The photo's shape, when the camera's own finder isn't there to show it.
+      $('[data-shape]').dataset.shape = !through() && st.view === 'viewfinder' ? photoShape(st, blassi) : 'wide';
       $('[data-pose]').textContent = st.pose;
       $('[data-pose-row]').classList.toggle('collapsed', st.view !== 'selfie');
+      // A switch hint only when there's something to switch between.
+      root.querySelectorAll('[data-many]').forEach((b) => b.classList.toggle('collapsed', (st[b.dataset.many]?.length ?? 0) < 2));
       // Frame preview: the frame drawn round the whole screen, the way AC:NH shows it.
       framePreview.dataset.frame = st.frame;
-      framePreview.innerHTML = st.frame === 'none' ? '' : `<div class="pm2-frame-cap">${esc(st.frame === 'polaroid' || st.frame === 'postcard' ? caption() : '')}</div>`;
-      $('[data-ui-layer]').classList.toggle('collapsed', st.hidden);
-      root.querySelector('.pm2-marks').classList.toggle('collapsed', st.hidden);
-      finder.classList.toggle('collapsed', st.hidden);
+      framePreview.innerHTML = st.frame === 'none' ? ''
+        : `<div class="pm2-frame-cap">${st.frame === 'polaroid' || st.frame === 'postcard' ? caption() : ''}</div>`;
     }
 
+    // The hints show on raising, then fade for good: the shutter is the button that
+    // raised the camera, and the book and Esc are where they always are.
+    const hints = $('[data-hints]');
+    const hintTimer = setTimeout(() => ctx.play(hints, HINTS_OUT).finished.then(() => hints.classList.add('faded')), HINT_SECONDS * 1000);
+
     function take() {
-      const photo = { id: `p${Date.now()}`, view: st.view, body: st.body, lens: st.lens, filter: st.filter, frame: st.frame === 'none' ? 'polaroid' : st.frame, caption: caption() };
+      const photo = { id: `p${Date.now()}`, view: st.view, body: st.body, lens: st.lens, filter: st.filter,
+        frame: st.frame === 'none' ? 'polaroid' : st.frame, caption: caption() };
       witch.set('photos', [photo, ...witch.get('photos')]);
       ctx.play($('.pm2-flash'), FLASH);
       const saved = $('[data-saved]');
@@ -184,32 +185,54 @@ export default {
       ctx.action('photo-taken', { photo });
     }
 
-    const nudge = (sel) => ctx.play($(sel), NUDGE);
+    // The book changed what's on the camera: follow it. A new camera or lens blinks.
+    const unsub = witch.on('camera', (cam) => {
+      const swapped = cam.body !== st.body || cam.lens !== st.lens;
+      Object.assign(st, cam);
+      render();
+      if (swapped) ctx.play(view, SWAP);
+    }, { immediate: false });
+
+    // Switch to the next enabled filter or frame (D26). Only the ones enabled on Tools ›
+    // Camera take part; the book's list is the order.
+    const switched = $('[data-switched]');
+    function switchTo(part) {
+      const cam = witch.get('camera');
+      const list = cam[`${part}s`];
+      if (list.length < 2) return;
+      const next = list[(list.indexOf(cam[part]) + 1) % list.length];
+      witch.set('camera', { ...cam, [part]: next });   // the camera listener re-renders
+      const label = (part === 'filter' ? FILTERS : FRAMES).find((x) => x.id === next)?.label ?? next;
+      switched.innerHTML = `<span class="s-text gb-small">${part === 'filter' ? 'Filter' : 'Frame'}</span><span class="s-text gb-h3">${label}</span>`;
+      ctx.play(switched, SWITCHED);
+    }
+
     const DO = {
       take,
-      view:   () => { st.view = st.view === 'viewfinder' ? 'selfie' : 'viewfinder'; render(); ctx.play(view, IN); },
-      body:   () => { st.body = cycle(bodies.map((b) => b.id), st.body); render(); nudge('[data-bodylabel]'); ctx.play(view, SWAP); },
-      lens:   () => { st.lens = cycle(lenses.map((l) => l.id), st.lens); render(); nudge('[data-lenslabel]'); ctx.play(view, SWAP); },
-      filter: () => { st.filter = cycle(filters.map((f) => f.id), st.filter); render(); nudge('[data-filterlabel]'); },
-      frame:  () => { st.frame = cycle(frames.map((f) => f.id), st.frame); render(); nudge('[data-framelabel]'); },
-      hide:   () => { st.hidden = !st.hidden; render(); },
-      pose:   (dir) => { if (st.view !== 'selfie') return; st.pose = cycle(POSES, st.pose, dir); render(); nudge('[data-pose]'); },
-      exit:   () => ctx.action('back'),
+      filter: () => switchTo('filter'),
+      frame:  () => switchTo('frame'),
+      kit:  () => ctx.action('camera-kit'),
+      exit: () => ctx.action('back'),
+      view: () => { st.view = st.view === 'viewfinder' ? 'selfie' : 'viewfinder'; render(); ctx.play(view, IN); },
+      pose: (dir) => { if (st.view !== 'selfie') return; st.pose = cycle(POSES, st.pose, dir); render(); ctx.play($('[data-pose]'), NUDGE); },
     };
-    const KEYS = { ' ': 'take', v: 'view', b: 'body', l: 'lens', f: 'filter', r: 'frame', h: 'hide' };
     ctx.onKey((e) => {
       const k = e.key.toLowerCase();
-      if (KEYS[k]) { e.preventDefault(); DO[KEYS[k]](); return true; }
-      if (k === 'q' || k === 'e') { DO.pose(k === 'e' ? 1 : -1); return true; }
-      if (k === 'escape' && st.hidden) { DO.hide(); return true; }   // first Esc brings the UI back
-      if (k === 'enter') return true;                                  // Enter would re-press the focused control
-      return false;
+      if (k === 'f' || k === ' ') { e.preventDefault(); take(); return true; }   // use tool is the shutter (Space: a bench alias)
+      if (k === 'v') { DO.view(); return true; }                                  // selfie: deferred in the game, kept here
+      if ((k === 'q' || k === 'e') && st.view === 'selfie') { DO.pose(k === 'e' ? 1 : -1); return true; }
+      if (k === 'q') { DO.filter(); return true; }                                 // D26: switch between the enabled ones
+      if (k === 'e') { DO.frame(); return true; }
+      if (k === 'enter') return true;                                             // Enter would re-press the focused hint
+      return false;                                                               // I (the kit) and Esc (put away) are the flow's
     });
-    // Mouse: the control bar is buttons.
     root.querySelectorAll('[data-do]').forEach((b) => { b.onclick = () => DO[b.dataset.do](); });
 
     render();
-    ctx.play(root.querySelector('.pm2'), IN);
-    return { outro: () => ctx.play(root.querySelector('.pm2'), OUT).finished };
+    ctx.play($('.pm2'), IN);
+    return {
+      cleanup: () => { unsub(); clearTimeout(hintTimer); },
+      outro: () => ctx.play($('.pm2'), OUT).finished,
+    };
   },
 };

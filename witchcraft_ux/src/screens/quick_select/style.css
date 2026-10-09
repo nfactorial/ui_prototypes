@@ -40,6 +40,8 @@
 .qs[data-shape='bar'] .qs-bar-detail .gb-small { color: #fffaf0; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); }
 
 .qs-meta { color: var(--gb-accent); }
+.qs-page { gap: 8px; align-items: center; margin-top: 6px; opacity: 0.85; }   /* the book key: this tool's page */
+.qs[data-shape='bar'] .qs-page .gb-small { color: #fffaf0; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); }
 .qs-desc { max-width: 280px; }
 .qs[data-shape='bar'] .qs-desc { max-width: 520px; }
 .qs-note { margin: 0 0 40px 48px; max-width: 520px; }

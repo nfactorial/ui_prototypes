@@ -28,6 +28,7 @@ export const screens = {
   'photo-mode':   () => import('./screens/photo_mode/index.js'),
   'dialogue':     () => import('./screens/dialogue/index.js'),
   'study-reveal': () => import('./screens/study_reveal/index.js'),
+  'new-tool':     () => import('./screens/new_tool/index.js'),
 };
 
 // Design variants a scene can offer in the harness toolbar (data-v-<key> on #ui-root,
@@ -46,13 +47,16 @@ const V = {
   milestones: { label: 'Milestones', options: { cards: 'Cards (next only)', rows: 'Rows (all tiers)' }, remount: true },
   msgoal:   { label: 'Goal', options: { count: 'Count (6 / 10)', sentence: 'Sentence (Catch 10 fish)' }, remount: true },
   insight:  { label: 'Study', options: { moment: 'Moment (waits)', card: 'Card (fades)' }, remount: true },
-  photoui:  { label: 'Camera', options: { body: 'Through the camera', clean: 'Clean brackets' }, remount: true },
+  photoui:  { label: 'Viewfinder', options: { plain: 'Plain (stage 3)', clean: 'Corner brackets', body: "The camera's own" }, remount: true },
   kit:      { label: 'Kit', options: { earned: 'As earned', all: 'Whole kit (to try)' }, remount: true },
+  // Tools (2026-10-09): a kind she hasn't got, on the wheel; camera pieces she hasn't got, on Tools › Camera.
+  wheelempty: { label: 'Wheel: missing tool', options: { hidden: 'Hidden', empty: '"Something goes here"' }, remount: true },
+  unowned:  { label: 'Camera: missing pieces', options: { hints: 'Shown, with how to get them', hidden: 'Hidden' }, remount: true },
   names:    { label: 'Camera names', options: { anagram: 'Anagrams (Nyso, Icale…)', birds: 'Birds (Kestrel, Heron…)', makers: 'Makers (Hollis, Lunetta…)' }, remount: true },
   blassi:   { label: 'Blassi', options: { square: 'Square photos', look: 'Look only' }, remount: true },
   menubg:   { label: 'Menu bg', options: { golden: 'Golden cliff', night: 'Night', path: 'Golden path' }, remount: true },
 };
-const WORLD_VARIANTS = { input: V.input, hud: V.hud, selector: V.selector, book: V.book, affinity: V.affinity, catch: V.catch, bite: V.bite, banner: V.banner, photoui: V.photoui, kit: V.kit, names: V.names, blassi: V.blassi, speech: V.speech, babble: V.babble, insight: V.insight, milestones: V.milestones, msgoal: V.msgoal };
+const WORLD_VARIANTS = { input: V.input, hud: V.hud, selector: V.selector, wheelempty: V.wheelempty, book: V.book, affinity: V.affinity, catch: V.catch, bite: V.bite, banner: V.banner, photoui: V.photoui, kit: V.kit, unowned: V.unowned, names: V.names, blassi: V.blassi, speech: V.speech, babble: V.babble, insight: V.insight, milestones: V.milestones, msgoal: V.msgoal };
 
 const FLOW = () => import('./flows/game_flow.js');
 
@@ -68,9 +72,11 @@ export const scenes = [
   { id: 'flow-keepsakes', title: 'Flow — book: keepsakes', controller: FLOW, start: 'book:keepsakes:tasks', variants: WORLD_VARIANTS },
   { id: 'flow-talk',     title: 'Flow — talking to Hazel', controller: FLOW, start: 'talk', variants: WORLD_VARIANTS },
   { id: 'flow-study',    title: 'Flow — studied an animal', controller: FLOW, start: 'study', variants: WORLD_VARIANTS },
-  { id: 'flow-kit',      title: 'Flow — book: keepsakes › camera kit', controller: FLOW, start: 'kit',
+  { id: 'flow-toolpage', title: 'Flow — book: tools › fishing', controller: FLOW, start: 'book:tools:fishing', variants: WORLD_VARIANTS },
+  { id: 'flow-kit',      title: 'Flow — book: tools › camera', controller: FLOW, start: 'kit',
     variants: { ...WORLD_VARIANTS, kit: { ...V.kit, options: { all: V.kit.options.all, earned: V.kit.options.earned } } } },
-  { id: 'flow-photo',    title: 'Flow — photo mode (sunset)', controller: FLOW, start: 'photo', backdrop: 'cliff-sunset',
+  { id: 'flow-newtool',  title: 'Flow — a new tool (J for the next)', controller: FLOW, start: 'newtool', variants: WORLD_VARIANTS },
+  { id: 'flow-photo',    title: 'Flow — viewfinder (camera up)', controller: FLOW, start: 'photo', backdrop: 'cliff-sunset',
     variants: { ...WORLD_VARIANTS, kit: { ...V.kit, options: { all: V.kit.options.all, earned: V.kit.options.earned } } } },   // the whole kit by default, to try it
   { id: 'flow-tools',    title: 'Flow — tool selector',   controller: FLOW, start: 'tools',    variants: WORLD_VARIANTS },
   { id: 'flow-spellsel', title: 'Flow — spell selector',  controller: FLOW, start: 'spellsel', variants: WORLD_VARIANTS },

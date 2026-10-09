@@ -1,19 +1,21 @@
 // The witch's book: the in-game menu. Two levels, never more (user, 2026-09-29):
-//   tabs across the top      Satchel · Recipes · Almanac · Keepsakes   (5 max: D10)
-//   categories down a rail   Recipes: Cooking · Potions · Spells
+//   tabs across the top      Satchel · Recipes · Almanac · Keepsakes · Tools   (5: D10, D30)
+//   categories down a rail   Recipes: Cooking · Potions · Bait · Spells · Charms
 //                            Almanac: Fish · Flowers · Creatures
 //                            Keepsakes: Small tasks · Milestones · Photos
+//                            Tools: one page per kind she has (Broom · Fishing · Camera)
 // I opens the Satchel, K opens Recipes > Spells (the loadout stays one press away).
 // The satchel follows inventory_ui_prd v0.1: a portrait beside the bag, a calm
 // icon grid, count badges above 1, name + description on focus.
 //
-//   params.tab           'satchel' | 'recipes[:cooking|potions|spells|charms]' | 'almanac[:fish|flowers|creatures]'
-//                        | 'keepsakes[:tasks|milestones|photos]'
+//   params.tab           'satchel' | 'recipes[:cooking|potions|bait|spells|charms]' | 'almanac[:fish|flowers|creatures]'
+//                        | 'keepsakes[:tasks|milestones|photos]' | 'tools[:broom|fishing|camera]'
 //   variant 'book'       panel  (a window over the softened world)
 //                        spread (a full-screen open book, two pages)
 import { defineAnimation } from '../../core/motion.js';
 import { glyph } from '../../input.js';
-import { ITEMS, SPELLS, RECIPES, TASK_POOL, KIT, whereLabel, studyKnown, studyTotal, studyDone } from '../../mock/witch.js';
+import { ITEMS, SPELLS, RECIPES, TASK_POOL, KIT, TOOLS, whereLabel, studyKnown, studyTotal, studyDone,
+  toolKind, kindsOwned, activeTool, satchelCount } from '../../mock/witch.js';
 import { photoMarkup, FILTERS, FRAMES, BODIES, LENSES, bodyName } from '../../photo.js';
 
 const IN = defineAnimation('BookIn', {
@@ -29,6 +31,7 @@ const TABS = [
   { id: 'recipes', label: 'Recipes', rail: [
     { id: 'cooking', label: 'Cooking', icon: 'flame' },
     { id: 'potions', label: 'Potions', icon: 'bottle' },
+    { id: 'bait', label: 'Bait', icon: 'fish' },          // D31
     { id: 'spells', label: 'Spells', icon: 'sparkle' },
     { id: 'charms', label: 'Charms', icon: 'moon' },
   ] },
@@ -41,8 +44,11 @@ const TABS = [
     { id: 'tasks', label: 'Small tasks', icon: 'leaf' },
     { id: 'milestones', label: 'Milestones', icon: 'sparkle' },
     { id: 'photos', label: 'Photos', icon: 'book' },
-    { id: 'kit', label: 'Camera kit', icon: 'circle' },
   ] },
+  // Tools (D30): the rail is the kinds she has, worked out when the tab opens. A kind
+  // she has nothing of has no page (only what she owns is shown: leaning, 2026-10-09).
+  // Camera kit moved here from Keepsakes, as "Camera".
+  { id: 'tools', label: 'Tools', rail: 'owned-kinds' },
 ];
 const COST = { free: 'Free to cast', reagent: 'Needs a reagent', ritual: 'A ritual' };
 const icon = (name, cls = '') => `<div class="s-image tint ${cls}" style="--img:url(/assets/icons/${name}.svg)"></div>`;
@@ -60,8 +66,11 @@ export default {
     const look = ctx.variant('book') ?? 'panel';
     const [startTab, startSub] = (ctx.params.tab ?? 'satchel').split(':');
     let tab = startTab;
-    const railSel = { recipes: 'cooking', almanac: 'fish', keepsakes: 'tasks' };   // remembered per tab
+    const railSel = { recipes: 'cooking', almanac: 'fish', keepsakes: 'tasks', tools: null };   // remembered per tab
     if (startSub) railSel[startTab] = startSub;
+    // Camera pieces she owns; the harness's Kit › Whole kit hands her all of them.
+    const kitOwned = () => (ctx.variant('kit') === 'all' ? KIT.map((k) => `${k.kind}:${k.id}`) : witch.get('kit'));
+    const cameraName = (id) => bodyName(id, ctx.variant('names') ?? 'anagram');
 
     root.innerHTML = /* html */ `
       <div class="s-overlay gb bk" data-widget="WBP_WitchBook" data-look="${look}">
@@ -85,6 +94,7 @@ export default {
       satchel: renderSatchel,
       cooking: () => renderRecipes('cooking'),
       potions: () => renderRecipes('potions'),
+      bait: () => renderRecipes('bait'),
       spells: () => renderSpells(),
       charms: renderCharms,
       fish: () => renderCollection('fish'),
@@ -93,23 +103,35 @@ export default {
       tasks: renderTasks,
       milestones: renderMilestones,
       photos: renderPhotos,
-      kit: renderKit,
+      broom: () => renderTool('broom'),
+      fishing: () => renderTool('fishing'),
+      camera: () => renderTool('camera'),
     };
     const tabDef = (id) => TABS.find((t) => t.id === id);
+    // A tab's rail; Tools' is the kinds she has right now.
+    const railOf = (def) => (def.rail === 'owned-kinds'
+      ? kindsOwned(witch, kitOwned()).map((k) => ({ id: k.id, label: k.label, icon: k.icon }))
+      : def.rail);
 
     function show(id) {
       tab = id;
       root.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === id)));
       const def = tabDef(id);
-      if (!def.rail) {
+      const rail = railOf(def);
+      if (rail && !rail.some((r) => r.id === railSel[id])) railSel[id] = rail[0]?.id;
+      if (!rail) {
         target = pages;
         render[id]();
+      } else if (!rail.length) {
+        // Not in the game (the tab would be hidden until she has a tool: book_prd decision 5).
+        target = pages;
+        pages.innerHTML = '<div class="s-vbox fill bk-page bk-wide"><div class="s-text gb-small">No tools yet.</div></div>';
       } else {
         // The rail: categories down the left, the same on every tab that has one.
         pages.innerHTML = /* html */ `
           <div class="s-vbox bk-page bk-rail" data-widget="WBP_BookRail">
             <span class="bk-rail-glyph">${glyph('railPrev', 'sm')}</span>
-            ${def.rail.map((r) => /* html */ `
+            ${rail.map((r) => /* html */ `
               <button class="s-button gb-card bk-rail-item" data-rail="${r.id}" aria-selected="${r.id === railSel[id]}">
                 <span class="s-hbox bk-rail-row">${icon(r.icon)}<span class="s-text gb-h3">${r.label}</span></span>
               </button>`).join('')}
@@ -141,7 +163,7 @@ export default {
             <div class="s-image cover" style="--img:url(/assets/backdrops/path_day.jpg); --focus: 48% 62%; background-size: 420%"></div>
           </div>
           <div class="s-text gb-h2 bk-name">${esc(witch.get('name'))}</div>
-          <div class="s-text gb-small">In her hands: <span class="bk-strong">${esc(ITEMS[world.get('tool')]?.name ?? 'nothing')}</span></div>
+          <div class="s-text gb-small">In her hands: <span class="bk-strong">${esc(activeTool(witch, world.get('tool'), (id) => ({ name: cameraName(id) }))?.name ?? 'nothing')}</span></div>
           <div class="gb-note bk-note">Portrait: a crop of an in-engine shot. The game renders it live (GetCharacterPortrait). Her name is a placeholder.</div>
         </div>
         <div class="s-vbox fill bk-page bk-right">
@@ -151,7 +173,7 @@ export default {
               if (!s) return `<div class="wc-slot empty" data-widget="WBP_InventorySlot"></div>`;
               const it = ITEMS[s.item];
               return /* html */ `
-                <button class="s-button wc-slot" data-slot="${i}" data-aff="${it.affinity}" ${i === 0 ? 'data-focus-default' : ''} aria-selected="${world.get('tool') === s.item}" data-widget="WBP_InventorySlot">
+                <button class="s-button wc-slot" data-slot="${i}" data-aff="${it.affinity}" ${i === 0 ? 'data-focus-default' : ''} data-widget="WBP_InventorySlot">
                   <span class="wc-aff"></span>${icon(it.icon)}<span class="wc-count">${s.count > 1 ? s.count : ''}</span>
                 </button>`;
             }).join('')}
@@ -167,20 +189,13 @@ export default {
             <div class="s-vbox fill">
               <div class="s-text gb-h3">${esc(it.name)}${s.count > 1 ? ` <span class="gb-dim">×${s.count}</span>` : ''}</div>
               <div class="s-text gb-small wrap">${esc(it.desc)}</div>
-              <div class="s-text gb-label bk-aff-label" data-aff="${it.affinity}">${it.tool ? (world.get('tool') === s.item ? 'Tool · in hand · ' : 'Tool · click to hold · ') : ''}${it.affinity} affinity</div>
+              <div class="s-text gb-label bk-aff-label" data-aff="${it.affinity}">${it.bait ? 'Bait · put it on the hook in Tools › Fishing · ' : ''}${it.affinity} affinity</div>
             </div>
           </div>`;
       };
+      // No tools in here any more (D25): they live in her collection, Tools.
       target.querySelectorAll('[data-slot]').forEach((b) => {
         b.addEventListener('focus', () => showItem(slots[b.dataset.slot]));
-        b.onclick = () => {
-          const it = ITEMS[slots[b.dataset.slot].item];
-          if (!it.tool) return;
-          ctx.action('select-tool', { id: slots[b.dataset.slot].item, from: 'book' });
-          const i = b.dataset.slot;
-          renderSatchel();
-          target.querySelector(`[data-slot="${i}"]`)?.focus();
-        };
       });
       showItem(slots[0]);
     }
@@ -294,12 +309,19 @@ export default {
     }
     const chip = (g) => `<span class="s-hbox bk-reagent ${g.known ? (g.carried ? 'carried' : '') : 'unknown'}">${icon(g.icon)}<span class="s-text gb-body">${esc(g.name)}</span></span>`;
 
-    // --- Recipes: Cooking, Potions (speculative) --------------------------------------
+    // --- Recipes: Cooking, Potions, Bait (speculative) --------------------------------
+    const RECIPE_PAGES = {
+      cooking: { label: 'Cooking' },
+      potions: { label: 'Potions' },
+      // D31: bait is a recipe like any other; what she makes goes in her satchel, and she
+      // chooses which is on the hook on Tools › Fishing.
+      bait:    { label: 'Bait', note: 'Bait (user, 2026-10-09: D31): made here, kept in the satchel, put on the hook in Tools › Fishing. Brewed from what she forages (fishing.md), so the cauldron.' },
+    };
     function renderRecipes(kind) {
       const list = RECIPES[kind];
       target.innerHTML = /* html */ `
         <div class="s-vbox fill bk-page bk-wide">
-          <div class="s-hbox bk-page-head"><div class="s-text gb-label fill">${kind === 'cooking' ? 'Cooking' : 'Potions'}</div><div class="s-text gb-small">${list.filter((r) => r.learnt).length} learnt</div></div>
+          <div class="s-hbox bk-page-head"><div class="s-text gb-label fill">${RECIPE_PAGES[kind].label}</div><div class="s-text gb-small">${list.filter((r) => r.learnt).length} learnt</div></div>
           <div class="s-vbox bk-creatures">
             ${list.map((r, i) => {
               if (!r.learnt) return /* html */ `
@@ -318,7 +340,7 @@ export default {
                     <span class="bk-recipe-icon" data-widget="SImage (recipe icon)" title="Placeholder: the dish / potion's icon">${r.icon ? `<span class="s-image" style="--img:url(${r.icon})"></span>` : icon('image')}</span>
                     <span class="s-vbox bk-creature-name">
                       <span class="s-text gb-h3">${esc(r.name)}</span>
-                      <span class="s-text gb-small">${r.station}${ready ? ' · <span class="bk-ready">can make now</span>' : ''}</span>
+                      <span class="s-text gb-small">${r.station}${ready ? ' · <span class="bk-ready">can make now</span>' : ''}${r.makes && satchelCount(witch, r.makes) ? ` · ${satchelCount(witch, r.makes)} in the satchel` : ''}</span>
                       <span class="s-text gb-small wrap bk-recipe-desc">${esc(r.desc)}</span>
                     </span>
                     <span class="s-wrapbox fill bk-reagents">${gs.map(chip).join('')}</span>
@@ -326,7 +348,7 @@ export default {
                 </button>`;
             }).join('')}
           </div>
-          <div class="gb-note bk-note">Speculative: no cooking or brewing design yet (the campfire as a station and the cauldron are ideas in the game docs). Icons are placeholders (a recipe's "icon" field takes a real one). Solid chip = in the satchel · faint = known, not carried · dashed = not yet found.</div>
+          <div class="gb-note bk-note">${RECIPE_PAGES[kind].note ? `${RECIPE_PAGES[kind].note} ` : ''}Speculative: no cooking or brewing design yet (the campfire as a station and the cauldron are ideas in the game docs). Icons are placeholders (a recipe's "icon" field takes a real one). Solid chip = in the satchel · faint = known, not carried · dashed = not yet found.</div>
         </div>`;
     }
 
@@ -398,7 +420,7 @@ export default {
       const piece = KIT.find((k) => k.reward === title);
       if (piece && !witch.get('kit').includes(`${piece.kind}:${piece.id}`)) {
         witch.set('kit', [...witch.get('kit'), `${piece.kind}:${piece.id}`]);
-        body = `${body} · added to your camera kit`;
+        body = `${body} · added to Tools › Camera`;
       }
       ctx.toast({ kind: 'collected', label: 'Keepsake', title, body });
     };
@@ -534,54 +556,150 @@ export default {
       const photos = witch.get('photos');
       target.innerHTML = /* html */ `
         <div class="s-vbox fill bk-page bk-wide">
-          <div class="s-hbox bk-page-head"><div class="s-text gb-label fill">Photos</div><div class="s-text gb-small">${photos.length} kept · take more with ${glyph('photoMode', 'sm')}</div></div>
+          <div class="s-hbox bk-page-head"><div class="s-text gb-label fill">Photos</div><div class="s-text gb-small">${photos.length} kept · take more with the camera (a tool)</div></div>
           <div class="s-scroll fill"><div class="s-grid bk-album">
             ${photos.map((p, i) => `<button class="s-button bk-album-item" ${i === 0 ? 'data-focus-default' : ''} style="--tilt:${[-2, 1.5, -1, 2, -1.5][i % 5]}deg">${photoMarkup(p, 'bk-album-photo')}</button>`).join('')}
           </div></div>
         </div>`;
     }
 
-    // Keepsakes › Camera kit (user, 2026-09-29): the filters and frames she's gathered;
-    // cameras and lenses joined them on 2026-10-01. Harness variant 'kit' = 'all'
-    // shows the whole kit, to try every piece.
-    function renderKit() {
-      const owned = ctx.variant('kit') === 'all' ? KIT.map((k) => `${k.kind}:${k.id}`) : witch.get('kit');
+    // --- Tools (user, 2026-10-08/09: D25, D26, D30) ------------------------------------
+    // 🔴 ONE page design for every kind (WBP_ToolPage): a line saying what's on, then a
+    // section per part, all from the kind's data (TOOL_KINDS). Only what she owns is
+    // listed. Choosing a piece puts it on, one per part; the main piece (a broom, a rod, a
+    // camera) is the one on the tool wheel and in her hands. Camera filters and frames are
+    // ENABLED, several at once, and switched between in the viewfinder (D26).
+    // Camera kit lived in Keepsakes until 2026-10-09; it is the Camera page now.
+    const art = (name) => `<span class="bk-tool-art">${name ? icon(name) : ''}</span>`;   // placeholder art
+
+    // A section's cards: { key, name, meta, desc, sample, on, missing, go }
+    function toolCards(kind, part) {
+      if (kind.id === 'camera') return cameraCards(part);
+      if (part.from === 'satchel') return baitCards(part);
+      const active = witch.get('active');
+      const cards = witch.get('tools').filter((id) => TOOLS[id]?.part === part.part).map((id) => {
+        const t = TOOLS[id];
+        return { key: id, name: t.name, meta: t.meta, desc: t.desc, sample: art(t.icon), on: active[part.part] === id };
+      });
+      if (part.optional && cards.length) cards.unshift({ key: `${part.part}:none`, name: part.optional, desc: '', sample: art(null), on: !active[part.part] });
+      return cards;
+    }
+    // Bait: the kinds she knows how to make (Recipes › Bait), counted from her satchel.
+    // One she has none of points at its recipe instead.
+    function baitCards(part) {
+      const on = witch.get('active').bait;
+      const cards = RECIPES.bait.filter((r) => r.learnt).map((r) => {
+        const n = satchelCount(witch, r.makes);
+        const it = ITEMS[r.makes];
+        return { key: `bait:${r.makes}`, name: it.name, meta: n ? `${n} in your satchel` : 'None in your satchel',
+          desc: n ? it.desc : 'Make some: Recipes › Bait', sample: art(it.icon), on: n > 0 && on === r.makes, empty: !n, go: n ? null : 'bait' };
+      });
+      return [{ key: 'bait:none', name: part.optional, desc: 'Fish without any', sample: art(null), on: !on || !satchelCount(witch, on) }, ...cards];
+    }
+    // The camera's pieces: its kit. Missing pieces are shown with how to get them, or not
+    // at all (variant 'unowned': whether "only what she owns" reaches the camera is open).
+    function cameraCards(part) {
+      const cam = witch.get('camera');
+      const owned = kitOwned();
+      const hints = (ctx.variant('unowned') ?? 'hints') === 'hints';
       const blassi = ctx.variant('blassi') ?? 'square';
-      const names = ctx.variant('names') ?? 'anagram';
-      const asList = (o) => Object.entries(o).map(([id, d]) => ({ id, ...d, label: o === BODIES ? bodyName(id, names) : d.label }));
-      const section = (kind, defs, label, noun) => {
-        const pieces = KIT.filter((k) => k.kind === kind);
-        const n = pieces.filter((k) => owned.includes(`${kind}:${k.id}`)).length;
+      const defs = {
+        body: Object.entries(BODIES).map(([id, d]) => ({ id, ...d, label: cameraName(id) })),
+        lens: Object.entries(LENSES).map(([id, d]) => ({ id, ...d })),
+        filter: FILTERS, frame: FRAMES,
+      }[part.part];
+      return KIT.filter((k) => k.kind === part.part).flatMap((k) => {
+        const key = `${k.kind}:${k.id}`;
+        if (!owned.includes(key)) return hints ? [{ key, name: `Unknown ${part.noun}`, desc: k.hint, sample: '<span class="bk-kit-unknown">?</span>', missing: true }] : [];
+        const def = defs.find((d) => d.id === k.id);
+        const sample = { view: 'viewfinder', filter: part.part === 'filter' ? k.id : 'none', frame: part.part === 'frame' ? k.id : 'none',
+          body: part.part === 'body' ? k.id : 'box', lens: part.part === 'lens' ? k.id : 'std', caption: 'Sample' };
+        // No technical line (a camera's type, a focal length): the description is flavour,
+        // and the sample photo shows what the piece does (user, 2026-10-09).
+        return [{ key, name: def.label, meta: k.how !== 'start' ? '' : part.part === 'body' ? 'Her first camera' : 'Came with the camera',
+          desc: def.desc, sample: photoMarkup(sample, 'bk-kit-photo', { blassi }),
+          on: part.many ? cam[`${part.part}s`].includes(k.id) : cam[part.part] === k.id }];
+      });
+    }
+    // What's on, in a line: the main piece, then each part ("2 filters" for the enabled ones).
+    function toolSummary(kind) {
+      const cam = witch.get('camera');
+      const active = witch.get('active');
+      return kind.parts.map((part) => {
+        if (kind.id === 'camera') {
+          if (part.many) { const n = cam[`${part.part}s`].length; return `${n} ${n === 1 ? part.noun : part.label.toLowerCase()}`; }
+          return part.part === 'body' ? cameraName(cam.body) : LENSES[cam.lens]?.label;
+        }
+        const id = active[part.part];
+        if (part.from === 'satchel') return id && satchelCount(witch, id) ? `${ITEMS[id].name} (${satchelCount(witch, id)})` : null;
+        return id ? TOOLS[id]?.name : null;
+      }).filter(Boolean).join(' · ');
+    }
+
+    function renderTool(kindId, focusKey) {
+      const kind = toolKind(kindId);
+      const camera = kind.id === 'camera';
+      const hints = camera && (ctx.variant('unowned') ?? 'hints') === 'hints';
+      const section = (part, i) => {
+        const cards = toolCards(kind, part);
+        if (!cards.length) return '';                        // nothing of this part yet: no section
+        const badge = i === 0 ? 'On the wheel' : part.many ? 'Enabled' : kind.on;
+        const right = part.many
+          ? `<span class="s-hbox bk-tool-switch">Enable the ones you want · switch in the viewfinder ${glyph(part.part === 'filter' ? 'photoFilter' : 'photoFrame', 'sm')}</span>`
+          : hints ? `${cards.filter((c) => !c.missing).length} of ${cards.length}` : '';
         return /* html */ `
-          <div class="s-hbox bk-page-head"><div class="s-text gb-label fill">${label}</div><div class="s-text gb-small">${n} of ${pieces.length}</div></div>
+          <div class="s-hbox bk-page-head"><div class="s-text gb-label fill">${part.label}</div><div class="s-text gb-small">${right}</div></div>
           <div class="s-grid bk-kit">
-            ${pieces.map((k) => {
-              const def = defs.find((d) => d.id === k.id);
-              const have = owned.includes(`${kind}:${k.id}`);
-              const sample = { view: 'viewfinder', filter: kind === 'filter' ? k.id : 'none', frame: kind === 'frame' ? k.id : 'none',
-                body: kind === 'body' ? k.id : 'box', lens: kind === 'lens' ? k.id : 'std', caption: 'Sample' };
-              const meta = kind === 'body' ? def.kind : kind === 'lens' ? def.mm : '';
-              const line = !have ? esc(k.hint) : def.desc ? esc(def.desc) : k.how === 'start' ? 'Came with the camera' : 'In your kit';
-              return /* html */ `
-                <button class="s-button gb-card bk-kit-item ${have ? '' : 'missing'}">
-                  <span class="bk-kit-sample">${have ? photoMarkup(sample, 'bk-kit-photo', { blassi }) : '<span class="bk-kit-unknown">?</span>'}</span>
-                  <span class="s-text gb-h3">${have ? def.label : `Unknown ${noun}`}</span>
-                  ${have && meta ? `<span class="s-text gb-small bk-kit-meta">${esc(meta)}</span>` : ''}
-                  <span class="s-text gb-small wrap">${line}</span>
-                </button>`;
-            }).join('')}
+            ${cards.map((c) => /* html */ `
+              <button class="s-button gb-card bk-kit-item ${c.missing ? 'missing' : ''} ${c.empty ? 'empty' : ''}" data-piece="${c.key}" data-part="${part.part}"
+                aria-pressed="${!!c.on}" ${c.missing ? 'disabled' : ''} data-widget="WBP_ToolCard">
+                ${c.on ? `<span class="s-text gb-small bk-kit-inuse">${badge}</span>` : ''}
+                <span class="bk-kit-sample">${c.sample}</span>
+                <span class="s-text gb-h3 wrap">${esc(c.name)}</span>
+                ${c.meta ? `<span class="s-text gb-small bk-kit-meta">${esc(c.meta)}</span>` : ''}
+                <span class="s-text gb-small wrap">${esc(c.desc)}</span>
+              </button>`).join('')}
           </div>`;
       };
       target.innerHTML = /* html */ `
-        <div class="s-vbox fill bk-page bk-wide">
+        <div class="s-vbox fill bk-page bk-wide bk-tool" data-kind="${kind.id}" data-widget="WBP_ToolPage">
+          <div class="s-hbox bk-kit-now" data-widget="WBP_ToolPageNow">${icon(kind.icon)}<span class="s-text gb-small">In use</span><span class="s-text gb-h3">${esc(toolSummary(kind))}</span></div>
           <div class="s-scroll fill"><div class="s-vbox bk-kit-wrap">
-            ${section('body', asList(BODIES), 'Cameras', 'camera')}
-            ${section('lens', asList(LENSES), 'Lenses', 'lens')}
-            ${section('filter', FILTERS, 'Filters', 'filter')}
-            ${section('frame', FRAMES, 'Frames', 'frame')}
+            ${kind.parts.map(section).join('')}
           </div></div>
-          <div class="gb-note bk-note">The user's idea (2026-09-29): gather a full camera kit over the game. Filters and frames are found, brewed, or Keepsake rewards (claim "Take a photo at sunset" to get Dusk). Cameras and lenses (2026-10-01) each come from a photo: the moon, a bird in flight, a vista. Collectibles, different not better. Harness: Kit › Whole kit tries them all.</div>
+          <div class="gb-note bk-note">${camera
+            ? 'Tools › Camera (was Keepsakes › Camera kit; D30). Choose the camera and lens; enable the filters and frames to switch between in the viewfinder (D26). Cameras and lenses come from photos, filters and frames from rewards, brews and finds. Harness: Kit › Whole kit; Camera: missing pieces.'
+            : 'Tools (D25, D30): only what she owns; nothing here takes a satchel slot. The main piece is the one on the tool wheel. No stats: a rod is known by its name (D29). J in the world gives her the next tool (a bench demo).'}</div>
         </div>`;
+      target.querySelectorAll('[data-piece]:not([disabled])').forEach((b) => {
+        b.onclick = () => {
+          const key = b.dataset.piece;
+          const part = kind.parts.find((p) => p.part === b.dataset.part);
+          const id = key.slice(key.indexOf(':') + 1);
+          if (camera) {
+            const cam = witch.get('camera');
+            if (part.many) {
+              // Enable / disable. At least one stays enabled; the one on in the viewfinder
+              // moves to another if it was turned off.
+              const list = cam[`${part.part}s`];
+              const next = list.includes(id) ? (list.length > 1 ? list.filter((x) => x !== id) : list) : [...list, id];
+              const order = KIT.filter((k) => k.kind === part.part).map((k) => k.id);
+              next.sort((a, c) => order.indexOf(a) - order.indexOf(c));
+              witch.set('camera', { ...cam, [`${part.part}s`]: next, [part.part]: next.includes(cam[part.part]) ? cam[part.part] : next[0] });
+            } else if (cam[part.part] !== id) witch.set('camera', { ...cam, [part.part]: id });
+          } else {
+            const card = toolCards(kind, part).find((c) => c.key === key);
+            if (card?.go) { railSel.recipes = card.go; show('recipes'); return; }   // none left: to its recipe
+            witch.set('active', { ...witch.get('active'), [part.part]: id === 'none' ? null : (part.from === 'satchel' ? id : key) });
+          }
+          const sc = target.querySelector('.s-scroll');
+          const scroll = sc?.scrollTop ?? 0;
+          renderTool(kindId, key);
+          const sc2 = target.querySelector('.s-scroll'); if (sc2) sc2.scrollTop = scroll;
+        };
+      });
+      if (focusKey) target.querySelector(`[data-piece="${CSS.escape(focusKey)}"]`)?.focus({ preventScroll: true });
+      else target.querySelector('[aria-pressed="true"]')?.focus({ preventScroll: true });
     }
 
     root.querySelectorAll('[data-tab]').forEach((b) => { b.onclick = () => show(b.dataset.tab); });
@@ -597,8 +715,8 @@ export default {
         show(TABS[(i + (k === 'e' ? 1 : TABS.length - 1)) % TABS.length].id);
         return true;
       }
-      const rail = tabDef(tab).rail;
-      if (rail && (k === 'w' || k === 's')) {
+      const rail = railOf(tabDef(tab));
+      if (rail?.length && (k === 'w' || k === 's')) {
         const i = rail.findIndex((r) => r.id === railSel[tab]);
         showRail(rail[(i + (k === 's' ? 1 : rail.length - 1)) % rail.length].id);
         return true;

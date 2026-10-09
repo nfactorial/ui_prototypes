@@ -4,7 +4,12 @@
 //
 //   Main menu ──Continue/New──▶ the world (world HUD + zone banner)
 //   In the world:  I satchel · K spells (the book: Recipes › Spells) · T tools · Tab spell wheel
-//                  1–5 spell buttons · Q/E cycle spell · G interact · F fish · P photo mode · N study (demo)
+//                  1–5 spell buttons · Q/E cycle spell · G interact · N study (demo)
+//                  F use tool: the rod fishes, the camera raises (P: take the camera and raise it)
+//                  J (bench demo) she's given the next tool: the first of a kind is announced (D28)
+//   With the camera up: F takes a photo · Q / E switch filter / frame · I opens the book
+//                  on Tools › Camera (D27) · Esc puts it away
+//   Tool wheel open: I opens the aimed tool's page (proposed)
 //                  Z next zone · 6–0 toasts
 //                  Esc → pause (or back out of whatever is open)
 //   🔴 Only the pause menu pauses the world (user, 2026-09-29, flow.md D3). The
@@ -13,7 +18,7 @@
 // Keys are placeholders: the game is keyboard or joypad, and the prototype needn't match 1:1 (D4).
 
 import { ZONES } from '../mock/world.js';
-import { FISH, studyDone } from '../mock/witch.js';
+import { FISH, studyDone, CAMERA_DEFAULT, TOOLS, TOOLS_START, ACTIVE_START, GIFTS, TOOL_KINDS, hasKind } from '../mock/witch.js';
 import { dayPhase } from '../core/format.js';
 
 const DEMO_TOASTS = {
@@ -42,7 +47,25 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
 
   const isOpen = (id) => screens.isOpen(id);
   const syncPause = () => setGamePaused(PAUSING.some(isOpen));
-  const menuOpen = () => ['book', 'pause-menu', 'quick-select', 'fishing', 'photo-mode', 'dialogue', 'study-reveal', 'settings', 'quit-confirm'].some(isOpen);
+  const menuOpen = () => ['book', 'pause-menu', 'quick-select', 'fishing', 'photo-mode', 'dialogue', 'study-reveal', 'new-tool', 'settings', 'quit-confirm'].some(isOpen);
+  // She's given a tool (bench demo, J): the next in GIFTS she hasn't got. It goes to her
+  // collection, never the satchel (D25). The first of a kind is made active for her, goes
+  // to her hands, and is announced (D28); a later piece waits on its page.
+  function giveTool() {
+    const owned = witch.get('tools');
+    const id = GIFTS.find((g) => !owned.includes(g));
+    if (!id) { message('Nothing left to give in the mock.'); return; }
+    const t = TOOLS[id];
+    const kind = TOOL_KINDS.find((k) => k.parts.some((p) => p.part === t.part));
+    const part = kind.parts.find((p) => p.part === t.part);
+    const first = part === kind.parts[0] && !hasKind(witch, kind.id);
+    witch.set('tools', [...owned, id]);
+    if (first) {
+      witch.set('active', { ...witch.get('active'), [t.part]: id });
+      world.set('tool', kind.id);
+    }
+    screens.open('new-tool', { kind, part, name: t.name, icon: t.icon, first });
+  }
   // Studying an animal (demo): the next creature with something left to learn takes a step,
   // revealing one charm reagent.
   function study() {
@@ -107,11 +130,27 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
 
   // Esc is "back": close the topmost thing, or open the pause menu in-world.
   function back() {
-    for (const id of ['quit-confirm', 'settings', 'quick-select', 'photo-mode', 'dialogue', 'study-reveal', 'book', 'pause-menu']) {
+    // The book before the camera: the book can be open over the viewfinder.
+    for (const id of ['quit-confirm', 'settings', 'quick-select', 'book', 'photo-mode', 'dialogue', 'study-reveal', 'new-tool', 'pause-menu']) {
       if (isOpen(id)) { close(id); return true; }
     }
     if (state === 'world' && !isOpen('fishing')) { screens.open('pause-menu').then(syncPause); return true; }
     return false;
+  }
+
+  // The camera is a wheel tool (the game's take_photo_mode_prd): use tool raises it.
+  async function raiseCamera() {
+    if (state !== 'world' || menuOpen()) return;
+    world.set('tool', 'camera');
+    await screens.open('photo-mode');
+  }
+  // Use tool (F): whatever is in her hands (a kind: its active piece, D25).
+  function useTool() {
+    const tool = world.get('tool');
+    if (tool === 'fishing') return fish();
+    if (tool === 'camera') return raiseCamera();
+    if (tool === 'broom') return message('She would get on her broom (riding is not in the bench).');
+    message('Hands free: nothing to use. T picks a tool.');
   }
 
   function cycleSpell(dir) {
@@ -126,7 +165,13 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
     async start() {
       game.patch({ satchelSeen: false });
       const [timeOfDay, temperature] = BACKDROP_TIME[worldBackdrop ?? 'path-day'] ?? BACKDROP_TIME['path-day'];
-      world.patch({ zoneName: ZONES[0], activeSpell: 0, tool: 'Item.Tool.Rod', timeOfDay, temperature });
+      world.patch({ zoneName: ZONES[0], activeSpell: 0, tool: 'fishing', timeOfDay, temperature });
+      witch.patch({ camera: CAMERA_DEFAULT, tools: TOOLS_START, active: ACTIVE_START });
+      // "A new tool": she starts without a broom (or anything for one), and is given it.
+      if (start === 'newtool') {
+        const broomParts = TOOL_KINDS.find((k) => k.id === 'broom').parts.map((p) => p.part);
+        witch.patch({ tools: TOOLS_START.filter((id) => !broomParts.includes(TOOLS[id].part)), active: { ...ACTIVE_START, broom: null, trinket: null } });
+      }
       zoneIndex = 0;
       fishCount = 0;
       if (start === 'mainmenu' || !start) return toMainMenu();
@@ -137,8 +182,9 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
       if (start === 'tools') await openSelector('tool');
       if (start === 'spellsel') await openSelector('spell');
       if (start === 'fishing') setTimeout(fish, 800);
-      if (start === 'photo') await screens.open('photo-mode');
-      if (start === 'kit') await openBook('keepsakes:kit');
+      if (start === 'photo') await raiseCamera();
+      if (start === 'kit') await openBook('tools:camera');
+      if (start === 'newtool') setTimeout(() => { if (!menuOpen()) giveTool(); }, 800);
       if (start === 'talk') await screens.open('dialogue', { who: 'Hazel' });
       if (start === 'study') setTimeout(study, 600);
       if (start === 'pause') { await screens.open('pause-menu'); syncPause(); }
@@ -151,8 +197,10 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
 
       // Keys that work with the book open too: I / K jump between its tabs or close it.
       if (k === 'i' || k === 'k') {
-        if (isOpen('pause-menu') || isOpen('quick-select') || isOpen('fishing') || isOpen('photo-mode')) return true;
-        const tab = k === 'i' ? 'satchel' : 'recipes:spells';
+        if (isOpen('pause-menu') || isOpen('quick-select') || isOpen('fishing') || isOpen('new-tool')) return true;
+        // In photo mode (the camera raised, not just held) the book opens on Tools › Camera:
+        // that's where the camera is set up (D27). Otherwise always the Satchel.
+        const tab = isOpen('photo-mode') ? 'tools:camera' : k === 'i' ? 'satchel' : 'recipes:spells';
         openBook(tab);
         return true;
       }
@@ -170,9 +218,10 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
         case 'tab': openSelector('spell'); return true;
         case 'q':   cycleSpell(-1); return true;
         case 'e':   cycleSpell(1); return true;
-        case 'f':   fish(); return true;
-        case 'p':   screens.open('photo-mode'); return true;
+        case 'f':   useTool(); return true;
+        case 'p':   raiseCamera(); return true;
         case 'n':   study(); return true;
+        case 'j':   giveTool(); return true;
         case 'z':   zoneIndex = (zoneIndex + 1) % ZONES.length; world.set('zoneName', ZONES[zoneIndex]); return true;
         case 'g': {
           const p = world.get('prompt');
@@ -219,6 +268,12 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
           return close('study-reveal');
         case 'talk-done':
           return close('dialogue');
+        case 'camera-kit':   return openBook('tools:camera');
+        // The tool wheel's book key (proposed): the aimed tool's page, or the Satchel.
+        case 'tool-page':
+          return close('quick-select').then(() => openBook(data.kind ? `tools:${data.kind}` : 'satchel'));
+        case 'new-tool-done':
+          return close('new-tool');
         case 'photo-taken':
           if (dayPhase(world.get('timeOfDay')) === 'Evening') bumpTask(/photo at sunset/i);
           return;

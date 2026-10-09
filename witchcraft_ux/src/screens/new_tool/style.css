@@ -1,0 +1,24 @@
+/* A new tool. Prefix: nw- (the fish catch's hold-up, fishing/style.css, in another key) */
+#ui-root:has([data-screen='new-tool']) [data-screen='world-hud'] { visibility: hidden; }
+
+.nw-bar { height: 110px; background-color: #000; }
+.nw-bar.top { transform-origin: 50% 0; }
+.nw-bar.bottom { transform-origin: 50% 100%; }
+
+.nw-holdup { margin-top: 150px; gap: 6px; align-items: center; opacity: 0; }
+.nw-icon {
+  width: 96px; height: 96px; display: grid; place-items: center; margin-bottom: 10px;
+  border-radius: 50%; background-color: color-mix(in srgb, var(--gb-bg-solid) 70%, transparent);
+  border: 2px solid var(--gb-accent); color: var(--gb-accent);
+}
+.nw-icon .s-image { --w: 52px; --h: 52px; }
+.nw-kicker { font: italic 600 26px/1 var(--gb-font-display); color: var(--gb-accent); }
+.nw-name { font-size: 88px; color: #fffaf0; }
+.nw[data-first='true'] .nw-name { text-transform: uppercase; letter-spacing: 8px; }   /* SLATE: STextBlock TextTransformPolicy ToUpper */
+.nw-piece { color: #fffaf0; }
+.nw-where { color: #fffaf0; opacity: 0.85; margin-top: 4px; }
+
+.nw-continue { margin-bottom: 140px; }
+.nw-continue .gb-button { display: flex; gap: 10px; align-items: center; }
+.nw-note { margin: 0 0 128px 48px; max-width: 460px; }
+[data-clean] .nw-note { display: none; }

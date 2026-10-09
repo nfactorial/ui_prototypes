@@ -31,16 +31,16 @@ export const BINDINGS = {
   spell5:       { kb: '5',     pad: 'LB+D↑' },
   railPrev:     { kb: 'W',     pad: 'LT' },     // book categories down the left
   railNext:     { kb: 'S',     pad: 'RT' },
-  // Photo mode (all guesses)
-  photoMode:    { kb: 'P',     pad: 'D↓' },     // lift the camera
-  photoTake:    { kb: 'Space', pad: 'A' },
-  photoView:    { kb: 'V',     pad: 'Y' },      // viewfinder ⇄ selfie
-  photoBody:    { kb: 'B',     pad: 'D↑' },     // next camera in her kit
-  photoLens:    { kb: 'L',     pad: 'LB' },     // next lens
-  photoFilter:  { kb: 'F',     pad: 'X' },
-  photoFrame:   { kb: 'R',     pad: 'RB' },
-  photoPose:    { kb: 'Q/E',   pad: 'D←/D→' },  // selfie only
-  photoHide:    { kb: 'H',     pad: 'View' },
+  // The camera (user, 2026-10-05; the game's take_photo_mode_prd): a wheel tool. Use tool
+  // raises it and is the shutter; back puts it away; the book opens on Tools › Camera
+  // (D27), where the camera and lens are chosen and filters and frames enabled. In the
+  // viewfinder the enabled ones are switched between (D26).
+  photoMode:    { kb: 'P',     pad: 'D↓' },     // bench shortcut: take the camera in hand and raise it
+  cameraKit:    { kb: 'I',     pad: 'View' },   // the book, on Tools › Camera
+  photoFilter:  { kb: 'Q',     pad: 'LB' },     // viewfinder: next enabled filter (D26)
+  photoFrame:   { kb: 'E',     pad: 'RB' },     // viewfinder: next enabled frame
+  giveTool:     { kb: 'J',     pad: '—' },      // bench demo: she's given the next tool
+  photoPose:    { kb: 'Q/E',   pad: 'D←/D→' },  // selfie only (deferred in the game)
   claim:        { kb: 'Enter', pad: 'A' },
   confirm:      { kb: 'Enter', pad: 'A' },
   back:         { kb: 'Esc',   pad: 'B' },
