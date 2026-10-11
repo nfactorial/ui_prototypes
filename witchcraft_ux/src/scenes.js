@@ -50,9 +50,9 @@ const V = {
   photoui:  { label: 'Viewfinder', options: { plain: 'Plain (stage 3)', clean: 'Corner brackets', body: "The camera's own" }, remount: true },
   kit:      { label: 'Kit', options: { earned: 'As earned', all: 'Whole kit (to try)' }, remount: true },
   // Tools (2026-10-09): a kind she hasn't got, on the wheel; camera pieces she hasn't got, on Tools › Camera.
-  // The tool wheel's figure (user's idea, 2026-10-11): a ring of six, or a pentacle with a tool at
-  // each point and Hands free in the centre. Applies to the radial selector only.
-  toolwheel: { label: 'Tool wheel', options: { ring: 'Ring of six', pentacle: 'Pentacle' }, remount: true },
+  // The tool wheel's figure: the pentacle (user, 2026-10-11: D35), a tool at each point and Hands free
+  // in the centre. The ring of six is kept to compare. Applies to the radial selector only.
+  toolwheel: { label: 'Tool wheel', options: { pentacle: 'Pentacle', ring: 'Ring of six (before D35)' }, remount: true },
   wheelempty: { label: 'Wheel: missing tool', options: { hidden: 'Hidden', empty: '"Something goes here"' }, remount: true },
   unowned:  { label: 'Camera: missing pieces', options: { hints: 'Shown, with how to get them', hidden: 'Hidden' }, remount: true },
   names:    { label: 'Camera names', options: { anagram: 'Anagrams (Nyso, Icale…)', birds: 'Birds (Kestrel, Heron…)', makers: 'Makers (Hollis, Lunetta…)' }, remount: true },

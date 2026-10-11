@@ -51,6 +51,7 @@ world carrying on. Keys are placeholders (D4).
 | D31 | 2026-10-09 | **Recipes › Bait** joins Cooking, Potions, Spells, Charms. Bait she makes goes in the satchel |
 | D33 | 2026-10-11 | **Six places on the tool wheel at most**: five tools and Hands free. Broom, Fishing, Camera, Cauldron; the fifth undecided |
 | D34 | 2026-10-11 | **Tools › Cauldron**, a page like the others (Cauldrons; Spoons proposed) |
+| D35 | 2026-10-11 | **The tool wheel is a pentacle**: a tool at each point, Hands free in the centre |
 
 ## Proposed (built in the bench, not decided)
 
@@ -73,7 +74,7 @@ world carrying on. Keys are placeholders (D4).
 | Main menu | Grey-box | Variant: which shot (golden cliff, night, golden path) |
 | World HUD | Grey-box | Variant `hud`: quiet / contextual / always-on |
 | Zone banner | Grey-box (rules are the game's) | Variant: with or without the map name |
-| Tool selector | Grey-box | Variant `selector`: radial / bar; variant `toolwheel`: ring of six / pentacle (Hands free in the centre, open). A fixed place per kind, its active piece (D25); variant `wheelempty`: a missing kind hidden / "Something goes here". I on an aimed tool opens its page (proposed) |
+| Tool selector | Grey-box | Variant `selector`: radial / bar; the figure is a **pentacle** (D35; Hands free in the centre), variant `toolwheel` keeps the ring to compare. Handed off: `handoff/tool_wheel.md`. A fixed place per kind, its active piece (D25); variant `wheelempty`: a missing kind hidden / "Something goes here". I on an aimed tool opens its page (proposed) |
 | Spell selector | Grey-box, speculative content | Loadout from `spell-grammar-and-loadout.md` |
 | Book: Satchel | Grey-box, follows `inventory_ui_prd` v0.1 | Portrait + grid + detail |
 | Book: Recipes › Cooking | Grey-box, speculative | No cooking design yet; the campfire as a station is an idea |

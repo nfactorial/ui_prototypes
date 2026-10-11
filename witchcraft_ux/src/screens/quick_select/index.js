@@ -15,9 +15,9 @@
 //   variant 'wheelempty'  hidden  (default) no place at all: the kinds stay unknown
 //                         empty   an empty place reading "Something goes here"
 // Naming the missing kind ("A place for a fishing rod") is out: it gives it away (2026-10-09).
-//   variant 'toolwheel'   ring      (default) six places 60° apart, Hands free at the bottom
-//                         pentacle  a tool at each of the five points, Hands free in the
-//                                   centre, the name and flavour line below (user's idea, 2026-10-11)
+//   variant 'toolwheel'   pentacle  (default; D35) a tool at each of the five points, Hands free
+//                                   in the centre, the name and flavour line below
+//                         ring      the ring of six before D35, Hands free at the bottom
 // The book key while aiming at a tool opens that tool's page (proposed, from the user's idea).
 import { defineAnimation } from '../../core/motion.js';
 import { glyph } from '../../input.js';
@@ -78,7 +78,7 @@ export default {
   mount(root, ctx) {
     const kind = ctx.params.kind ?? 'spell';
     const shape = ctx.variant('selector') ?? 'radial';
-    const pentacle = kind === 'tool' && shape === 'radial' && ctx.variant('toolwheel') === 'pentacle';
+    const pentacle = kind === 'tool' && shape === 'radial' && ctx.variant('toolwheel') !== 'ring';
     const list = entries(kind, ctx.vm, {
       pentacle,
       showEmpty: ctx.variant('wheelempty') === 'empty',

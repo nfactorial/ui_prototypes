@@ -51,6 +51,7 @@ Label them, and feed anything settled back into the game's design docs.
 | D32 | 2026-10-09 | **Every detail string is flavour, never technical**: what a thing looks like, its character ("Ornately decorated with iridescent abalone shell"). Not what it does, how well, or a number: no "SLR, quick to focus", no "50 mm", no "Only bites after dark". The name says what it is. **For everything**: tools, camera pieces, satchel items, recipes, spells. (What a camera piece does shows in its sample photo on the card.) The factual lines are kept as possible **learnings** (Open, below) |
 | D33 | 2026-10-11 | **Six places on the tool wheel, at most: five tools and Hands free** (empty hands). The kinds so far: Broom, Fishing, Camera, **Cauldron** (for now: it may leave the wheel, below); the fifth is undecided (the game's `tools.md` intends a net). Matches the game's ring of six (`tool_wheel_prd`), now as a ceiling rather than room to grow. ⚠️ Updates `tools.md` ("about five tools, eventually"; the cauldron "undecided") |
 | D34 | 2026-10-11 | **The cauldron has a page of its own, Tools › Cauldron**, so it sits with the broom and the rod. Its pieces are a collection of **cauldrons**, plus whatever else she can choose for it (open, below; the bench proposes **spoons**). **Every piece is visual configuration only**: how it looks, never how well she brews. How she reaches the cauldron in play is open (below) |
+| D35 | 2026-10-11 | **The tool wheel is a pentacle** (the user's idea): a tool at each of the five points, broom at the top (the upright pentacle), **Hands free in the centre**, the name and flavour line below the figure. Carved into a dark wooden disc, its grooves glowing gold and breathing (`tessera/pentacle.toml`). Replaces the ring of six (kept as variant `ring` to compare). Handed off: `handoff/tool_wheel.md` |
 | D7 | 2026-09-29 | **The book is two levels: tabs across, categories down a rail.** Tabs: **Satchel · Recipes · Almanac**. Recipes = Cooking, Potions, Spells, Charms. Almanac = Fish, Flowers, Creatures ("Almanac": user's pick). A studied creature's charm is a recipe (Recipes › Charms); what she knows of the animal is in Almanac › Creatures |
 
 ## Reading the game (a working interpretation, to check with the user)
@@ -95,17 +96,12 @@ Looks are selectable **style sets** (`styles/themes/`), applied live to every sc
 
 ## Open
 
-- **The tool wheel: a ring of six, or a pentacle?** (user's idea, 2026-10-11) The pentacle has a tool at
-  each of its five points and **Hands free in the centre** (user, 2026-10-11: "makes sense"). Variant
-  **Tool wheel: Pentacle**, beside the **Ring of six**. With the pentacle:
-  - On a pad, the centre is where the stick rests. Today releasing with nothing aimed does nothing (a
-    cancel, `tool_wheel_prd` decision 4); with Hands free in the centre, letting go with the stick at rest
-    would put the tool away. Either the centre takes a deliberate press, or cancelling moves to B / Esc only.
-  - The figure always shows five points, so with a missing tool hidden (`wheelempty`) a bare point still
-    says "something goes here", unnamed. A feature or a giveaway?
-  - The name and flavour line sit below the figure, not in the centre.
-  - Point up (the upright pentacle), broom at the top. It echoes the game's casting figures (`casting.md`:
-    five runes make a pentagram).
+- **Choosing Hands free in the pentacle's centre** (D35). The game keeps the aim when the stick springs
+  back (`tool_wheel_prd` decision 2), so a stick at rest can't mean "the centre". The handoff proposes a
+  deliberate input: pad, click the aiming stick; mouse, the pointer inside an inner radius; keys, the
+  centre as one more step after the fifth point. To settle in the game's plan phase or here.
+- **A point with no tool**: the carved point is always there, so even with the slot hidden (`wheelempty`)
+  a bare point says "something goes here", unnamed. A feature or a giveaway? (Naming the kind is out.)
 - **What else is chosen for a cauldron?** (D34) Proposed in the bench: **spoons** (hazel spoon, bone
   ladle). Other candidates: what hangs it over the fire (a tripod, a chain, three stones), a lid, a charm
   tied to the handle (as the broom's trinket).

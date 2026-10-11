@@ -8,7 +8,7 @@ The in-game way to change what's in her hands, without opening the book.
   tool not yet chosen. **Six places at most** (D33). Each shows that kind's **active**
   piece from her collection (D25: tools no longer live in the satchel); which one is chosen on its page,
   Tools › Broom / Fishing / Camera. The game has one equipped-tool slot (`equipped_tool_prd`).
-- **Variant `toolwheel`** (user's idea, 2026-10-11): `ring` (default) or `pentacle`: a tool at each of the
+- **The tool wheel is a pentacle** (D35, user, 2026-10-11; variant `toolwheel`, `ring` kept to compare): a tool at each of the
   five points (72° apart, broom at the top), **Hands free in the centre**, the name and flavour line below
   the figure. Radial only. The figure is **carved into a dark wooden disc** with grooves that glow gold
   and breathe slowly (user, 2026-10-11: "engraved, or at least more mystical"): a tessera bake,
@@ -31,8 +31,7 @@ The in-game way to change what's in her hands, without opening the book.
 - Q/E still cycle spells directly without opening anything (see the world HUD's change hint).
 
 ## Open
-- Ring of six or pentacle (variant `toolwheel`)? With Hands free in the centre, a stick at rest aims at it:
-  see `direction.md`.
+- How Hands free in the centre is chosen on a pad and with the mouse: see `direction.md` and the handoff.
 - Hold-to-open/release-to-pick (gamepad-natural) vs toggle (here). Possibly a setting.
 - One wheel with tools and spells together, or two (here)?
 - Does the tool selector also carry consumables (bait, a potion)? (Bait is chosen on Tools › Fishing for now.)
@@ -40,6 +39,9 @@ The in-game way to change what's in her hands, without opening the book.
 - The book key as the wheel's "open its page" button: right, or a face button of its own?
 
 ## Port notes
+
+**Handed off:** `documents/handoff/tool_wheel.md` (the pentacle).
+
 - Radial: an `SConstraintCanvas` with slots placed by angle, or a custom panel that lays out on a circle.
   Focus navigation on a wheel wants stick-angle selection, not the spatial arrows used here.
 - Pentacle: two textures (`assets/tessera/pentacle.png`, colour; `pentacle_glow.png`, tinted) as two
