@@ -19,4 +19,4 @@ and no build. Edits reload the page live. Stop it with Ctrl+C.
 ## More
 
 - `CLAUDE.md`: how the prototype works, and the harness's keyboard shortcuts
-- `documents/handoff/`: the specs the Unreal work builds from
+- `documents/handoff/`: decided UI specs, the input to the game's planning

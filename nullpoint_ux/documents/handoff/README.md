@@ -1,9 +1,11 @@
-# Handoff specs: what the Unreal work builds from
+# Handoff specs: inputs to the game's planning
 
-A handoff describes a **decided** piece of UI, at a fixed commit, in Slate terms. The Unreal side builds from
-these, never from the raw HTML/CSS (the prototype can't tell harness from design, and it keeps moving).
-The game repo's technical design makes the engine decisions (UMG vs Slate, CommonUI, MVVM, input routing);
-its PRDs reference these files rather than copying them.
+A handoff describes a **decided** piece of UI, at a fixed commit, in Slate terms. The game's plan phase
+works from these, never from the raw HTML/CSS (the prototype can't tell harness from design, and it keeps
+moving). The game repo's technical design makes the engine decisions (UMG vs Slate, CommonUI, MVVM, input
+routing). Its PRDs describe the implementation in their own terms and record the handoff tag they were
+planned from. They never point at these files as their spec, so the bench can keep evolving without
+invalidating them.
 
 ## Handed off
 

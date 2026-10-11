@@ -2,8 +2,12 @@
 
 A **fast design bench** for the UI of *Null Point*, built in plain HTML/CSS/JS so it can be iterated in
 seconds. The shipping UI will be Slate/UMG in Unreal. This prototype is where the UI gets *designed*, and
-what the Unreal implementation will use as its **reference**: how each screen looks, moves and behaves,
-plus notes on how to build it.
+the **input** the game's plan phase works from: how each screen looks, moves and behaves, plus notes on
+how to build it.
+
+🔴 **The bench is vibe-coded: the code itself doesn't matter.** The design → plan → implement workflow
+doesn't apply here. No PRDs, no `/implement`. Build, show, iterate. What matters is what the bench
+*shows* and the handoffs it produces, not the quality of its HTML/CSS/JS.
 
 🔴 **It's a prototype, not a replica.** It does **not** have to match Slate 1:1 (user, 2026-09-28). The
 Slate-shaped primitives below are a convenient default vocabulary that keeps the port easy. They are not
@@ -12,7 +16,7 @@ it would cost in Unreal. A good idea that needs a UI material is worth more than
 
 🔴 **Expect many iterations, not a one-shot.** Screens will be built, looked at, argued with and rebuilt.
 Keep changes small and reviewable. Don't polish something the user hasn't reacted to yet, and keep each
-screen's `README.md` current, because it's the handoff note the Unreal work will read.
+screen's `README.md` current, because it's what the screen's handoff spec is built from.
 
 | | |
 |---|---|
@@ -320,7 +324,8 @@ look is theirs to sign off.
 
 ✅ **Started 2026-10-02:** the Director look, the menu system and the components (toasts, tooltips) are
 handed off, tag `ui-handoff-core`. Index: `documents/handoff/README.md`. 🔴 **Changing a handed-off piece
-means updating its spec and re-tagging**, or the Unreal side builds from something that no longer exists.
+means updating its spec and re-tagging**, so the game's next planning pass can diff the new tag against
+the one its PRD was planned from.
 
 The prototype is the **design stage** of the game repo's pipeline (design doc → technical design → PRD →
 implementation, see the game's `CLAUDE.md`). It shows *what must be true*: layout, flow, states, timing,
@@ -342,9 +347,14 @@ the screen's README. Each one covers:
 | Reference | Screenshots, the scene link, and the **git tag** the handoff describes |
 
 The game repo's **technical design** then makes the engine decisions the prototype can't (UMG vs Slate,
-CommonUI, MVVM, input routing: see `E:\learning\unreal_engine\ui\`), and its **PRD** references the
-handoff rather than copying it (the game repo's rule: reference reasoning, don't copy it downward).
+CommonUI, MVVM, input routing: see `E:\learning\unreal_engine\ui\`).
+
+🔴 **The handoff is an input to the game's plan phase, never part of its spec.** The game's PRD describes
+the *implementation* in its own terms (the widget tree, states, data and values as they will be built in
+Unreal), so implementing it never requires the handoff. That keeps the bench and the game separate: the
+bench can keep iterating without invalidating the game's PRD or its code. Bringing a later revision
+across is new planning work on the PRD. The PRD records which handoff tag it was planned from.
 
 **Keep this possible as we go:** keep each screen README honest about decided vs placeholder and its port
-notes, and **tag the commit** a handoff describes (e.g. `ui-handoff-vitals`) so the Unreal work has a fixed
-reference while the prototype keeps evolving.
+notes, and **tag the commit** a handoff describes (e.g. `ui-handoff-vitals`) so the game's planning has a
+fixed point to plan from, and to diff against when the bench moves on.
