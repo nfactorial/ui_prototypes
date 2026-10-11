@@ -1,8 +1,12 @@
 # UI bench — the playbook for a game's UI prototype
 
 A **UI bench** is a browser prototype of a game's UI: plain HTML/CSS/JS, no build step, iterated in
-seconds, where the UI is *designed* before anything is built in Slate/UMG. It becomes the **reference**
-the Unreal implementation is built from: how each screen looks, moves and behaves, plus port notes.
+seconds, where the UI is *designed* before anything is built in Slate/UMG. It becomes the **input** the
+game's plan phase works from: how each screen looks, moves and behaves, plus port notes.
+
+🔴 **A bench is vibe-coded: the code itself doesn't matter.** The design → plan → implement workflow
+doesn't apply here. No PRDs, no `/implement`. Build, show, iterate. What matters is what the bench
+*shows* and the handoffs it produces, not the quality of its HTML/CSS/JS.
 
 This file is the method and the shared framework. It is game-agnostic. Each bench's own `CLAUDE.md`
 imports it (`@../UI_BENCH.md`) and adds only what is true of that game.
@@ -285,5 +289,12 @@ raw HTML/CSS: it can't tell harness from design, or decided from placeholder.
 When a feature is agreed, write **`documents/handoff/<feature>.md`**: layout (widget tree from the
 outline, Slate units), states and behaviour (screen README, pure rules), data (the viewmodel fields bound),
 motion (`defineAnimation` keys), style values (the chosen set's `--th-*`), assets, port costs (every
-`/* SLATE: */`), reference (screenshots, scene link, and a **git tag** for the commit it describes). The
-game repo's PRD references the handoff rather than copying it.
+`/* SLATE: */`), reference (screenshots, scene link, and a **git tag** for the commit it describes).
+
+🔴 **The handoff is an input to the game's plan phase, never part of its spec.** The game repo's PRD
+describes the *implementation* in its own terms (the widget tree, states, data and values as they will be
+built in Unreal), so implementing it never requires the handoff. That keeps the bench and the game
+separate: the bench can keep iterating without invalidating the game's PRD or its code. When a later
+handoff revises a feature, bringing that revision across is new planning work on the PRD. The PRD's
+background line records which handoff tag it was planned from, so the next revision can be diffed
+against it.
