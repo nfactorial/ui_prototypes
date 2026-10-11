@@ -49,6 +49,8 @@ world carrying on. Keys are placeholders (D4).
 | D30 | 2026-10-09 | **Fifth tab: Tools** (Broom · Fishing · Camera). Camera kit moves there as "Camera"; Keepsakes keeps Small tasks · Milestones · Photos. Only a Map could ever be added (a sixth: open, `direction.md`) |
 | D27 | 2026-10-09 | **The book opens on the Satchel**, except in photo mode (camera raised): then on Tools › Camera. Merely holding the camera doesn't count |
 | D31 | 2026-10-09 | **Recipes › Bait** joins Cooking, Potions, Spells, Charms. Bait she makes goes in the satchel |
+| D33 | 2026-10-11 | **Six places on the tool wheel at most**: five tools and Hands free. Broom, Fishing, Camera, Cauldron; the fifth undecided |
+| D34 | 2026-10-11 | **Tools › Cauldron**, a page like the others (Cauldrons; Spoons proposed) |
 
 ## Proposed (built in the bench, not decided)
 
@@ -71,7 +73,7 @@ world carrying on. Keys are placeholders (D4).
 | Main menu | Grey-box | Variant: which shot (golden cliff, night, golden path) |
 | World HUD | Grey-box | Variant `hud`: quiet / contextual / always-on |
 | Zone banner | Grey-box (rules are the game's) | Variant: with or without the map name |
-| Tool selector | Grey-box | Variant `selector`: radial / bar. A fixed place per kind, its active piece (D25); variant `wheelempty`: a missing kind hidden / "Something goes here". I on an aimed tool opens its page (proposed) |
+| Tool selector | Grey-box | Variant `selector`: radial / bar; variant `toolwheel`: ring of six / pentacle (Hands free in the centre, open). A fixed place per kind, its active piece (D25); variant `wheelempty`: a missing kind hidden / "Something goes here". I on an aimed tool opens its page (proposed) |
 | Spell selector | Grey-box, speculative content | Loadout from `spell-grammar-and-loadout.md` |
 | Book: Satchel | Grey-box, follows `inventory_ui_prd` v0.1 | Portrait + grid + detail |
 | Book: Recipes › Cooking | Grey-box, speculative | No cooking design yet; the campfire as a station is an idea |
@@ -90,7 +92,7 @@ world carrying on. Keys are placeholders (D4).
 | Viewfinder (photo mode) | Grey-box (D12, D21) | Plain overlay (stage 3); variant: brackets, or each camera's own finder. Camera and lens chosen in Tools › Camera; Q / E switch the enabled filters / frames (D26). Selfie kept but unadvertised (deferred in the game) |
 | Study progress ("Aha!") | Grey-box (D17) | Moment or card; reveals a charm reagent. N in the world |
 | Book: Keepsakes | Grey-box (D11) | Small tasks · Milestones · Photos · Camera kit (D13); Camera kit moves to Tools (D30) |
-| Book: Tools › Broom, Fishing, Camera | Grey-box (D25, D30) | One page design for every kind: the main piece (broom, rod, camera) and its parts (trinket; line, bait; lens, filter, frame). Only what she owns. Camera kit moved here |
+| Book: Tools › Broom, Fishing, Camera, Cauldron | Grey-box (D25, D30, D34) | One page design for every kind: the main piece (broom, rod, camera) and its parts (trinket; line, bait; lens, filter, frame). Only what she owns. Camera kit moved here |
 | Book: Recipes › Bait | Grey-box (D31), speculative content | Same shape as the other recipe pages |
 | New tool ("You received a new tool!") | Grey-box (D28) | The catch's hold-up. J in the world gives the next tool; scene *Flow — a new tool* |
 | Broom | Open | Mounting is item-driven from the inventory; no fuel, no stats. Race timer + ghost (design only) |

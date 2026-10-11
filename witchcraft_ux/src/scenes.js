@@ -50,13 +50,16 @@ const V = {
   photoui:  { label: 'Viewfinder', options: { plain: 'Plain (stage 3)', clean: 'Corner brackets', body: "The camera's own" }, remount: true },
   kit:      { label: 'Kit', options: { earned: 'As earned', all: 'Whole kit (to try)' }, remount: true },
   // Tools (2026-10-09): a kind she hasn't got, on the wheel; camera pieces she hasn't got, on Tools › Camera.
+  // The tool wheel's figure (user's idea, 2026-10-11): a ring of six, or a pentacle with a tool at
+  // each point and Hands free in the centre. Applies to the radial selector only.
+  toolwheel: { label: 'Tool wheel', options: { ring: 'Ring of six', pentacle: 'Pentacle' }, remount: true },
   wheelempty: { label: 'Wheel: missing tool', options: { hidden: 'Hidden', empty: '"Something goes here"' }, remount: true },
   unowned:  { label: 'Camera: missing pieces', options: { hints: 'Shown, with how to get them', hidden: 'Hidden' }, remount: true },
   names:    { label: 'Camera names', options: { anagram: 'Anagrams (Nyso, Icale…)', birds: 'Birds (Kestrel, Heron…)', makers: 'Makers (Hollis, Lunetta…)' }, remount: true },
   blassi:   { label: 'Blassi', options: { square: 'Square photos', look: 'Look only' }, remount: true },
   menubg:   { label: 'Menu bg', options: { golden: 'Golden cliff', night: 'Night', path: 'Golden path' }, remount: true },
 };
-const WORLD_VARIANTS = { input: V.input, hud: V.hud, selector: V.selector, wheelempty: V.wheelempty, book: V.book, affinity: V.affinity, catch: V.catch, bite: V.bite, banner: V.banner, photoui: V.photoui, kit: V.kit, unowned: V.unowned, names: V.names, blassi: V.blassi, speech: V.speech, babble: V.babble, insight: V.insight, milestones: V.milestones, msgoal: V.msgoal };
+const WORLD_VARIANTS = { input: V.input, hud: V.hud, selector: V.selector, toolwheel: V.toolwheel, wheelempty: V.wheelempty, book: V.book, affinity: V.affinity, catch: V.catch, bite: V.bite, banner: V.banner, photoui: V.photoui, kit: V.kit, unowned: V.unowned, names: V.names, blassi: V.blassi, speech: V.speech, babble: V.babble, insight: V.insight, milestones: V.milestones, msgoal: V.msgoal };
 
 const FLOW = () => import('./flows/game_flow.js');
 

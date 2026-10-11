@@ -15,6 +15,9 @@
 //   variant 'wheelempty'  hidden  (default) no place at all: the kinds stay unknown
 //                         empty   an empty place reading "Something goes here"
 // Naming the missing kind ("A place for a fishing rod") is out: it gives it away (2026-10-09).
+//   variant 'toolwheel'   ring      (default) six places 60° apart, Hands free at the bottom
+//                         pentacle  a tool at each of the five points, Hands free in the
+//                                   centre, the name and flavour line below (user's idea, 2026-10-11)
 // The book key while aiming at a tool opens that tool's page (proposed, from the user's idea).
 import { defineAnimation } from '../../core/motion.js';
 import { glyph } from '../../input.js';
@@ -28,19 +31,35 @@ const IN = defineAnimation('QuickIn', {
 const SCRIM_IN = defineAnimation('QuickScrimIn', { opacity: [[0, 0, 'linear'], [0.15, 1]] });
 const OUT = defineAnimation('QuickOut', { opacity: [[0, 1, 'quadIn'], [0.12, 0]] });
 
+// The pentacle: carved into a wooden disc (a tessera bake, tessera/pentacle.toml), with
+// the same grooves as a tintable mask that glows faintly and breathes.
+// SLATE: two SImages (a colour brush and a tinted one) and a looping UMG animation on the glow.
+const GLOW = defineAnimation('PentacleGlow', {
+  opacity: [[0, 0.35, 'cubicInOut'], [2, 0.75, 'cubicInOut'], [4, 0.35]],
+});
+const figure = () => /* html */ `
+  <div class="s-image stretch qs-pentacle" style="--img:url(/assets/tessera/pentacle.png)"></div>
+  <div class="s-image stretch tint qs-pentacle-glow" style="--img:url(/assets/tessera/pentacle_glow.png)"></div>`;
+
 const icon = (name) => `<div class="s-image tint" style="--img:url(/assets/icons/${name}.svg)"></div>`;
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-function entries(kind, vm, { showEmpty, camera }) {
+// The pentacle's five points: 72° apart, clockwise from the top.
+const POINTS = 5;
+const pointAngle = (p) => p * (360 / POINTS);
+
+function entries(kind, vm, { showEmpty, camera, pentacle }) {
   if (kind === 'tool') {
     const held = vm.world.get('tool');
+    const angleOf = (k) => (pentacle ? pointAngle(k.point) : k.angle);
     const places = TOOL_KINDS.flatMap((k) => {
       const t = activeTool(vm.witch, k.id, camera);
-      if (t) return [{ id: k.id, tool: k.id, angle: k.angle, name: t.name, icon: t.icon, desc: t.desc, current: held === k.id }];
-      return showEmpty ? [{ id: null, angle: k.angle, empty: true, name: 'Something goes here', icon: null, desc: '' }] : [];
+      if (t) return [{ id: k.id, tool: k.id, angle: angleOf(k), name: t.name, icon: t.icon, desc: t.desc, current: held === k.id }];
+      return showEmpty ? [{ id: null, angle: angleOf(k), empty: true, name: 'Something goes here', icon: null, desc: '' }] : [];
     });
-    return [...places, { id: null, angle: 180, name: 'Hands free', icon: 'circle', desc: 'Put it away.', current: held === null }]
-      .sort((a, b) => a.angle - b.angle);
+    // Hands free: the bottom of the ring, or the pentacle's centre.
+    const hands = { id: null, angle: pentacle ? undefined : 180, centre: pentacle, name: 'Hands free', icon: 'hand', desc: 'Put it away.', current: held === null };
+    return [...places.sort((a, b) => a.angle - b.angle), hands].sort((a, b) => (a.angle ?? 999) - (b.angle ?? 999));
   }
   return vm.witch.get('loadout').map((id, i) => {
     const s = SPELLS.find((x) => x.id === id);
@@ -59,7 +78,9 @@ export default {
   mount(root, ctx) {
     const kind = ctx.params.kind ?? 'spell';
     const shape = ctx.variant('selector') ?? 'radial';
+    const pentacle = kind === 'tool' && shape === 'radial' && ctx.variant('toolwheel') === 'pentacle';
     const list = entries(kind, ctx.vm, {
+      pentacle,
       showEmpty: ctx.variant('wheelempty') === 'empty',
       camera: (id) => ({ name: bodyName(id, ctx.variant('names') ?? 'anagram'), desc: BODIES[id]?.desc }),
     });
@@ -67,10 +88,12 @@ export default {
 
     const slot = (e, i) => {
       // A tool's place is fixed by its kind (clockwise from the top); spells share the ring evenly.
+      // The pentacle's Hands free sits in the centre.
       const a = e.angle !== undefined ? (e.angle - 90) * Math.PI / 180 : (i / list.length) * Math.PI * 2 - Math.PI / 2;
-      const pos = shape === 'radial' ? `style="--x:${Math.cos(a) * R}px; --y:${Math.sin(a) * R}px"` : '';
+      const r = e.centre ? 0 : R;
+      const pos = shape === 'radial' ? `style="--x:${Math.cos(a) * r}px; --y:${Math.sin(a) * r}px"` : '';
       return /* html */ `
-        <button class="s-button qs-slot ${shape === 'radial' ? 'anchored' : ''} ${e.empty ? 'empty' : ''}" ${pos}
+        <button class="s-button qs-slot ${shape === 'radial' ? 'anchored' : ''} ${e.empty ? 'empty' : ''} ${e.centre ? 'centre' : ''}" ${pos}
           data-i="${i}" data-aff="${e.affinity ?? ''}" aria-selected="${!!e.current}" ${e.current ? 'data-focus-default' : ''}>
           ${e.icon ? icon(e.icon) : ''}
           ${kind === 'spell' ? `<span class="qs-num">${i + 1}</span>` : ''}
@@ -82,9 +105,9 @@ export default {
         <div class="s-border qs-scrim"></div> <!-- SLATE: SBackgroundBlur if blurred; here a darkening only -->
         ${shape === 'radial' ? /* html */ `
           <div class="s-overlay qs-wheel h-center v-center">
-            <div class="qs-ring"></div>
+            ${pentacle ? figure() : '<div class="qs-ring"></div>'}
             <div class="s-canvas qs-canvas">${list.map(slot).join('')}</div>
-            <div class="s-vbox qs-centre h-center v-center" data-detail></div>
+            <div class="s-vbox ${pentacle ? 'qs-below h-center v-bottom' : 'qs-centre h-center v-center'}" data-detail></div>
           </div>` : /* html */ `
           <div class="s-vbox qs-bar-wrap h-center v-bottom">
             <div class="s-vbox qs-bar-detail" data-detail></div>
@@ -129,6 +152,7 @@ export default {
     });
 
     ctx.play(root.querySelector('.qs-scrim'), SCRIM_IN);
+    if (pentacle) ctx.play(root.querySelector('.qs-pentacle-glow'), GLOW, { loops: Infinity });
     ctx.play(root.querySelector(shape === 'radial' ? '.qs-wheel' : '.qs-bar-wrap'), IN);
     return { outro: () => ctx.play(root.querySelector('.qs'), OUT).finished };
   },

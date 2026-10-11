@@ -13,6 +13,7 @@ and no build. Edits reload the page live. Stop it with Ctrl+C.
 
 - Use another port with `PORT=9000 node tools/serve.mjs` in bash, or `$env:PORT=9000; node tools/serve.mjs`
   in PowerShell.
+- `node tools/bake.mjs` re-bakes the tessera textures (`tessera/`). Needs Python and tessera. Rarely needed.
 - `python tools/colours.py` prints the style's colours as UMG/Slate-ready tables.
 
 ## More

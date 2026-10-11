@@ -49,6 +49,8 @@ Label them, and feed anything settled back into the game's design docs.
 | D30 | 2026-10-09 | **A Tools tab holds the tool pages**: Broom · Fishing · Camera (and kinds to come). **Camera kit moves here from Keepsakes, retitled "Camera"**; Keepsakes keeps Small tasks · Milestones · Photos. The book is Satchel · Recipes · Almanac · Keepsakes · Tools. **A Map is the only other tab that could be added**; nothing else gets a tab (⚠️ that would be a sixth, past D10's five: open, below) |
 | D31 | 2026-10-09 | **Bait recipes are Recipes › Bait**, a category beside Cooking, Potions, Spells and Charms. Bait she makes goes in her satchel |
 | D32 | 2026-10-09 | **Every detail string is flavour, never technical**: what a thing looks like, its character ("Ornately decorated with iridescent abalone shell"). Not what it does, how well, or a number: no "SLR, quick to focus", no "50 mm", no "Only bites after dark". The name says what it is. **For everything**: tools, camera pieces, satchel items, recipes, spells. (What a camera piece does shows in its sample photo on the card.) The factual lines are kept as possible **learnings** (Open, below) |
+| D33 | 2026-10-11 | **Six places on the tool wheel, at most: five tools and Hands free** (empty hands). The kinds so far: Broom, Fishing, Camera, **Cauldron** (for now: it may leave the wheel, below); the fifth is undecided (the game's `tools.md` intends a net). Matches the game's ring of six (`tool_wheel_prd`), now as a ceiling rather than room to grow. ⚠️ Updates `tools.md` ("about five tools, eventually"; the cauldron "undecided") |
+| D34 | 2026-10-11 | **The cauldron has a page of its own, Tools › Cauldron**, so it sits with the broom and the rod. Its pieces are a collection of **cauldrons**, plus whatever else she can choose for it (open, below; the bench proposes **spoons**). **Every piece is visual configuration only**: how it looks, never how well she brews. How she reaches the cauldron in play is open (below) |
 | D7 | 2026-09-29 | **The book is two levels: tabs across, categories down a rail.** Tabs: **Satchel · Recipes · Almanac**. Recipes = Cooking, Potions, Spells, Charms. Almanac = Fish, Flowers, Creatures ("Almanac": user's pick). A studied creature's charm is a recipe (Recipes › Charms); what she knows of the animal is in Almanac › Creatures |
 
 ## Reading the game (a working interpretation, to check with the user)
@@ -83,6 +85,8 @@ Looks are selectable **style sets** (`styles/themes/`), applied live to every sc
 
 | Date | Reaction (user) |
 |---|---|
+| 2026-10-11 | **No held-tool dot on the tool wheel** (a minor note). Removed; the spell wheel keeps its dot |
+| 2026-10-11 | **The pentacle should look engraved, or at least more mystical**, perhaps a real image from tessera. Now carved into a dark wooden disc, its grooves glowing gold and breathing (`tessera/pentacle.toml`). The user: **"looks great"**, and it gives the wheel "much more of a witchy vibe". For the game, the user is considering a bump map lit by a 2D light that follows the cursor or the aimed tool, with the glow colour a parameter to tune there (port notes, `quick_select`) |
 | 2026-09-29 | **Selector motion is right as built.** The quick pop in reads as a "tada"; the fade out reads as the player dismissing it (`quick_select`: `QuickIn` 0.2 s fade + 92%→100% scale, `QuickOut` 0.12 s fade) |
 | 2026-09-29 | Dialogue colour: a cream mix was *"a little bright and desaturated"*; the original tone was right, just too dark. Now the original lifted and more golden (`--th-speech: #3b2a1c`, Hedgewitch). **Approved** |
 | 2026-09-29 | Dialogue: the panel was **too dark** (lightened), replies **too far right** (now aligned with the panel's edge), replies went **transparent on hover** (fixed: solid fill) |
@@ -91,6 +95,25 @@ Looks are selectable **style sets** (`styles/themes/`), applied live to every sc
 
 ## Open
 
+- **The tool wheel: a ring of six, or a pentacle?** (user's idea, 2026-10-11) The pentacle has a tool at
+  each of its five points and **Hands free in the centre** (user, 2026-10-11: "makes sense"). Variant
+  **Tool wheel: Pentacle**, beside the **Ring of six**. With the pentacle:
+  - On a pad, the centre is where the stick rests. Today releasing with nothing aimed does nothing (a
+    cancel, `tool_wheel_prd` decision 4); with Hands free in the centre, letting go with the stick at rest
+    would put the tool away. Either the centre takes a deliberate press, or cancelling moves to B / Esc only.
+  - The figure always shows five points, so with a missing tool hidden (`wheelempty`) a bare point still
+    says "something goes here", unnamed. A feature or a giveaway?
+  - The name and flavour line sit below the figure, not in the centre.
+  - Point up (the upright pentacle), broom at the top. It echoes the game's casting figures (`casting.md`:
+    five runes make a pentagram).
+- **What else is chosen for a cauldron?** (D34) Proposed in the bench: **spoons** (hazel spoon, bone
+  ladle). Other candidates: what hangs it over the fire (a tripod, a chain, three stones), a lid, a charm
+  tied to the handle (as the broom's trinket).
+- **How does she reach her cauldron?** (user, 2026-10-11: not mapped out yet) She already carries more
+  than a real person could (broom, rod, camera), so carrying a cauldron isn't ruled out on that ground.
+  Possibly out of reach when she's away from home, or she can set it down only at certain places; it may
+  leave the wheel altogether, freeing a place. (The game's `structure.md` has a home's cauldron as its
+  crafting anchor.)
 - **How much in-play UI?** The world HUD's `hud` variant: quiet / contextual / always-on corner (D1).
 - **Selector shape**: radial wheel vs bar, one wheel or two (tools, spells). (The world carries on: D3.)
 - **Is colour affinity ever shown?** The `affinity` variant. The game never discloses a wand's affinity.

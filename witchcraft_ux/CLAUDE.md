@@ -12,6 +12,7 @@ Everything below is only what is true of this game.
 | **The game** | `E:\dev\unreal\alittlewitchcraft`. Read its `CLAUDE.md` (genre and tone) before designing a screen. UE 5.8, C++, GAS; UMG only, no CommonUI yet |
 | **Screenshots** | `E:\dev\Unreal\screenshots\alittlewitchcraft\`, copied into `assets/backdrops/` (see `assets/CREDITS.md`) |
 | **Port** | `node tools/serve.mjs` → http://localhost:5320 |
+| **Textures** | tessera (`E:\dev\terrain\tessera`): sources in `tessera/` (read its `README.md`), baked to `assets/tessera/` with `node tools/bake.mjs` (needs Python + tessera; the bakes are committed, so the bench runs without them) |
 
 🔴 **`documents/direction.md` holds the UI direction; read it first.** In short (user, 2026-09-29): **as
 little UI as possible while actually playing, but not nothing, and nothing is final yet.** Swapping tools,

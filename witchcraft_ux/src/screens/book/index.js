@@ -106,6 +106,7 @@ export default {
       broom: () => renderTool('broom'),
       fishing: () => renderTool('fishing'),
       camera: () => renderTool('camera'),
+      cauldron: () => renderTool('cauldron'),
     };
     const tabDef = (id) => TABS.find((t) => t.id === id);
     // A tab's rail; Tools' is the kinds she has right now.

@@ -251,28 +251,41 @@ export const CAMERA_DEFAULT = { body: 'box', lens: 'std', filter: 'none', frame:
 // Different, not better: a rod's strength is internal and never shown (D29); the name
 // carries it. One page design serves every kind: the kind is data (its parts), as below.
 //
-//   angle   the kind's fixed place on the wheel, clockwise from the top (the game's
-//           tool_wheel_prd: broom 0°, rod 60°, camera 120°; Hands free 180°)
+//   angle   the kind's fixed place on the ring, clockwise from the top (the game's
+//           tool_wheel_prd: broom 0°, rod 60°, camera 120°; Hands free 180°; then the
+//           cauldron 240° and a sixth, undecided, 300°)
+//   point   its point on the pentacle wheel (variant `toolwheel`), 0–4 clockwise from the
+//           top, 72° apart; Hands free is the centre (user's idea, 2026-10-11)
+// 🔴 Six places at most: five tools and Hands free (user, 2026-10-11: D33). The kinds so far:
+// broom, fishing, camera, cauldron; the fifth is undecided (the game's tools.md intends a net).
 //   on      what a chosen part's card says ("On the rod"); the main piece says "On the wheel"
 //   parts   the sections of its page. [0] is the main piece. `many`: she enables
 //           several (switched in use); `optional`: a "none" card; `from: 'satchel'`:
 //           the pieces are satchel items (bait), only chosen here
 // The camera's pieces are its kit (KIT above, photo.js); the rest are TOOLS below.
 export const TOOL_KINDS = [
-  { id: 'broom', label: 'Broom', icon: 'broom', angle: 0, on: 'On the broom', parts: [
+  { id: 'broom', label: 'Broom', icon: 'broom', angle: 0, point: 0, on: 'On the broom', parts: [
     { part: 'broom',   label: 'Brooms',   noun: 'broom' },
     { part: 'trinket', label: 'Trinkets', noun: 'trinket', optional: 'No trinket' },
   ] },
-  { id: 'fishing', label: 'Fishing', icon: 'rod', angle: 60, on: 'On the rod', parts: [
+  { id: 'fishing', label: 'Fishing', icon: 'rod', angle: 60, point: 1, on: 'On the rod', parts: [
     { part: 'rod',  label: 'Rods',  noun: 'fishing rod' },
     { part: 'line', label: 'Lines', noun: 'line' },
     { part: 'bait', label: 'Bait',  noun: 'bait', optional: 'No bait', from: 'satchel' },
   ] },
-  { id: 'camera', label: 'Camera', icon: 'camera', angle: 120, on: 'On the camera', parts: [
+  { id: 'camera', label: 'Camera', icon: 'camera', angle: 120, point: 2, on: 'On the camera', parts: [
     { part: 'body',   label: 'Cameras', noun: 'camera' },
     { part: 'lens',   label: 'Lenses',  noun: 'lens' },
     { part: 'filter', label: 'Filters', noun: 'filter', many: true },
     { part: 'frame',  label: 'Frames',  noun: 'frame', many: true },
+  ] },
+  // The cauldron (user, 2026-10-11: D34): a wheel tool with a page of its own, like the
+  // broom and the rod. Every piece is a look only, never better brewing. Spoons are PROPOSED,
+  // the bench's guess at a second part; what else could be chosen for it is open, and so is
+  // whether it stays on the wheel (direction.md).
+  { id: 'cauldron', label: 'Cauldron', icon: 'cauldron', angle: 240, point: 3, on: 'With the cauldron', parts: [
+    { part: 'cauldron', label: 'Cauldrons', noun: 'cauldron' },
+    { part: 'spoon',    label: 'Spoons',    noun: 'spoon' },
   ] },
 ];
 export const toolKind = (id) => TOOL_KINDS.find((k) => k.id === id);
@@ -292,13 +305,17 @@ export const TOOLS = {
   'line:plain':         { part: 'line', name: 'Plain line',     icon: 'water', meta: 'Came with the rod', desc: 'Ordinary brown twine.' },
   'line:silk':          { part: 'line', name: 'Spider silk',    icon: 'water', desc: 'A thread of spider silk, caught silver at dawn.' },
   'line:moon':          { part: 'line', name: 'Moonlight line', icon: 'moon',  desc: 'Spun from moonlight, with a faint glow after dark.' },
+  'cauldron:black-pot': { part: 'cauldron', name: 'The black pot',  icon: 'cauldron', meta: 'Her first cauldron', desc: 'Squat and black, on three stubby legs. The soot never quite comes off.' },
+  'cauldron:copper':    { part: 'cauldron', name: 'Copper kettle-pot', icon: 'cauldron', desc: 'Hammered copper, gone green at the rivets.' },
+  'spoon:hazel':        { part: 'spoon', name: 'Hazel spoon',  icon: 'spoon', meta: 'Came with the pot', desc: 'Long-handled and scorched at the bowl.' },
+  'spoon:bone':         { part: 'spoon', name: 'Bone ladle',   icon: 'spoon', desc: 'Yellowed and smooth, carved with a row of tiny fish.' },
 };
 // What she starts with, and what's on.
-export const TOOLS_START = ['broom:old-faithful', 'trinket:bell', 'rod:willow', 'line:plain'];
-export const ACTIVE_START = { broom: 'broom:old-faithful', trinket: null, rod: 'rod:willow', line: 'line:plain', bait: 'Item.Bait.Rowan' };
+export const TOOLS_START = ['broom:old-faithful', 'trinket:bell', 'rod:willow', 'line:plain', 'cauldron:black-pot', 'spoon:hazel'];
+export const ACTIVE_START = { broom: 'broom:old-faithful', trinket: null, rod: 'rod:willow', line: 'line:plain', bait: 'Item.Bait.Rowan', cauldron: 'cauldron:black-pot', spoon: 'spoon:hazel' };
 // Bench demo (J in the world): the next thing she's given, in this order. The first of a
 // kind is made active for her and announced (D28); later ones wait on their page.
-export const GIFTS = ['broom:old-faithful', 'broom:silverwood', 'rod:waverly', 'line:silk', 'trinket:tassel', 'line:moon'];
+export const GIFTS = ['broom:old-faithful', 'broom:silverwood', 'rod:waverly', 'line:silk', 'trinket:tassel', 'line:moon', 'cauldron:copper', 'spoon:bone'];
 
 export const witch = createViewModel('witch', {
   name: 'Wren',                    // PROPOSED: the witch has no name in the docs

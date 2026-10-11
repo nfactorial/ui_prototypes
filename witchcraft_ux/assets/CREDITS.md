@@ -23,6 +23,10 @@ In-engine screenshots of *A Little Witchcraft* (the owner's own game), taken 202
 White single-colour SVGs, tinted at runtime. `check`, `info`, `warning`, `diamond`, `circle`, `arrow`
 come from `nullpoint_ux`; the rest were drawn for this bench. Placeholders.
 
+## tessera/
+
+Generated with tessera from the bench's own `tessera/*.toml` (see `tessera/README.md`).
+
 ## fonts/
 
 All SIL Open Font License, licence files alongside: Inter, Nunito, Fraunces, Cormorant Garamond,

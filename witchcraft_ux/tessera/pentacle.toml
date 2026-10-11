@@ -1,0 +1,316 @@
+[meta]
+name = "pentacle"
+description = "The tool wheel's pentacle, carved into a dark wooden disc: the star, its circle, a border ring and small marks between the points. Colour texture, plus a tintable glow mask of the same grooves."
+
+# Geometry, in image units over the wheel's 620 px box (1 unit = 620 px):
+#   R    = 0.37097  the circle through the five points (230 px; the tool slots sit on it)
+#   star = R * 0.381966 for the inner corners (cos 72 / cos 36: a true pentagram)
+# The pentagram's lines are the star's outline plus the inner pentagon, turned 36 degrees.
+
+# --- the lines ---------------------------------------------------------------
+[nodes.star]
+type = "polygon"
+sides = 5
+radius = 0.37097
+inner_ratio = 0.381966
+
+[nodes.inner]
+type = "polygon"
+sides = 5
+radius = 0.141697
+[nodes.inner.transform]
+rotation = 36.0
+
+[nodes.ring]              # the circle through the points
+type = "arc"
+radius = 0.37097
+thickness = 0.0
+sweep = 360.0
+
+[nodes.border]            # the border, near the rim
+type = "arc"
+radius = 0.408
+thickness = 0.0
+sweep = 360.0
+
+[nodes.hub]               # a small circle round Hands free
+type = "arc"
+radius = 0.082
+thickness = 0.0
+sweep = 360.0
+
+# Marks in the band between the circle and the border, midway between the points:
+# a dot either side of a small diamond, five times round. A radial `repeat` wedge is
+# centred on twelve o'clock, and a transform's offset moves the shape the opposite way
+# (it moves the coordinates), so +y here is up the image.
+[nodes.dot_l]
+type = "disc"
+radius = 0.0045
+[nodes.dot_l.transform]
+offset = [-0.028, 0.389]
+
+[nodes.dot_r]
+type = "disc"
+radius = 0.0045
+[nodes.dot_r.transform]
+offset = [0.028, 0.389]
+
+[nodes.diamond]
+type = "polygon"
+sides = 4
+radius = 0.011
+[nodes.diamond.transform]
+offset = [0.0, 0.389]
+
+[nodes.dots]
+type = "combine"
+a = "dot_l"
+b = "dot_r"
+
+[nodes.mark]
+type = "combine"
+a = "dots"
+b = "diamond"
+
+[nodes.mark_turned]       # between the points: half a point's turn from the top
+type = "repeat"
+input = "mark"
+mode = "radial"
+count = 5
+[nodes.mark_turned.transform]
+rotation = 36.0
+
+# --- grooves: a rounded V cut along every line ---------------------------------
+[nodes.g_star]
+type = "contour"
+input = "star"
+mode = "stroke"
+width = 0.011
+softness = 0.0055
+curve = "round"
+
+[nodes.g_inner]
+type = "contour"
+input = "inner"
+mode = "stroke"
+width = 0.011
+softness = 0.0055
+curve = "round"
+
+[nodes.g_ring]
+type = "contour"
+input = "ring"
+mode = "stroke"
+width = 0.009
+softness = 0.0045
+curve = "round"
+
+[nodes.g_border]
+type = "contour"
+input = "border"
+mode = "stroke"
+width = 0.006
+softness = 0.003
+curve = "round"
+
+[nodes.g_hub]
+type = "contour"
+input = "hub"
+mode = "stroke"
+width = 0.006
+softness = 0.003
+curve = "round"
+
+[nodes.g_marks]
+type = "contour"
+input = "mark_turned"
+softness = 0.004
+curve = "round"
+
+[nodes.g1]
+type = "blend"
+mode = "lighten"
+a = "g_star"
+b = "g_inner"
+
+[nodes.g2]
+type = "blend"
+mode = "lighten"
+a = "g1"
+b = "g_ring"
+
+[nodes.g3]
+type = "blend"
+mode = "lighten"
+a = "g2"
+b = "g_border"
+
+[nodes.g4]
+type = "blend"
+mode = "lighten"
+a = "g3"
+b = "g_hub"
+
+[nodes.groove]
+type = "blend"
+mode = "lighten"
+a = "g4"
+b = "g_marks"
+
+# --- the disc ----------------------------------------------------------------
+[nodes.plate]
+type = "disc"
+radius = 0.43
+
+[nodes.plate_fill]
+type = "contour"
+input = "plate"
+
+[nodes.plate_bevel]       # a rounded rim, for the light to catch
+type = "contour"
+input = "plate"
+mode = "bevel"
+width = 0.018
+curve = "round"
+
+# Height: the rim's bevel, with the grooves cut into it.
+[nodes.height]
+type = "blend"
+mode = "subtract"
+a = "plate_bevel"
+b = "groove"
+amount = 0.55
+
+# Light from the top left: what faces it is lit, what faces away is shaded.
+[nodes.facing]
+type = "slope"
+height = "height"
+measure = "facing"
+angle = 225.0
+strength = 0.016
+
+# Wood: long grain, wobbled.
+[nodes.grain_raw]
+type = "noise"
+seed = 3
+octaves = 5
+[nodes.grain_raw.transform]
+scale = [1.2, 34.0]
+
+[nodes.wob_x]
+type = "noise"
+seed = 11
+octaves = 3
+[nodes.wob_x.transform]
+scale = [3.0, 3.0]
+
+[nodes.wob_y]
+type = "noise"
+seed = 12
+octaves = 3
+[nodes.wob_y.transform]
+scale = [3.0, 3.0]
+
+[nodes.grain]
+type = "warp"
+input = "grain_raw"
+offset_x = "wob_x"
+offset_y = "wob_y"
+amount = 0.025
+
+[nodes.wood]
+type = "gradient_map"
+input = "grain"
+stops = [
+  [0.0, 0.085, 0.058, 0.040],
+  [0.45, 0.150, 0.106, 0.074],
+  [0.7, 0.190, 0.136, 0.094],
+  [1.0, 0.240, 0.172, 0.115],
+]
+
+# Grooves are darker: the cut is in shadow.
+[nodes.groove_shade]
+type = "levels"
+input = "groove"
+out_low = 1.0
+out_high = 0.42
+
+[nodes.cut]
+type = "blend"
+mode = "multiply"
+a = "wood"
+b = "groove_shade"
+
+[nodes.lit]
+type = "blend"
+mode = "overlay"
+a = "cut"
+b = "facing"
+
+# A soft shadow under the disc, so it sits over the world.
+[nodes.shadow]
+type = "contour"
+input = "plate"
+mode = "outer"
+width = 0.05
+offset = 0.004
+curve = "smooth"
+
+[nodes.shadow_a]
+type = "levels"
+input = "shadow"
+out_high = 0.5
+
+[nodes.plate_a]
+type = "levels"
+input = "plate_fill"
+out_high = 0.9
+
+[nodes.alpha]
+type = "blend"
+mode = "lighten"
+a = "shadow_a"
+b = "plate_a"
+
+[nodes.colour]
+type = "blend"
+mode = "mix"
+a = [0.0, 0.0, 0.0]
+b = "lit"
+amount = "plate_fill"
+
+[nodes.out]
+type = "pack"
+rgb = "colour"
+a = "alpha"
+
+# --- the glow: the grooves alone, tintable (white RGB, coverage in alpha) -------
+[nodes.glow_soft]
+type = "blur"
+input = "groove"
+radius = 0.006
+
+[nodes.glow_mix]
+type = "blend"
+mode = "lighten"
+a = "glow_soft"
+b = "groove"
+
+[nodes.glow]
+type = "pack"
+rgb = [1.0, 1.0, 1.0]
+a = "glow_mix"
+
+[[outputs]]
+name = "pentacle"
+node = "out"
+size = [1024, 1024]
+samples = 2
+format = "RGBA"
+
+[[outputs]]
+name = "pentacle_glow"
+node = "glow"
+size = [1024, 1024]
+samples = 2
+format = "RGBA"

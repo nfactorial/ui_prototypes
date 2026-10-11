@@ -150,6 +150,7 @@ export default function createFlow({ screens, setBackdrop, viewmodels, setGamePa
     if (tool === 'fishing') return fish();
     if (tool === 'camera') return raiseCamera();
     if (tool === 'broom') return message('She would get on her broom (riding is not in the bench).');
+    if (tool === 'cauldron') return message('She would set the cauldron down and brew (brewing is not in the bench).');
     message('Hands free: nothing to use. T picks a tool.');
   }
 
